@@ -1,0 +1,62 @@
+#ifndef STORAGE_HPP
+#define STORAGE_HPP
+
+#include "../Container/I/IContainer.hpp"
+#include <thread> 
+#include <vector>
+#include <mutex> 
+#include <atomic>
+#include <shared_mutex>
+#include <iostream>
+#include "../Octree/Octree.hpp"
+
+
+class Storage{
+    private:
+        int number;
+        int length, width, height;
+        double temperature;
+        Octree<int, IContainer*, ContainerPosition<int>>* containers;
+
+        public:
+          Storage(int number, int length, int width, int height, double temperature);
+          Storage(const Storage& other);
+          std::string addContainer(IContainer* container);
+          void moveContainer(std::string id, int X, int Y, int Z);
+          void rotateContainer(std::string id, int method);
+          void removeContainer(std::string id);
+          std::string getInfo() const;
+          size_t howContainer(IContainer* container);
+          void addContainer(IContainer* container, int X, int Y, int Z);
+          void getSize(int l, int w, int h);
+          std::string getInfoAboutStorage() const;
+          std::vector<std::string> getListContainers() const;
+          ~Storage(){
+            std::cout << "Storage destructor" << std::endl;
+            delete containers;
+            }
+
+
+        private:
+          std::mutex mtx;
+          mutable std::shared_mutex shared_mtx;
+          std::atomic<bool> containerAdded{false}; 
+          Storage& operator=(const Storage& other);
+          int calculateDepth();
+          static bool comparePosition(std::pair<ContainerPosition<int>, IContainer*>& pos1, std::pair<ContainerPosition<int>, IContainer*>& pos2);
+          static bool comparePositionReverse(std::pair<ContainerPosition<int>, IContainer*>& pos1, std::pair<ContainerPosition<int>, IContainer*>& pos2);
+          bool isNoTop(const ContainerPosition<int>& position);
+          std::vector<std::pair<ContainerPosition<int>,IContainer*>> searchUnderContainer(ContainerPosition<int>& position);
+          double calculatemass(std::vector<std::pair<ContainerPosition<int>, IContainer*>> con, size_t it);
+          bool addContainerR(IContainer* container,  int yStart, int yEnd);
+          ContainerPosition<int> calculateContainerPosition(int x, int y, int z, int l, int w, int h);
+          bool moveContainer(std::pair<ContainerPosition<int>, IContainer*> it);
+          std::pair<ContainerPosition<int>, IContainer*> isTop(const ContainerPosition<int>& position);
+           void multitread(IContainer* container, int X, int Y, int Z);
+           std::vector<std::pair<ContainerPosition<int>,IContainer*>> searchUpperContainer(ContainerPosition<int>& position);
+           void howContai(IContainer* container, std::vector<size_t>& result, size_t method);
+           bool checkSupport(ContainerPosition<int>& position, std::vector<std::pair<ContainerPosition<int>,IContainer*>> con);
+          
+
+};
+#endif
