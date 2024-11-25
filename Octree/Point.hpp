@@ -1,6 +1,6 @@
 #ifndef POINT_HPP
 #define POINT_HPP
-
+#include <tuple>
 
 template <typename T>
 struct Point{
