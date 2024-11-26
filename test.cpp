@@ -47,11 +47,45 @@ TEST(StorageTest, AddContainer){
     storage.addContainer(container, 16, 16 , 0);
     container =  new Container("_", "Cargo A", 7, 4, 3, 21.2, 1.1);
     storage.addContainer(container, 80, 80 , 0);
+    container =  new Container("_", "Cargo A", 1, 1, 1, 21.2, 1.1);
+    storage.addContainer(container, 0, 0 , 5);
     std::string result = storage.getInfo();
     EXPECT_EQ(result.find("0_0_0") != std::string::npos, true);
     EXPECT_EQ(result.find("0_0_3") != std::string::npos, true);
     EXPECT_EQ(result.find("16_16_0") != std::string::npos, true);
     EXPECT_EQ(result.find("80_80_0") != std::string::npos, true);
+    EXPECT_EQ(result.find("0_0_5") != std::string::npos, true);
+}
+
+
+TEST(StorageTest, setSize){
+    Storage storage(1, 100, 100, 100, 20.0);
+    IContainer* container = new FragileContainer("_", "Cargo B", 2, 5, 2, 23.5, 2.5, 11.3);
+    storage.addContainer(container, 0, 0, 0);
+    container =  new Container("_", "Cargo A", 1, 4, 1, 21.2, 1.1);
+    storage.addContainer(container, 0, 0 , 3);
+    container =  new Container("_", "Cargo A", 14, 4, 12, 21.2, 1.1);
+    storage.addContainer(container, 16, 16 , 0);
+    container =  new Container("_", "Cargo A", 7, 4, 3, 21.2, 1.1);
+    storage.addContainer(container, 80, 80 , 0);
+    container =  new Container("_", "Cargo A", 1, 1, 1, 21.2, 1.1);
+    storage.addContainer(container, 0, 0 , 5);
+    EXPECT_THROW(storage.getSize(100, 100, 10), std::runtime_error);
+    storage.getSize(101, 100, 100);
+    EXPECT_EQ(storage.getInfoAboutStorage(), "Length: 101, Width: 100, Height: 100, Temperature: 20.000000");
+    std::string result = storage.getInfo();
+    EXPECT_EQ(result.find("0_0_0") != std::string::npos, true);
+    EXPECT_EQ(result.find("0_0_3") != std::string::npos, true);
+    EXPECT_EQ(result.find("16_16_0") != std::string::npos, true);
+    EXPECT_EQ(result.find("80_80_0") != std::string::npos, true);
+    EXPECT_EQ(result.find("0_0_5") != std::string::npos, true);
+    Storage st = storage;
+    result = st.getInfo();
+    EXPECT_EQ(result.find("0_0_0") != std::string::npos, true);
+    EXPECT_EQ(result.find("0_0_3") != std::string::npos, true);
+    EXPECT_EQ(result.find("16_16_0") != std::string::npos, true);
+    EXPECT_EQ(result.find("80_80_0") != std::string::npos, true);
+    EXPECT_EQ(result.find("0_0_5") != std::string::npos, true);
 }
 
 int main(int argc, char **argv) {

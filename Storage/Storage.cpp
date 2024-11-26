@@ -84,7 +84,6 @@ Storage::Storage(const Storage& other)
         auto i = other.containers->searchDepth();
         std::sort(i.begin(), i.end(), comparePosition);
         for(auto& it : i){
-            //std::cout << it.second->getId() << std::endl;
             addContainer(it.second->Clone(), it.first.LLDown.x, it.first.LLDown.y, it.first.LLDown.z);
         }
     }
@@ -266,16 +265,11 @@ void Storage::addContainer(IContainer* container, int X, int Y, int Z){
         if(!checkSupport(pos, con)){
             throw std::invalid_argument("Support doesn t exist");
         }
-        int max = 0;
         for(size_t i = 0; i < con.size(); i++){
             ContainerPosition<int> check = con[i].first;
-            max = std::max(max, Octree<int, IContainer*, ContainerPosition<int>>::getMaxZ(check));
             if(((*con[i].second).isType() == "Fragile" || (*con[i].second).isType() == "Fragile and Refraged Container") && calculatemass(con, i) + (*container).getMass() > (*(dynamic_cast<IFragileContainer*>(con[i].second))).getMaxPressure()){
                 throw std::invalid_argument("Container would be too heavy");
             }
-        }
-        if(max + 1 != pos.LLDown.z){
-            throw std::invalid_argument("Container can t fly");
         }
     }
     (*containers).insert(container, pos, cache);

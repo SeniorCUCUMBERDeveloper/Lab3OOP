@@ -76,7 +76,8 @@ class Octree{
             Node* children[8] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
             BoundingBox<T> box;
             Node* parent = nullptr;
-            Node(BoundingBox<T>& box) : box(box) {}
+            int height;
+            Node(BoundingBox<T>& box, int height) : box(box), height(height) {}
             ~Node() {
                 for (auto c : con) {
                     delete c.second; // Освобождение памяти для контейнеров
@@ -145,8 +146,8 @@ class Octree{
     public:
         Octree(BoundingBox<T>& bbox, int depth) {
         depth_ = depth;
-        root = new Node(bbox);
-        createTree(root, depth);
+        root = new Node(bbox, 0);
+        //createTree(root, depth);
     }
 
 
@@ -174,20 +175,15 @@ class Octree{
                 return false;
             }
             target->con.push_back(std::make_pair(position, container));
+            if (target->con.empty() == false && target->isLeaf() && target->height < depth_){
+                split(target);
+            }
             return true;
         }
 
 
-        Octree* Clone(){
-            Octree* clone = new Octree(this->root->box, this->depth_);
-            return clone;
-        }
-
-
-        void createTree(Node* node, int depth) {
-            if (depth <= 0) return;
-            
-            Point<T> min = node->box.min;
+        void split(Node* node){
+             Point<T> min = node->box.min;
             Point<T> max = node->box.max;
 
             T midX = (min.x + max.x) / 2;
@@ -197,63 +193,83 @@ class Octree{
             Point<T> first = min;
             Point<T> second = Point<T>(midX, midY, midZ);
             BoundingBox<T> box = BoundingBox<T>(first, second);
-            node->children[0] = new Node(box); // 0: min
+            node->children[0] = new Node(box, node->height + 1); // 0: min
             node->children[0]->parent = node;
 
 
             first = Point<T>(midX, min.y, min.z);
             second = Point<T>(max.x, midY, midZ);
             box = BoundingBox<T>(first, second);
-            node->children[1] = new Node(box); // 1: x+
+            node->children[1] = new Node(box, node->height + 1); // 1: x+
             node->children[1]->parent = node;
 
 
             first = Point<T>(min.x, midY, min.z);
             second = Point<T>(midX, max.y, midZ);
             box = BoundingBox<T>(first, second);
-            node->children[2] = new Node(box); // 2: y+
+            node->children[2] = new Node(box, node->height + 1); // 2: y+
             node->children[2]->parent = node;
 
 
             first = Point<T>(midX, midY, min.z);
             second = Point<T>(max.x, max.y, midZ);
             box = BoundingBox<T>(first, second);
-            node->children[3] = new Node(box); // 3: xy+
+            node->children[3] = new Node(box, node->height + 1); // 3: xy+
             node->children[3]->parent = node;
 
 
             first = Point<T>(min.x, min.y, midZ);
             second = Point<T>(midX, midY, max.z);
             box = BoundingBox<T>(first, second);
-            node->children[4] = new Node(box); // 4: z+
+            node->children[4] = new Node(box, node->height + 1); // 4: z+
             node->children[4]->parent = node;
 
 
             first = Point<T>(midX, min.y, midZ);
             second = Point<T>(max.x, midY, max.z);
             box = BoundingBox<T>(first, second);
-            node->children[5] = new Node(box); // 5: x+z+
+            node->children[5] = new Node(box, node->height + 1); // 5: x+z+
             node->children[5]->parent = node;
 
 
             first = Point<T>(min.x, midY, midZ);
             second =  Point<T>(midX, max.y, max.z);
             box = BoundingBox<T>(first, second);
-            node->children[6] = new Node(box); // 6: y+z+
+            node->children[6] = new Node(box, node->height + 1); // 6: y+z+
             node->children[6]->parent = node;
 
 
             first = Point<T>(midX, midY, midZ);
             second = max;
             box = BoundingBox<T>(first, second);
-            node->children[7] = new Node(box); // 7: xyz+
+            node->children[7] = new Node(box, node->height + 1); // 7: xyz+
             node->children[7]->parent = node;
 
 
-            for (auto& child : node->children) {
-            createTree(child, depth - 1);
+            for (auto& item : node->con) {
+                for (int i = 0; i < 8; ++i) {
+                    if (node->children[i]->box.contains(item.first.LLDown) &&
+                    node->children[i]->box.contains(item.first.LLUp) &&
+                    node->children[i]->box.contains(item.first.LRDown) &&
+                    node->children[i]->box.contains(item.first.LRUp) &&
+                    node->children[i]->box.contains(item.first.RLDown) &&
+                    node->children[i]->box.contains(item.first.RLUp) &&
+                    node->children[i]->box.contains(item.first.RRDown) &&
+                    node->children[i]->box.contains(item.first.RRUp)) {
+                        node->children[i]->con.push_back(item);
+                        node->con.erase(std::remove(node->con.begin(), node->con.end(), item), node->con.end());
+                        break;
+                    }
+                }
             }
         }
+
+
+        Octree* Clone(){
+            Octree* clone = new Octree(this->root->box, this->depth_);
+            return clone;
+        }
+
 
 
         bool remove(std::string id){
@@ -404,6 +420,9 @@ class Octree{
 
 
         void findI(std::string id, Node* node, std::pair<CPosType, N>* it){
+            if(node == nullptr){
+                return;
+            }
             if(node->con.empty() == false){
                 for(auto& i : node->con){
                     if(i.first.LLDown.x != -1 && i.second != nullptr && number(i.first.LLDown) == id){
@@ -470,6 +489,9 @@ class Octree{
 
 
             void searchR(std::string id, Node* node, Node** copyCache){
+                if(node == nullptr){
+                    return;
+                }
                 if(node->con.empty() == false){
                 for(auto& i : node->con){
                     if(i.first.LLDown.x != -1 && i.second != nullptr && number(i.first.LLDown) == id){
@@ -487,6 +509,9 @@ class Octree{
 
 
             void removeR(std::string id, Node* node, bool& collision){
+                if(node == nullptr){
+                    return;
+                }
                 if(collision == true || node == nullptr){
                     return;
                 }
