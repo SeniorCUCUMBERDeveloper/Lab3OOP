@@ -36,6 +36,8 @@ class Storage{
             delete containers;
             }
 
+          void check();
+
 
         private:
           std::mutex mtx;

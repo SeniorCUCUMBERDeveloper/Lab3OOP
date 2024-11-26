@@ -24,6 +24,21 @@ int Storage::calculateDepth(){
 }
 
 
+void Storage::check(){
+    for(auto it = containers->begin(); it != containers->end(); ++it){
+        if (*it == nullptr) {
+            std::cout << "Invalid container found.\n";
+            continue; // Пропустите этот контейнер
+        }
+        if(!(*it)->con.empty()){
+            for(auto it2 = (*it)->con.begin(); it2 != (*it)->con.end(); ++it2){
+                std::cout << (*it2).second->getId() << "\n";
+            }
+        }
+    }
+}
+
+
 Storage::Storage(int number, int length, int width, int height, double temperature){
     this->number = number;
     this->length = length;

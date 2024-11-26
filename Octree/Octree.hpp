@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "ContainerPosition.hpp"
 #include <tuple>
+#include <stack>
 
 
 template<typename T>
@@ -94,6 +95,50 @@ class Octree{
             }
 
         };
+
+
+        class iterator {
+            private:
+                std::stack<Node*> nodeStack;
+
+            public:
+                using value_type = Node*;
+                using pointer = value_type*;
+                using reference = value_type&;
+                using difference_type = std::ptrdiff_t;
+                using iterator_category = std::forward_iterator_tag;
+
+            public:
+
+                explicit iterator(Node* root) {
+                    if (root != nullptr) {
+                        nodeStack.push(root);
+                    }
+                }
+
+                reference operator*() {
+                    return nodeStack.top();
+                }
+
+
+                iterator& operator++() {
+                    if (nodeStack.empty()) return *this;
+                    Node* current = nodeStack.top();
+                    nodeStack.pop();
+                    for (int i = 7; i >= 0; --i) {
+                        if (current->children[i]) {
+                            nodeStack.push(current->children[i]);
+                        }
+                    }
+                    return *this;
+                }
+
+                
+                bool operator!=(const iterator& other) const {
+                    return nodeStack != other.nodeStack;
+                }
+        };
+
     private:
         Node* root = nullptr;
         int depth_;
@@ -106,12 +151,21 @@ class Octree{
 
 
         ~Octree() {
-            delete root; // Освобождение памяти корневого узла
+            delete root;
         }
 
 
         Node* getRoot(){
             return root;
+        }
+
+
+        iterator begin() {
+            return iterator(root);
+        }
+
+        iterator end() {
+            return iterator(nullptr);
         }
 
 
