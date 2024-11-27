@@ -309,13 +309,19 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP/test.cpp \
  /usr/include/c++/13/stack /usr/include/c++/13/deque \
  /usr/include/c++/13/bits/stl_deque.h /usr/include/c++/13/bits/deque.tcc \
  /usr/include/c++/13/bits/stl_stack.h \
+ /mnt/c/л3/Lab3OOP/./Storage/../Checker/Checker.hpp \
+ /mnt/c/л3/Lab3OOP/./Storage/../Checker/../Container/Container.hpp \
+ /mnt/c/л3/Lab3OOP/./Storage/../Checker/../Container/./I/IContainer.hpp \
+ /mnt/c/л3/Lab3OOP/./Storage/../Checker/../Container/FragileContainer.hpp \
+ /mnt/c/л3/Lab3OOP/./Storage/../Checker/../Container/./I/IFragile.hpp \
+ /mnt/c/л3/Lab3OOP/./Storage/../Checker/../Container/./I/IContainer.hpp \
+ /mnt/c/л3/Lab3OOP/./Storage/../Checker/../Container/RefragedContainer.hpp \
+ /mnt/c/л3/Lab3OOP/./Storage/../Checker/../Container/./I/IRefragedContainer.hpp \
+ /mnt/c/л3/Lab3OOP/./Storage/../Checker/../Container/Frag_and_Ref.hpp \
+ /mnt/c/л3/Lab3OOP/./Storage/../Checker/../Container/FragileContainer.hpp \
+ /mnt/c/л3/Lab3OOP/./Storage/../Checker/../Container/RefragedContainer.hpp \
+ /mnt/c/л3/Lab3OOP/./Storage/../Checker/../Storage/Storage.hpp \
  /mnt/c/л3/Lab3OOP/./Container/Container.hpp \
- /mnt/c/л3/Lab3OOP/./Container/./I/IContainer.hpp \
  /mnt/c/л3/Lab3OOP/./Container/FragileContainer.hpp \
- /mnt/c/л3/Lab3OOP/./Container/./I/IFragile.hpp \
- /mnt/c/л3/Lab3OOP/./Container/./I/IContainer.hpp \
  /mnt/c/л3/Lab3OOP/./Container/RefragedContainer.hpp \
- /mnt/c/л3/Lab3OOP/./Container/./I/IRefragedContainer.hpp \
- /mnt/c/л3/Lab3OOP/./Container/Frag_and_Ref.hpp \
- /mnt/c/л3/Lab3OOP/./Container/FragileContainer.hpp \
- /mnt/c/л3/Lab3OOP/./Container/RefragedContainer.hpp
+ /mnt/c/л3/Lab3OOP/./Container/Frag_and_Ref.hpp

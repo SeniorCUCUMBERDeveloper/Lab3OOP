@@ -47,6 +47,8 @@ Storage::Storage(int number, int length, int width, int height, double temperatu
     this->temperature = temperature;
     BoundingBox<int> bound(Point<int>(0, 0, 0), Point<int>(length, width, height));
     this->containers = new Octree<int, IContainer*, ContainerPosition<int>>(bound, calculateDepth());
+    this->checker.addCheckFunction(std::bind(&Storage::checkTemperature, this, std::placeholders::_1, std::placeholders::_2));
+    this->checker.addCheckFunction(std::bind(&Storage::checkPressure, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 
@@ -73,6 +75,7 @@ Storage& Storage::operator=(const Storage& other) {
             for(auto& it : i){
                 addContainer(it.second->Clone(), it.first.LLDown.x, it.first.LLDown.y, it.first.LLDown.z);
             }
+            Checker checker = other.checker;
         }
         return *this;
     }
@@ -86,6 +89,7 @@ Storage::Storage(const Storage& other)
         for(auto& it : i){
             addContainer(it.second->Clone(), it.first.LLDown.x, it.first.LLDown.y, it.first.LLDown.z);
         }
+        Checker checker = other.checker;
     }
 
 
@@ -251,27 +255,7 @@ void Storage::addContainer(IContainer* container, int X, int Y, int Z){
     if(cache == nullptr){
         throw std::invalid_argument("Valid place for container doesn t exist");
     }
-    IRefragedContainer* ref = dynamic_cast<IRefragedContainer*>(container);
-    if(((*container).isType() == "Refraged" || (*container).isType() == "Fragile and Refraged Container") &&
-    temperature > (*ref).getMaxTemperature())
-    {
-        throw std::invalid_argument("Container is too hot");
-    }
-    if(pos.LLDown.z != 0){
-        std::vector<std::pair<ContainerPosition<int>,IContainer*>> con = searchUnderContainer(pos);
-        if(con.empty()){
-            throw std::invalid_argument("Container can t fly 1");
-        }
-        if(!checkSupport(pos, con)){
-            throw std::invalid_argument("Support doesn t exist");
-        }
-        for(size_t i = 0; i < con.size(); i++){
-            ContainerPosition<int> check = con[i].first;
-            if(((*con[i].second).isType() == "Fragile" || (*con[i].second).isType() == "Fragile and Refraged Container") && calculatemass(con, i) + (*container).getMass() > (*(dynamic_cast<IFragileContainer*>(con[i].second))).getMaxPressure()){
-                throw std::invalid_argument("Container would be too heavy");
-            }
-        }
-    }
+    checker.applyChecks(container, pos);
     (*containers).insert(container, pos, cache);
     container->setId(X, Y, Z);
 }
@@ -573,4 +557,33 @@ std::vector<std::string> Storage::getListContainers() const{
         result.push_back(con.second->getId());
     }
     return result;
+}
+
+
+void Storage::checkTemperature(IContainer* container, ContainerPosition<int> pos){
+    IRefragedContainer* ref = dynamic_cast<IRefragedContainer*>(container);
+    if(((*container).isType() == "Refraged" || (*container).isType() == "Fragile and Refraged Container") &&
+    temperature > (*ref).getMaxTemperature())
+    {
+        throw std::invalid_argument("Container is too hot");
+    }
+}
+
+
+void Storage::checkPressure(IContainer* container, ContainerPosition<int> pos){
+    if(pos.LLDown.z != 0){
+        std::vector<std::pair<ContainerPosition<int>,IContainer*>> con = searchUnderContainer(pos);
+        if(con.empty()){
+            throw std::invalid_argument("Container can t fly 1");
+        }
+        if(!checkSupport(pos, con)){
+            throw std::invalid_argument("Support doesn t exist");
+        }
+        for(size_t i = 0; i < con.size(); i++){
+            ContainerPosition<int> check = con[i].first;
+            if(((*con[i].second).isType() == "Fragile" || (*con[i].second).isType() == "Fragile and Refraged Container") && calculatemass(con, i) + (*container).getMass() > (*(dynamic_cast<IFragileContainer*>(con[i].second))).getMaxPressure()){
+                throw std::invalid_argument("Container would be too heavy");
+            }
+        }
+    }
 }

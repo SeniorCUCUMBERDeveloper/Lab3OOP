@@ -6,6 +6,37 @@
 #include "./Container/RefragedContainer.hpp"
 #include "./Request/Request.hpp"
 
+
+void checkTemperature(Storage& storage, IContainer* container, ContainerPosition<int> pos){
+    IRefragedContainer* ref = dynamic_cast<IRefragedContainer*>(container);
+    if(((*container).isType() == "Refraged" || (*container).isType() == "Fragile and Refraged Container") &&
+    storage.getTemperature() > (*ref).getMaxTemperature())
+    {
+        throw std::invalid_argument("Container is too hot");
+    }
+}
+
+
+void checkPressure(Storage& storage, IContainer* container, ContainerPosition<int> pos){
+    if(pos.LLDown.z != 0){
+        std::vector<std::pair<ContainerPosition<int>,IContainer*>> con = storage.searchUnderContainer(pos);
+        if(con.empty()){
+            throw std::invalid_argument("Container can t fly 1");
+        }
+        if(!storage.checkSupport(pos, con)){
+            throw std::invalid_argument("Support doesn t exist");
+        }
+        for(size_t i = 0; i < con.size(); i++){
+            ContainerPosition<int> check = con[i].first;
+            if(((*con[i].second).isType() == "Fragile" || (*con[i].second).isType() == "Fragile and Refraged Container") && storage.calculatemass(con, i) + (*container).getMass() > (*(dynamic_cast<IFragileContainer*>(con[i].second))).getMaxPressure()){
+                throw std::invalid_argument("Container would be too heavy");
+            }
+        }
+    }
+}
+
+
+
 int main(){
    Terminal terminal;
    
@@ -17,7 +48,7 @@ int main(){
   //   requestThread.join();
    // //st->getInfoAboutStorage();
   IContainer* container = new FragileContainer("_", "Cargo A", 2, 5, 2, 21.2, 2.1, 300.0);
-  IContainer* container2 = new Container("_", "Cargo A", 2, 5, 1, 21.2, 2.1);
+  IContainer* container2 = new Container("_", "Cargo A", 2, 5, 1, 21.2, 2222222.1);
   IContainer* container3 = new Container("x", "Cargo A", 2, 5, 1, 21.2, 11.1);
   IContainer* container4 = new Container("_", "Cargo A", 1, 7, 1, 21.2, 2.1);
   IContainer* container5 = new Container("_", "Cargo A", 2, 1, 1, 21.2, 2.1);

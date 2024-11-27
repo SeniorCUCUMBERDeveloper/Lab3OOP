@@ -9,6 +9,7 @@
 #include <shared_mutex>
 #include <iostream>
 #include "../Octree/Octree.hpp"
+#include "../Checker/Checker.hpp"
 
 
 class Storage{
@@ -17,6 +18,8 @@ class Storage{
         int length, width, height;
         double temperature;
         Octree<int, IContainer*, ContainerPosition<int>>* containers;
+        Checker<int> checker;
+
 
         public:
           Storage(int number, int length, int width, int height, double temperature);
@@ -58,6 +61,8 @@ class Storage{
            std::vector<std::pair<ContainerPosition<int>,IContainer*>> searchUpperContainer(ContainerPosition<int>& position);
            void howContai(IContainer* container, std::vector<size_t>& result, size_t method);
            bool checkSupport(ContainerPosition<int>& position, std::vector<std::pair<ContainerPosition<int>,IContainer*>> con);
+           void checkTemperature(IContainer* container, ContainerPosition<int> position);
+           void checkPressure(IContainer* container, ContainerPosition<int> position);
           
 
 };

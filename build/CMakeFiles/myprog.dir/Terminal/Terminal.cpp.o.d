@@ -219,4 +219,23 @@ CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: \
  /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Octree/Point.hpp \
  /usr/include/c++/13/stack /usr/include/c++/13/deque \
  /usr/include/c++/13/bits/stl_deque.h /usr/include/c++/13/bits/deque.tcc \
- /usr/include/c++/13/bits/stl_stack.h
+ /usr/include/c++/13/bits/stl_stack.h \
+ /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/Checker.hpp \
+ /usr/include/c++/13/functional /usr/include/c++/13/bits/std_function.h \
+ /usr/include/c++/13/unordered_map \
+ /usr/include/c++/13/bits/unordered_map.h \
+ /usr/include/c++/13/bits/hashtable.h \
+ /usr/include/c++/13/bits/hashtable_policy.h \
+ /usr/include/c++/13/bits/enable_special_members.h \
+ /usr/include/c++/13/array \
+ /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/Container.hpp \
+ /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/./I/IContainer.hpp \
+ /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/FragileContainer.hpp \
+ /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/./I/IFragile.hpp \
+ /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/./I/IContainer.hpp \
+ /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/RefragedContainer.hpp \
+ /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/./I/IRefragedContainer.hpp \
+ /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/Frag_and_Ref.hpp \
+ /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/FragileContainer.hpp \
+ /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/RefragedContainer.hpp \
+ /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Storage/Storage.hpp
