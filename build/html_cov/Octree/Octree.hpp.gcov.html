@@ -31,13 +31,13 @@
             <td class="headerValue">gcov_filtered.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntryLo">73.6&nbsp;%</td>
+            <td class="headerCovTableEntryMed">79.6&nbsp;%</td>
             <td class="headerCovTableEntry">265</td>
-            <td class="headerCovTableEntry">195</td>
+            <td class="headerCovTableEntry">211</td>
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2024-11-27 17:19:27</td>
+            <td class="headerValue">2024-11-27 21:06:48</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryLo">72.1&nbsp;%</td>
@@ -114,10 +114,10 @@
 <span id="L52"><span class="lineNum">      52</span>              : requires BoundingBoxConcept&lt;T&gt;</span>
 <span id="L53"><span class="lineNum">      53</span>              : struct BoundingBox{</span>
 <span id="L54"><span class="lineNum">      54</span>              :     Point&lt;T&gt; min, max;</span>
-<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC tlaBgGNC">         102 :     BoundingBox(const Point&lt;T&gt;&amp; m, const Point&lt;T&gt;&amp; ma) : min(m), max(ma) {}</span></span>
+<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC tlaBgGNC">        1460 :     BoundingBox(const Point&lt;T&gt;&amp; m, const Point&lt;T&gt;&amp; ma) : min(m), max(ma) {}</span></span>
 <span id="L56"><span class="lineNum">      56</span>              : </span>
-<span id="L57"><span class="lineNum">      57</span> <span class="tlaGNC">         797 :     bool contains(Point&lt;T&gt;&amp; p) const {</span></span>
-<span id="L58"><span class="lineNum">      58</span> <span class="tlaGNC">         797 :         return min.x &lt;= p.x &amp;&amp; p.x &lt;= max.x &amp;&amp; min.y &lt;= p.y &amp;&amp; p.y &lt;= max.y &amp;&amp; min.z &lt;= p.z &amp;&amp; p.z &lt;= max.z;</span></span>
+<span id="L57"><span class="lineNum">      57</span> <span class="tlaGNC">       15324 :     bool contains(Point&lt;T&gt;&amp; p) const {</span></span>
+<span id="L58"><span class="lineNum">      58</span> <span class="tlaGNC">       15324 :         return min.x &lt;= p.x &amp;&amp; p.x &lt;= max.x &amp;&amp; min.y &lt;= p.y &amp;&amp; p.y &lt;= max.y &amp;&amp; min.z &lt;= p.z &amp;&amp; p.z &lt;= max.z;</span></span>
 <span id="L59"><span class="lineNum">      59</span>              :     }</span>
 <span id="L60"><span class="lineNum">      60</span>              : </span>
 <span id="L61"><span class="lineNum">      61</span>              :     bool intersects(BoundingBox&amp; other) const {</span>
@@ -139,7 +139,7 @@
 <span id="L77"><span class="lineNum">      77</span>              :             BoundingBox&lt;T&gt; box;</span>
 <span id="L78"><span class="lineNum">      78</span>              :             Node* parent = nullptr;</span>
 <span id="L79"><span class="lineNum">      79</span>              :             int height;</span>
-<span id="L80"><span class="lineNum">      80</span> <span class="tlaGNC">         105 :             Node(BoundingBox&lt;T&gt;&amp; box, int height) : box(box), height(height) {}</span></span>
+<span id="L80"><span class="lineNum">      80</span> <span class="tlaGNC">        1484 :             Node(BoundingBox&lt;T&gt;&amp; box, int height) : box(box), height(height) {}</span></span>
 <span id="L81"><span class="lineNum">      81</span> <span class="tlaUNC tlaBgUNC">           0 :             ~Node() {</span></span>
 <span id="L82"><span class="lineNum">      82</span> <span class="tlaUNC">           0 :                 for (auto c : con) {</span></span>
 <span id="L83"><span class="lineNum">      83</span> <span class="tlaUNC">           0 :                     delete c.second; // Освобождение памяти для контейнеров</span></span>
@@ -149,8 +149,8 @@
 <span id="L87"><span class="lineNum">      87</span>              :                 }</span>
 <span id="L88"><span class="lineNum">      88</span> <span class="tlaUNC">           0 :             }</span></span>
 <span id="L89"><span class="lineNum">      89</span>              : </span>
-<span id="L90"><span class="lineNum">      90</span> <span class="tlaGNC tlaBgGNC">         193 :             bool isLeaf() const {</span></span>
-<span id="L91"><span class="lineNum">      91</span> <span class="tlaGNC">         193 :                 return children[0] == nullptr;</span></span>
+<span id="L90"><span class="lineNum">      90</span> <span class="tlaUNC">           0 :             bool isLeaf() const {</span></span>
+<span id="L91"><span class="lineNum">      91</span> <span class="tlaUNC">           0 :                 return children[0] == nullptr;</span></span>
 <span id="L92"><span class="lineNum">      92</span>              :             }</span>
 <span id="L93"><span class="lineNum">      93</span>              : </span>
 <span id="L94"><span class="lineNum">      94</span>              :             std::vector&lt;std::pair&lt;CPosType, N&gt;&gt; getCon(){</span>
@@ -173,7 +173,7 @@
 <span id="L111"><span class="lineNum">     111</span>              : </span>
 <span id="L112"><span class="lineNum">     112</span>              :             public:</span>
 <span id="L113"><span class="lineNum">     113</span>              : </span>
-<span id="L114"><span class="lineNum">     114</span> <span class="tlaUNC tlaBgUNC">           0 :                 explicit iterator(Node* root) {</span></span>
+<span id="L114"><span class="lineNum">     114</span> <span class="tlaUNC">           0 :                 explicit iterator(Node* root) {</span></span>
 <span id="L115"><span class="lineNum">     115</span> <span class="tlaUNC">           0 :                     if (root != nullptr) {</span></span>
 <span id="L116"><span class="lineNum">     116</span> <span class="tlaUNC">           0 :                         nodeStack.push(root);</span></span>
 <span id="L117"><span class="lineNum">     117</span>              :                     }</span>
@@ -206,11 +206,11 @@
 <span id="L144"><span class="lineNum">     144</span>              :         Node* root = nullptr;</span>
 <span id="L145"><span class="lineNum">     145</span>              :         int depth_;</span>
 <span id="L146"><span class="lineNum">     146</span>              :     public:</span>
-<span id="L147"><span class="lineNum">     147</span> <span class="tlaGNC tlaBgGNC">           9 :         Octree(BoundingBox&lt;T&gt;&amp; bbox, int depth) {</span></span>
-<span id="L148"><span class="lineNum">     148</span> <span class="tlaGNC">           9 :         depth_ = depth;</span></span>
-<span id="L149"><span class="lineNum">     149</span> <span class="tlaGNC">           9 :         root = new Node(bbox, 0);</span></span>
+<span id="L147"><span class="lineNum">     147</span> <span class="tlaGNC tlaBgGNC">          84 :         Octree(BoundingBox&lt;T&gt;&amp; bbox, int depth) {</span></span>
+<span id="L148"><span class="lineNum">     148</span> <span class="tlaGNC">          84 :         depth_ = depth;</span></span>
+<span id="L149"><span class="lineNum">     149</span> <span class="tlaGNC">          84 :         root = new Node(bbox, 0);</span></span>
 <span id="L150"><span class="lineNum">     150</span>              :         //createTree(root, depth);</span>
-<span id="L151"><span class="lineNum">     151</span> <span class="tlaGNC">           9 :     }</span></span>
+<span id="L151"><span class="lineNum">     151</span> <span class="tlaGNC">          84 :     }</span></span>
 <span id="L152"><span class="lineNum">     152</span>              : </span>
 <span id="L153"><span class="lineNum">     153</span>              : </span>
 <span id="L154"><span class="lineNum">     154</span> <span class="tlaUNC tlaBgUNC">           0 :         ~Octree() {</span></span>
@@ -232,123 +232,123 @@
 <span id="L170"><span class="lineNum">     170</span>              :         }</span>
 <span id="L171"><span class="lineNum">     171</span>              : </span>
 <span id="L172"><span class="lineNum">     172</span>              : </span>
-<span id="L173"><span class="lineNum">     173</span> <span class="tlaGNC tlaBgGNC">          35 :         bool insert(N container, CPosType&amp; position, Node* target){</span></span>
-<span id="L174"><span class="lineNum">     174</span> <span class="tlaGNC">          35 :             if(target == nullptr){</span></span>
+<span id="L173"><span class="lineNum">     173</span> <span class="tlaGNC tlaBgGNC">         402 :         bool insert(N container, CPosType&amp; position, Node* target){</span></span>
+<span id="L174"><span class="lineNum">     174</span> <span class="tlaGNC">         402 :             if(target == nullptr){</span></span>
 <span id="L175"><span class="lineNum">     175</span> <span class="tlaUNC tlaBgUNC">           0 :                 return false;</span></span>
 <span id="L176"><span class="lineNum">     176</span>              :             }</span>
-<span id="L177"><span class="lineNum">     177</span> <span class="tlaGNC tlaBgGNC">          35 :             target-&gt;con.push_back(std::make_pair(position, container));</span></span>
-<span id="L178"><span class="lineNum">     178</span> <span class="tlaGNC">          35 :             if (target-&gt;con.empty() == false &amp;&amp; target-&gt;isLeaf() &amp;&amp; target-&gt;height &lt; depth_){</span></span>
-<span id="L179"><span class="lineNum">     179</span> <span class="tlaGNC">          12 :                 split(target);</span></span>
+<span id="L177"><span class="lineNum">     177</span> <span class="tlaGNC tlaBgGNC">         402 :             target-&gt;con.push_back(std::make_pair(position, container));</span></span>
+<span id="L178"><span class="lineNum">     178</span> <span class="tlaGNC">         402 :             if (target-&gt;con.empty() == false &amp;&amp; target-&gt;isLeaf() &amp;&amp; target-&gt;height &lt; depth_){</span></span>
+<span id="L179"><span class="lineNum">     179</span> <span class="tlaGNC">         175 :                 split(target);</span></span>
 <span id="L180"><span class="lineNum">     180</span>              :             }</span>
-<span id="L181"><span class="lineNum">     181</span> <span class="tlaGNC">          35 :             return true;</span></span>
+<span id="L181"><span class="lineNum">     181</span> <span class="tlaGNC">         402 :             return true;</span></span>
 <span id="L182"><span class="lineNum">     182</span>              :         }</span>
 <span id="L183"><span class="lineNum">     183</span>              : </span>
 <span id="L184"><span class="lineNum">     184</span>              : </span>
-<span id="L185"><span class="lineNum">     185</span> <span class="tlaGNC">          12 :         void split(Node* node){</span></span>
-<span id="L186"><span class="lineNum">     186</span> <span class="tlaGNC">          12 :              Point&lt;T&gt; min = node-&gt;box.min;</span></span>
-<span id="L187"><span class="lineNum">     187</span> <span class="tlaGNC">          12 :             Point&lt;T&gt; max = node-&gt;box.max;</span></span>
+<span id="L185"><span class="lineNum">     185</span> <span class="tlaGNC">         175 :         void split(Node* node){</span></span>
+<span id="L186"><span class="lineNum">     186</span> <span class="tlaGNC">         175 :              Point&lt;T&gt; min = node-&gt;box.min;</span></span>
+<span id="L187"><span class="lineNum">     187</span> <span class="tlaGNC">         175 :             Point&lt;T&gt; max = node-&gt;box.max;</span></span>
 <span id="L188"><span class="lineNum">     188</span>              : </span>
-<span id="L189"><span class="lineNum">     189</span> <span class="tlaGNC">          12 :             T midX = (min.x + max.x) / 2;</span></span>
-<span id="L190"><span class="lineNum">     190</span> <span class="tlaGNC">          12 :             T midY = (min.y + max.y) / 2;</span></span>
-<span id="L191"><span class="lineNum">     191</span> <span class="tlaGNC">          12 :             T midZ = (min.z + max.z) / 2;</span></span>
+<span id="L189"><span class="lineNum">     189</span> <span class="tlaGNC">         175 :             T midX = (min.x + max.x) / 2;</span></span>
+<span id="L190"><span class="lineNum">     190</span> <span class="tlaGNC">         175 :             T midY = (min.y + max.y) / 2;</span></span>
+<span id="L191"><span class="lineNum">     191</span> <span class="tlaGNC">         175 :             T midZ = (min.z + max.z) / 2;</span></span>
 <span id="L192"><span class="lineNum">     192</span>              : </span>
-<span id="L193"><span class="lineNum">     193</span> <span class="tlaGNC">          12 :             Point&lt;T&gt; first = min;</span></span>
-<span id="L194"><span class="lineNum">     194</span> <span class="tlaGNC">          12 :             Point&lt;T&gt; second = Point&lt;T&gt;(midX, midY, midZ);</span></span>
-<span id="L195"><span class="lineNum">     195</span> <span class="tlaGNC">          12 :             BoundingBox&lt;T&gt; box = BoundingBox&lt;T&gt;(first, second);</span></span>
-<span id="L196"><span class="lineNum">     196</span> <span class="tlaGNC">          12 :             node-&gt;children[0] = new Node(box, node-&gt;height + 1); // 0: min</span></span>
-<span id="L197"><span class="lineNum">     197</span> <span class="tlaGNC">          12 :             node-&gt;children[0]-&gt;parent = node;</span></span>
+<span id="L193"><span class="lineNum">     193</span> <span class="tlaGNC">         175 :             Point&lt;T&gt; first = min;</span></span>
+<span id="L194"><span class="lineNum">     194</span> <span class="tlaGNC">         175 :             Point&lt;T&gt; second = Point&lt;T&gt;(midX, midY, midZ);</span></span>
+<span id="L195"><span class="lineNum">     195</span> <span class="tlaGNC">         175 :             BoundingBox&lt;T&gt; box = BoundingBox&lt;T&gt;(first, second);</span></span>
+<span id="L196"><span class="lineNum">     196</span> <span class="tlaGNC">         175 :             node-&gt;children[0] = new Node(box, node-&gt;height + 1); // 0: min</span></span>
+<span id="L197"><span class="lineNum">     197</span> <span class="tlaGNC">         175 :             node-&gt;children[0]-&gt;parent = node;</span></span>
 <span id="L198"><span class="lineNum">     198</span>              : </span>
 <span id="L199"><span class="lineNum">     199</span>              : </span>
-<span id="L200"><span class="lineNum">     200</span> <span class="tlaGNC">          12 :             first = Point&lt;T&gt;(midX, min.y, min.z);</span></span>
-<span id="L201"><span class="lineNum">     201</span> <span class="tlaGNC">          12 :             second = Point&lt;T&gt;(max.x, midY, midZ);</span></span>
-<span id="L202"><span class="lineNum">     202</span> <span class="tlaGNC">          12 :             box = BoundingBox&lt;T&gt;(first, second);</span></span>
-<span id="L203"><span class="lineNum">     203</span> <span class="tlaGNC">          12 :             node-&gt;children[1] = new Node(box, node-&gt;height + 1); // 1: x+</span></span>
-<span id="L204"><span class="lineNum">     204</span> <span class="tlaGNC">          12 :             node-&gt;children[1]-&gt;parent = node;</span></span>
+<span id="L200"><span class="lineNum">     200</span> <span class="tlaGNC">         175 :             first = Point&lt;T&gt;(midX, min.y, min.z);</span></span>
+<span id="L201"><span class="lineNum">     201</span> <span class="tlaGNC">         175 :             second = Point&lt;T&gt;(max.x, midY, midZ);</span></span>
+<span id="L202"><span class="lineNum">     202</span> <span class="tlaGNC">         175 :             box = BoundingBox&lt;T&gt;(first, second);</span></span>
+<span id="L203"><span class="lineNum">     203</span> <span class="tlaGNC">         175 :             node-&gt;children[1] = new Node(box, node-&gt;height + 1); // 1: x+</span></span>
+<span id="L204"><span class="lineNum">     204</span> <span class="tlaGNC">         175 :             node-&gt;children[1]-&gt;parent = node;</span></span>
 <span id="L205"><span class="lineNum">     205</span>              : </span>
 <span id="L206"><span class="lineNum">     206</span>              : </span>
-<span id="L207"><span class="lineNum">     207</span> <span class="tlaGNC">          12 :             first = Point&lt;T&gt;(min.x, midY, min.z);</span></span>
-<span id="L208"><span class="lineNum">     208</span> <span class="tlaGNC">          12 :             second = Point&lt;T&gt;(midX, max.y, midZ);</span></span>
-<span id="L209"><span class="lineNum">     209</span> <span class="tlaGNC">          12 :             box = BoundingBox&lt;T&gt;(first, second);</span></span>
-<span id="L210"><span class="lineNum">     210</span> <span class="tlaGNC">          12 :             node-&gt;children[2] = new Node(box, node-&gt;height + 1); // 2: y+</span></span>
-<span id="L211"><span class="lineNum">     211</span> <span class="tlaGNC">          12 :             node-&gt;children[2]-&gt;parent = node;</span></span>
+<span id="L207"><span class="lineNum">     207</span> <span class="tlaGNC">         175 :             first = Point&lt;T&gt;(min.x, midY, min.z);</span></span>
+<span id="L208"><span class="lineNum">     208</span> <span class="tlaGNC">         175 :             second = Point&lt;T&gt;(midX, max.y, midZ);</span></span>
+<span id="L209"><span class="lineNum">     209</span> <span class="tlaGNC">         175 :             box = BoundingBox&lt;T&gt;(first, second);</span></span>
+<span id="L210"><span class="lineNum">     210</span> <span class="tlaGNC">         175 :             node-&gt;children[2] = new Node(box, node-&gt;height + 1); // 2: y+</span></span>
+<span id="L211"><span class="lineNum">     211</span> <span class="tlaGNC">         175 :             node-&gt;children[2]-&gt;parent = node;</span></span>
 <span id="L212"><span class="lineNum">     212</span>              : </span>
 <span id="L213"><span class="lineNum">     213</span>              : </span>
-<span id="L214"><span class="lineNum">     214</span> <span class="tlaGNC">          12 :             first = Point&lt;T&gt;(midX, midY, min.z);</span></span>
-<span id="L215"><span class="lineNum">     215</span> <span class="tlaGNC">          12 :             second = Point&lt;T&gt;(max.x, max.y, midZ);</span></span>
-<span id="L216"><span class="lineNum">     216</span> <span class="tlaGNC">          12 :             box = BoundingBox&lt;T&gt;(first, second);</span></span>
-<span id="L217"><span class="lineNum">     217</span> <span class="tlaGNC">          12 :             node-&gt;children[3] = new Node(box, node-&gt;height + 1); // 3: xy+</span></span>
-<span id="L218"><span class="lineNum">     218</span> <span class="tlaGNC">          12 :             node-&gt;children[3]-&gt;parent = node;</span></span>
+<span id="L214"><span class="lineNum">     214</span> <span class="tlaGNC">         175 :             first = Point&lt;T&gt;(midX, midY, min.z);</span></span>
+<span id="L215"><span class="lineNum">     215</span> <span class="tlaGNC">         175 :             second = Point&lt;T&gt;(max.x, max.y, midZ);</span></span>
+<span id="L216"><span class="lineNum">     216</span> <span class="tlaGNC">         175 :             box = BoundingBox&lt;T&gt;(first, second);</span></span>
+<span id="L217"><span class="lineNum">     217</span> <span class="tlaGNC">         175 :             node-&gt;children[3] = new Node(box, node-&gt;height + 1); // 3: xy+</span></span>
+<span id="L218"><span class="lineNum">     218</span> <span class="tlaGNC">         175 :             node-&gt;children[3]-&gt;parent = node;</span></span>
 <span id="L219"><span class="lineNum">     219</span>              : </span>
 <span id="L220"><span class="lineNum">     220</span>              : </span>
-<span id="L221"><span class="lineNum">     221</span> <span class="tlaGNC">          12 :             first = Point&lt;T&gt;(min.x, min.y, midZ);</span></span>
-<span id="L222"><span class="lineNum">     222</span> <span class="tlaGNC">          12 :             second = Point&lt;T&gt;(midX, midY, max.z);</span></span>
-<span id="L223"><span class="lineNum">     223</span> <span class="tlaGNC">          12 :             box = BoundingBox&lt;T&gt;(first, second);</span></span>
-<span id="L224"><span class="lineNum">     224</span> <span class="tlaGNC">          12 :             node-&gt;children[4] = new Node(box, node-&gt;height + 1); // 4: z+</span></span>
-<span id="L225"><span class="lineNum">     225</span> <span class="tlaGNC">          12 :             node-&gt;children[4]-&gt;parent = node;</span></span>
+<span id="L221"><span class="lineNum">     221</span> <span class="tlaGNC">         175 :             first = Point&lt;T&gt;(min.x, min.y, midZ);</span></span>
+<span id="L222"><span class="lineNum">     222</span> <span class="tlaGNC">         175 :             second = Point&lt;T&gt;(midX, midY, max.z);</span></span>
+<span id="L223"><span class="lineNum">     223</span> <span class="tlaGNC">         175 :             box = BoundingBox&lt;T&gt;(first, second);</span></span>
+<span id="L224"><span class="lineNum">     224</span> <span class="tlaGNC">         175 :             node-&gt;children[4] = new Node(box, node-&gt;height + 1); // 4: z+</span></span>
+<span id="L225"><span class="lineNum">     225</span> <span class="tlaGNC">         175 :             node-&gt;children[4]-&gt;parent = node;</span></span>
 <span id="L226"><span class="lineNum">     226</span>              : </span>
 <span id="L227"><span class="lineNum">     227</span>              : </span>
-<span id="L228"><span class="lineNum">     228</span> <span class="tlaGNC">          12 :             first = Point&lt;T&gt;(midX, min.y, midZ);</span></span>
-<span id="L229"><span class="lineNum">     229</span> <span class="tlaGNC">          12 :             second = Point&lt;T&gt;(max.x, midY, max.z);</span></span>
-<span id="L230"><span class="lineNum">     230</span> <span class="tlaGNC">          12 :             box = BoundingBox&lt;T&gt;(first, second);</span></span>
-<span id="L231"><span class="lineNum">     231</span> <span class="tlaGNC">          12 :             node-&gt;children[5] = new Node(box, node-&gt;height + 1); // 5: x+z+</span></span>
-<span id="L232"><span class="lineNum">     232</span> <span class="tlaGNC">          12 :             node-&gt;children[5]-&gt;parent = node;</span></span>
+<span id="L228"><span class="lineNum">     228</span> <span class="tlaGNC">         175 :             first = Point&lt;T&gt;(midX, min.y, midZ);</span></span>
+<span id="L229"><span class="lineNum">     229</span> <span class="tlaGNC">         175 :             second = Point&lt;T&gt;(max.x, midY, max.z);</span></span>
+<span id="L230"><span class="lineNum">     230</span> <span class="tlaGNC">         175 :             box = BoundingBox&lt;T&gt;(first, second);</span></span>
+<span id="L231"><span class="lineNum">     231</span> <span class="tlaGNC">         175 :             node-&gt;children[5] = new Node(box, node-&gt;height + 1); // 5: x+z+</span></span>
+<span id="L232"><span class="lineNum">     232</span> <span class="tlaGNC">         175 :             node-&gt;children[5]-&gt;parent = node;</span></span>
 <span id="L233"><span class="lineNum">     233</span>              : </span>
 <span id="L234"><span class="lineNum">     234</span>              : </span>
-<span id="L235"><span class="lineNum">     235</span> <span class="tlaGNC">          12 :             first = Point&lt;T&gt;(min.x, midY, midZ);</span></span>
-<span id="L236"><span class="lineNum">     236</span> <span class="tlaGNC">          12 :             second =  Point&lt;T&gt;(midX, max.y, max.z);</span></span>
-<span id="L237"><span class="lineNum">     237</span> <span class="tlaGNC">          12 :             box = BoundingBox&lt;T&gt;(first, second);</span></span>
-<span id="L238"><span class="lineNum">     238</span> <span class="tlaGNC">          12 :             node-&gt;children[6] = new Node(box, node-&gt;height + 1); // 6: y+z+</span></span>
-<span id="L239"><span class="lineNum">     239</span> <span class="tlaGNC">          12 :             node-&gt;children[6]-&gt;parent = node;</span></span>
+<span id="L235"><span class="lineNum">     235</span> <span class="tlaGNC">         175 :             first = Point&lt;T&gt;(min.x, midY, midZ);</span></span>
+<span id="L236"><span class="lineNum">     236</span> <span class="tlaGNC">         175 :             second =  Point&lt;T&gt;(midX, max.y, max.z);</span></span>
+<span id="L237"><span class="lineNum">     237</span> <span class="tlaGNC">         175 :             box = BoundingBox&lt;T&gt;(first, second);</span></span>
+<span id="L238"><span class="lineNum">     238</span> <span class="tlaGNC">         175 :             node-&gt;children[6] = new Node(box, node-&gt;height + 1); // 6: y+z+</span></span>
+<span id="L239"><span class="lineNum">     239</span> <span class="tlaGNC">         175 :             node-&gt;children[6]-&gt;parent = node;</span></span>
 <span id="L240"><span class="lineNum">     240</span>              : </span>
 <span id="L241"><span class="lineNum">     241</span>              : </span>
-<span id="L242"><span class="lineNum">     242</span> <span class="tlaGNC">          12 :             first = Point&lt;T&gt;(midX, midY, midZ);</span></span>
-<span id="L243"><span class="lineNum">     243</span> <span class="tlaGNC">          12 :             second = max;</span></span>
-<span id="L244"><span class="lineNum">     244</span> <span class="tlaGNC">          12 :             box = BoundingBox&lt;T&gt;(first, second);</span></span>
-<span id="L245"><span class="lineNum">     245</span> <span class="tlaGNC">          12 :             node-&gt;children[7] = new Node(box, node-&gt;height + 1); // 7: xyz+</span></span>
-<span id="L246"><span class="lineNum">     246</span> <span class="tlaGNC">          12 :             node-&gt;children[7]-&gt;parent = node;</span></span>
+<span id="L242"><span class="lineNum">     242</span> <span class="tlaGNC">         175 :             first = Point&lt;T&gt;(midX, midY, midZ);</span></span>
+<span id="L243"><span class="lineNum">     243</span> <span class="tlaGNC">         175 :             second = max;</span></span>
+<span id="L244"><span class="lineNum">     244</span> <span class="tlaGNC">         175 :             box = BoundingBox&lt;T&gt;(first, second);</span></span>
+<span id="L245"><span class="lineNum">     245</span> <span class="tlaGNC">         175 :             node-&gt;children[7] = new Node(box, node-&gt;height + 1); // 7: xyz+</span></span>
+<span id="L246"><span class="lineNum">     246</span> <span class="tlaGNC">         175 :             node-&gt;children[7]-&gt;parent = node;</span></span>
 <span id="L247"><span class="lineNum">     247</span>              : </span>
 <span id="L248"><span class="lineNum">     248</span>              : </span>
-<span id="L249"><span class="lineNum">     249</span> <span class="tlaGNC">          27 :             for (auto&amp; item : node-&gt;con) {</span></span>
-<span id="L250"><span class="lineNum">     250</span> <span class="tlaGNC">          25 :                 for (int i = 0; i &lt; 8; ++i) {</span></span>
-<span id="L251"><span class="lineNum">     251</span> <span class="tlaGNC">          40 :                     if (node-&gt;children[i]-&gt;box.contains(item.first.LLDown) &amp;&amp;</span></span>
-<span id="L252"><span class="lineNum">     252</span> <span class="tlaGNC">          30 :                     node-&gt;children[i]-&gt;box.contains(item.first.LLUp) &amp;&amp;</span></span>
-<span id="L253"><span class="lineNum">     253</span> <span class="tlaGNC">          30 :                     node-&gt;children[i]-&gt;box.contains(item.first.LRDown) &amp;&amp;</span></span>
-<span id="L254"><span class="lineNum">     254</span> <span class="tlaGNC">          30 :                     node-&gt;children[i]-&gt;box.contains(item.first.LRUp) &amp;&amp;</span></span>
-<span id="L255"><span class="lineNum">     255</span> <span class="tlaGNC">          30 :                     node-&gt;children[i]-&gt;box.contains(item.first.RLDown) &amp;&amp;</span></span>
-<span id="L256"><span class="lineNum">     256</span> <span class="tlaGNC">          30 :                     node-&gt;children[i]-&gt;box.contains(item.first.RLUp) &amp;&amp;</span></span>
-<span id="L257"><span class="lineNum">     257</span> <span class="tlaGNC">          55 :                     node-&gt;children[i]-&gt;box.contains(item.first.RRDown) &amp;&amp;</span></span>
-<span id="L258"><span class="lineNum">     258</span> <span class="tlaGNC">          15 :                     node-&gt;children[i]-&gt;box.contains(item.first.RRUp)) {</span></span>
-<span id="L259"><span class="lineNum">     259</span> <span class="tlaGNC">          15 :                         node-&gt;children[i]-&gt;con.push_back(item);</span></span>
-<span id="L260"><span class="lineNum">     260</span> <span class="tlaGNC">          15 :                         node-&gt;con.erase(std::remove(node-&gt;con.begin(), node-&gt;con.end(), item), node-&gt;con.end());</span></span>
-<span id="L261"><span class="lineNum">     261</span> <span class="tlaGNC">          15 :                         break;</span></span>
+<span id="L249"><span class="lineNum">     249</span> <span class="tlaGNC">         398 :             for (auto&amp; item : node-&gt;con) {</span></span>
+<span id="L250"><span class="lineNum">     250</span> <span class="tlaGNC">         481 :                 for (int i = 0; i &lt; 8; ++i) {</span></span>
+<span id="L251"><span class="lineNum">     251</span> <span class="tlaGNC">         692 :                     if (node-&gt;children[i]-&gt;box.contains(item.first.LLDown) &amp;&amp;</span></span>
+<span id="L252"><span class="lineNum">     252</span> <span class="tlaGNC">         453 :                     node-&gt;children[i]-&gt;box.contains(item.first.LLUp) &amp;&amp;</span></span>
+<span id="L253"><span class="lineNum">     253</span> <span class="tlaGNC">         427 :                     node-&gt;children[i]-&gt;box.contains(item.first.LRDown) &amp;&amp;</span></span>
+<span id="L254"><span class="lineNum">     254</span> <span class="tlaGNC">         408 :                     node-&gt;children[i]-&gt;box.contains(item.first.LRUp) &amp;&amp;</span></span>
+<span id="L255"><span class="lineNum">     255</span> <span class="tlaGNC">         408 :                     node-&gt;children[i]-&gt;box.contains(item.first.RLDown) &amp;&amp;</span></span>
+<span id="L256"><span class="lineNum">     256</span> <span class="tlaGNC">         408 :                     node-&gt;children[i]-&gt;box.contains(item.first.RLUp) &amp;&amp;</span></span>
+<span id="L257"><span class="lineNum">     257</span> <span class="tlaGNC">         896 :                     node-&gt;children[i]-&gt;box.contains(item.first.RRDown) &amp;&amp;</span></span>
+<span id="L258"><span class="lineNum">     258</span> <span class="tlaGNC">         204 :                     node-&gt;children[i]-&gt;box.contains(item.first.RRUp)) {</span></span>
+<span id="L259"><span class="lineNum">     259</span> <span class="tlaGNC">         204 :                         node-&gt;children[i]-&gt;con.push_back(item);</span></span>
+<span id="L260"><span class="lineNum">     260</span> <span class="tlaGNC">         204 :                         node-&gt;con.erase(std::remove(node-&gt;con.begin(), node-&gt;con.end(), item), node-&gt;con.end());</span></span>
+<span id="L261"><span class="lineNum">     261</span> <span class="tlaGNC">         204 :                         break;</span></span>
 <span id="L262"><span class="lineNum">     262</span>              :                     }</span>
 <span id="L263"><span class="lineNum">     263</span>              :                 }</span>
 <span id="L264"><span class="lineNum">     264</span>              :             }</span>
-<span id="L265"><span class="lineNum">     265</span> <span class="tlaGNC">          12 :         }</span></span>
+<span id="L265"><span class="lineNum">     265</span> <span class="tlaGNC">         175 :         }</span></span>
 <span id="L266"><span class="lineNum">     266</span>              : </span>
 <span id="L267"><span class="lineNum">     267</span>              : </span>
-<span id="L268"><span class="lineNum">     268</span> <span class="tlaGNC">           3 :         Octree* Clone(){</span></span>
-<span id="L269"><span class="lineNum">     269</span> <span class="tlaGNC">           3 :             Octree* clone = new Octree(this-&gt;root-&gt;box, this-&gt;depth_);</span></span>
-<span id="L270"><span class="lineNum">     270</span> <span class="tlaGNC">           3 :             return clone;</span></span>
+<span id="L268"><span class="lineNum">     268</span> <span class="tlaGNC">          24 :         Octree* Clone(){</span></span>
+<span id="L269"><span class="lineNum">     269</span> <span class="tlaGNC">          24 :             Octree* clone = new Octree(this-&gt;root-&gt;box, this-&gt;depth_);</span></span>
+<span id="L270"><span class="lineNum">     270</span> <span class="tlaGNC">          24 :             return clone;</span></span>
 <span id="L271"><span class="lineNum">     271</span>              :         }</span>
 <span id="L272"><span class="lineNum">     272</span>              : </span>
 <span id="L273"><span class="lineNum">     273</span>              : </span>
 <span id="L274"><span class="lineNum">     274</span>              : </span>
-<span id="L275"><span class="lineNum">     275</span> <span class="tlaUNC tlaBgUNC">           0 :         bool remove(std::string id){</span></span>
-<span id="L276"><span class="lineNum">     276</span> <span class="tlaUNC">           0 :             bool collision = false;</span></span>
-<span id="L277"><span class="lineNum">     277</span> <span class="tlaUNC">           0 :             removeR(id, root, collision);</span></span>
-<span id="L278"><span class="lineNum">     278</span> <span class="tlaUNC">           0 :             if(collision == false){</span></span>
-<span id="L279"><span class="lineNum">     279</span> <span class="tlaUNC">           0 :                 return false;</span></span>
+<span id="L275"><span class="lineNum">     275</span> <span class="tlaGNC">          42 :         bool remove(std::string id){</span></span>
+<span id="L276"><span class="lineNum">     276</span> <span class="tlaGNC">          42 :             bool collision = false;</span></span>
+<span id="L277"><span class="lineNum">     277</span> <span class="tlaGNC">          42 :             removeR(id, root, collision);</span></span>
+<span id="L278"><span class="lineNum">     278</span> <span class="tlaGNC">          42 :             if(collision == false){</span></span>
+<span id="L279"><span class="lineNum">     279</span> <span class="tlaUNC tlaBgUNC">           0 :                 return false;</span></span>
 <span id="L280"><span class="lineNum">     280</span>              :             }</span>
-<span id="L281"><span class="lineNum">     281</span> <span class="tlaUNC">           0 :             collision = false;</span></span>
-<span id="L282"><span class="lineNum">     282</span> <span class="tlaUNC">           0 :             return true;</span></span>
+<span id="L281"><span class="lineNum">     281</span> <span class="tlaGNC tlaBgGNC">          42 :             collision = false;</span></span>
+<span id="L282"><span class="lineNum">     282</span> <span class="tlaGNC">          42 :             return true;</span></span>
 <span id="L283"><span class="lineNum">     283</span>              :         }</span>
 <span id="L284"><span class="lineNum">     284</span>              : </span>
 <span id="L285"><span class="lineNum">     285</span>              : </span>
-<span id="L286"><span class="lineNum">     286</span> <span class="tlaGNC tlaBgGNC">           4 :         Node* search(std::string id){</span></span>
-<span id="L287"><span class="lineNum">     287</span> <span class="tlaGNC">           4 :             Node* copyCache = nullptr;</span></span>
-<span id="L288"><span class="lineNum">     288</span> <span class="tlaGNC">           4 :             searchR(id, root, &amp;copyCache);</span></span>
-<span id="L289"><span class="lineNum">     289</span> <span class="tlaGNC">           4 :             return copyCache;</span></span>
+<span id="L286"><span class="lineNum">     286</span> <span class="tlaGNC">          78 :         Node* search(std::string id){</span></span>
+<span id="L287"><span class="lineNum">     287</span> <span class="tlaGNC">          78 :             Node* copyCache = nullptr;</span></span>
+<span id="L288"><span class="lineNum">     288</span> <span class="tlaGNC">          78 :             searchR(id, root, &amp;copyCache);</span></span>
+<span id="L289"><span class="lineNum">     289</span> <span class="tlaGNC">          78 :             return copyCache;</span></span>
 <span id="L290"><span class="lineNum">     290</span>              :         }</span>
 <span id="L291"><span class="lineNum">     291</span>              : </span>
 <span id="L292"><span class="lineNum">     292</span>              : </span>
@@ -359,20 +359,20 @@
 <span id="L297"><span class="lineNum">     297</span>              :         }</span>
 <span id="L298"><span class="lineNum">     298</span>              : </span>
 <span id="L299"><span class="lineNum">     299</span>              : </span>
-<span id="L300"><span class="lineNum">     300</span> <span class="tlaGNC tlaBgGNC">          25 :         std::vector&lt;std::pair&lt;CPosType, N&gt;&gt; searchDepth(){</span></span>
-<span id="L301"><span class="lineNum">     301</span> <span class="tlaGNC">          25 :             std::vector&lt;std::pair&lt;CPosType, N&gt;&gt; copyCache(0);</span></span>
-<span id="L302"><span class="lineNum">     302</span> <span class="tlaGNC">          25 :             searchDepth(root, copyCache);</span></span>
-<span id="L303"><span class="lineNum">     303</span> <span class="tlaGNC">          25 :             return copyCache;</span></span>
+<span id="L300"><span class="lineNum">     300</span> <span class="tlaGNC tlaBgGNC">         352 :         std::vector&lt;std::pair&lt;CPosType, N&gt;&gt; searchDepth(){</span></span>
+<span id="L301"><span class="lineNum">     301</span> <span class="tlaGNC">         352 :             std::vector&lt;std::pair&lt;CPosType, N&gt;&gt; copyCache(0);</span></span>
+<span id="L302"><span class="lineNum">     302</span> <span class="tlaGNC">         352 :             searchDepth(root, copyCache);</span></span>
+<span id="L303"><span class="lineNum">     303</span> <span class="tlaGNC">         352 :             return copyCache;</span></span>
 <span id="L304"><span class="lineNum">     304</span> <span class="tlaUNC tlaBgUNC">           0 :         }</span></span>
 <span id="L305"><span class="lineNum">     305</span>              : </span>
 <span id="L306"><span class="lineNum">     306</span>              : </span>
-<span id="L307"><span class="lineNum">     307</span> <span class="tlaGNC tlaBgGNC">          41 :         Node* SearchInsert(N container, CPosType pos){</span></span>
-<span id="L308"><span class="lineNum">     308</span> <span class="tlaGNC">          41 :             bool collision = false;</span></span>
-<span id="L309"><span class="lineNum">     309</span> <span class="tlaGNC">          41 :             Node* copyCache = nullptr;</span></span>
-<span id="L310"><span class="lineNum">     310</span> <span class="tlaGNC">          41 :             std::vector&lt;std::pair&lt;CPosType, N&gt;&gt; copy(0);</span></span>
-<span id="L311"><span class="lineNum">     311</span> <span class="tlaGNC">          41 :             SearchInsert(container, pos, root, &amp;copyCache, copy, collision);</span></span>
-<span id="L312"><span class="lineNum">     312</span> <span class="tlaGNC">          41 :             return copyCache;</span></span>
-<span id="L313"><span class="lineNum">     313</span> <span class="tlaGNC">          41 :         }</span></span>
+<span id="L307"><span class="lineNum">     307</span> <span class="tlaGNC tlaBgGNC">         537 :         Node* SearchInsert(N container, CPosType pos){</span></span>
+<span id="L308"><span class="lineNum">     308</span> <span class="tlaGNC">         537 :             bool collision = false;</span></span>
+<span id="L309"><span class="lineNum">     309</span> <span class="tlaGNC">         537 :             Node* copyCache = nullptr;</span></span>
+<span id="L310"><span class="lineNum">     310</span> <span class="tlaGNC">         537 :             std::vector&lt;std::pair&lt;CPosType, N&gt;&gt; copy(0);</span></span>
+<span id="L311"><span class="lineNum">     311</span> <span class="tlaGNC">         537 :             SearchInsert(container, pos, root, &amp;copyCache, copy, collision);</span></span>
+<span id="L312"><span class="lineNum">     312</span> <span class="tlaGNC">         537 :             return copyCache;</span></span>
+<span id="L313"><span class="lineNum">     313</span> <span class="tlaGNC">         537 :         }</span></span>
 <span id="L314"><span class="lineNum">     314</span>              : </span>
 <span id="L315"><span class="lineNum">     315</span>              : </span>
 <span id="L316"><span class="lineNum">     316</span>              :         void print() const {</span>
@@ -380,103 +380,103 @@
 <span id="L318"><span class="lineNum">     318</span>              :         }</span>
 <span id="L319"><span class="lineNum">     319</span>              : </span>
 <span id="L320"><span class="lineNum">     320</span>              : </span>
-<span id="L321"><span class="lineNum">     321</span> <span class="tlaGNC">         253 :             static T getMinX(CPosType&amp; position){</span></span>
+<span id="L321"><span class="lineNum">     321</span> <span class="tlaGNC">        3221 :             static T getMinX(CPosType&amp; position){</span></span>
 <span id="L322"><span class="lineNum">     322</span>              :                 static_assert(ContainerPositionConcept&lt;CPosType&gt;, &quot;CPosType должен удовлетворять ContainerPositionConcept&quot;);</span>
-<span id="L323"><span class="lineNum">     323</span> <span class="tlaGNC">         253 :                 return std::min({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});</span></span>
+<span id="L323"><span class="lineNum">     323</span> <span class="tlaGNC">        3221 :                 return std::min({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});</span></span>
 <span id="L324"><span class="lineNum">     324</span>              :             }</span>
 <span id="L325"><span class="lineNum">     325</span>              : </span>
 <span id="L326"><span class="lineNum">     326</span>              : </span>
-<span id="L327"><span class="lineNum">     327</span> <span class="tlaGNC">         253 :             static T getMaxX(CPosType&amp; position){</span></span>
+<span id="L327"><span class="lineNum">     327</span> <span class="tlaGNC">        3221 :             static T getMaxX(CPosType&amp; position){</span></span>
 <span id="L328"><span class="lineNum">     328</span>              :                 static_assert(ContainerPositionConcept&lt;CPosType&gt;, &quot;CPosType должен удовлетворять ContainerPositionConcept&quot;);</span>
-<span id="L329"><span class="lineNum">     329</span> <span class="tlaGNC">         253 :                 return std::max({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});</span></span>
+<span id="L329"><span class="lineNum">     329</span> <span class="tlaGNC">        3221 :                 return std::max({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});</span></span>
 <span id="L330"><span class="lineNum">     330</span>              :             }</span>
 <span id="L331"><span class="lineNum">     331</span>              : </span>
 <span id="L332"><span class="lineNum">     332</span>              : </span>
-<span id="L333"><span class="lineNum">     333</span> <span class="tlaGNC">         279 :             static T getMinY(CPosType&amp; position){</span></span>
+<span id="L333"><span class="lineNum">     333</span> <span class="tlaGNC">        3605 :             static T getMinY(CPosType&amp; position){</span></span>
 <span id="L334"><span class="lineNum">     334</span>              :                 static_assert(ContainerPositionConcept&lt;CPosType&gt;, &quot;CPosType должен удовлетворять ContainerPositionConcept&quot;);</span>
-<span id="L335"><span class="lineNum">     335</span> <span class="tlaGNC">         279 :                 return std::min({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});</span></span>
+<span id="L335"><span class="lineNum">     335</span> <span class="tlaGNC">        3605 :                 return std::min({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});</span></span>
 <span id="L336"><span class="lineNum">     336</span>              :             }</span>
 <span id="L337"><span class="lineNum">     337</span>              : </span>
 <span id="L338"><span class="lineNum">     338</span>              : </span>
-<span id="L339"><span class="lineNum">     339</span> <span class="tlaGNC">         279 :             static T getMaxY(CPosType&amp; position){</span></span>
+<span id="L339"><span class="lineNum">     339</span> <span class="tlaGNC">        3605 :             static T getMaxY(CPosType&amp; position){</span></span>
 <span id="L340"><span class="lineNum">     340</span>              :                 static_assert(ContainerPositionConcept&lt;CPosType&gt;, &quot;CPosType должен удовлетворять ContainerPositionConcept&quot;);</span>
-<span id="L341"><span class="lineNum">     341</span> <span class="tlaGNC">         279 :                 return std::max({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});</span></span>
+<span id="L341"><span class="lineNum">     341</span> <span class="tlaGNC">        3605 :                 return std::max({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});</span></span>
 <span id="L342"><span class="lineNum">     342</span>              :             }</span>
 <span id="L343"><span class="lineNum">     343</span>              : </span>
 <span id="L344"><span class="lineNum">     344</span>              : </span>
-<span id="L345"><span class="lineNum">     345</span> <span class="tlaGNC">         240 :             static T getMinZ(CPosType&amp; position){</span></span>
+<span id="L345"><span class="lineNum">     345</span> <span class="tlaGNC">        3011 :             static T getMinZ(CPosType&amp; position){</span></span>
 <span id="L346"><span class="lineNum">     346</span>              :                 static_assert(ContainerPositionConcept&lt;CPosType&gt;, &quot;CPosType должен удовлетворять ContainerPositionConcept&quot;);</span>
-<span id="L347"><span class="lineNum">     347</span> <span class="tlaGNC">         240 :                 return std::min({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});</span></span>
+<span id="L347"><span class="lineNum">     347</span> <span class="tlaGNC">        3011 :                 return std::min({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});</span></span>
 <span id="L348"><span class="lineNum">     348</span>              :             }</span>
 <span id="L349"><span class="lineNum">     349</span>              : </span>
 <span id="L350"><span class="lineNum">     350</span>              : </span>
-<span id="L351"><span class="lineNum">     351</span> <span class="tlaGNC">         226 :             static T getMaxZ(CPosType&amp; position){</span></span>
+<span id="L351"><span class="lineNum">     351</span> <span class="tlaGNC">        2831 :             static T getMaxZ(CPosType&amp; position){</span></span>
 <span id="L352"><span class="lineNum">     352</span>              :                 static_assert(ContainerPositionConcept&lt;CPosType&gt;, &quot;CPosType должен удовлетворять ContainerPositionConcept&quot;);</span>
-<span id="L353"><span class="lineNum">     353</span> <span class="tlaGNC">         226 :                 return std::max({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});</span></span>
+<span id="L353"><span class="lineNum">     353</span> <span class="tlaGNC">        2831 :                 return std::max({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});</span></span>
 <span id="L354"><span class="lineNum">     354</span>              :             }</span>
 <span id="L355"><span class="lineNum">     355</span>              : </span>
 <span id="L356"><span class="lineNum">     356</span>              : </span>
-<span id="L357"><span class="lineNum">     357</span> <span class="tlaGNC">          46 :             static T getMinX(const CPosType&amp; position){</span></span>
+<span id="L357"><span class="lineNum">     357</span> <span class="tlaGNC">         885 :             static T getMinX(const CPosType&amp; position){</span></span>
 <span id="L358"><span class="lineNum">     358</span>              :                 static_assert(ContainerPositionConcept&lt;CPosType&gt;, &quot;CPosType должен удовлетворять ContainerPositionConcept&quot;);</span>
-<span id="L359"><span class="lineNum">     359</span> <span class="tlaGNC">          46 :                 return std::min({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});</span></span>
+<span id="L359"><span class="lineNum">     359</span> <span class="tlaGNC">         885 :                 return std::min({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});</span></span>
 <span id="L360"><span class="lineNum">     360</span>              :             }</span>
 <span id="L361"><span class="lineNum">     361</span>              : </span>
-<span id="L362"><span class="lineNum">     362</span> <span class="tlaGNC">          27 :             static T getMaxX(const CPosType&amp; position){</span></span>
+<span id="L362"><span class="lineNum">     362</span> <span class="tlaGNC">         641 :             static T getMaxX(const CPosType&amp; position){</span></span>
 <span id="L363"><span class="lineNum">     363</span>              :                 static_assert(ContainerPositionConcept&lt;CPosType&gt;, &quot;CPosType должен удовлетворять ContainerPositionConcept&quot;);</span>
-<span id="L364"><span class="lineNum">     364</span> <span class="tlaGNC">          27 :                 return std::max({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});</span></span>
+<span id="L364"><span class="lineNum">     364</span> <span class="tlaGNC">         641 :                 return std::max({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});</span></span>
 <span id="L365"><span class="lineNum">     365</span>              :             }</span>
 <span id="L366"><span class="lineNum">     366</span>              : </span>
 <span id="L367"><span class="lineNum">     367</span>              : </span>
-<span id="L368"><span class="lineNum">     368</span> <span class="tlaGNC">          27 :             static T getMinY(const CPosType&amp; position){</span></span>
+<span id="L368"><span class="lineNum">     368</span> <span class="tlaGNC">         593 :             static T getMinY(const CPosType&amp; position){</span></span>
 <span id="L369"><span class="lineNum">     369</span>              :                 static_assert(ContainerPositionConcept&lt;CPosType&gt;, &quot;CPosType должен удовлетворять ContainerPositionConcept&quot;);</span>
-<span id="L370"><span class="lineNum">     370</span> <span class="tlaGNC">          27 :                 return std::min({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});</span></span>
+<span id="L370"><span class="lineNum">     370</span> <span class="tlaGNC">         593 :                 return std::min({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});</span></span>
 <span id="L371"><span class="lineNum">     371</span>              :             }</span>
 <span id="L372"><span class="lineNum">     372</span>              : </span>
 <span id="L373"><span class="lineNum">     373</span>              : </span>
-<span id="L374"><span class="lineNum">     374</span> <span class="tlaGNC">          27 :             static T getMaxY(const CPosType&amp; position){</span></span>
+<span id="L374"><span class="lineNum">     374</span> <span class="tlaGNC">         528 :             static T getMaxY(const CPosType&amp; position){</span></span>
 <span id="L375"><span class="lineNum">     375</span>              :                 static_assert(ContainerPositionConcept&lt;CPosType&gt;, &quot;CPosType должен удовлетворять ContainerPositionConcept&quot;);</span>
-<span id="L376"><span class="lineNum">     376</span> <span class="tlaGNC">          27 :                 return std::max({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});</span></span>
+<span id="L376"><span class="lineNum">     376</span> <span class="tlaGNC">         528 :                 return std::max({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});</span></span>
 <span id="L377"><span class="lineNum">     377</span>              :             }</span>
 <span id="L378"><span class="lineNum">     378</span>              : </span>
 <span id="L379"><span class="lineNum">     379</span>              : </span>
 <span id="L380"><span class="lineNum">     380</span>              : </span>
-<span id="L381"><span class="lineNum">     381</span> <span class="tlaGNC">           6 :             static T getMinZ(const CPosType&amp; position){</span></span>
+<span id="L381"><span class="lineNum">     381</span> <span class="tlaGNC">         126 :             static T getMinZ(const CPosType&amp; position){</span></span>
 <span id="L382"><span class="lineNum">     382</span>              :                 static_assert(ContainerPositionConcept&lt;CPosType&gt;, &quot;CPosType должен удовлетворять ContainerPositionConcept&quot;);</span>
-<span id="L383"><span class="lineNum">     383</span> <span class="tlaGNC">           6 :                 return std::min({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});</span></span>
+<span id="L383"><span class="lineNum">     383</span> <span class="tlaGNC">         126 :                 return std::min({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});</span></span>
 <span id="L384"><span class="lineNum">     384</span>              :             }</span>
 <span id="L385"><span class="lineNum">     385</span>              : </span>
 <span id="L386"><span class="lineNum">     386</span>              : </span>
-<span id="L387"><span class="lineNum">     387</span> <span class="tlaGNC">          21 :             static T getMaxZ(const CPosType&amp; position){</span></span>
+<span id="L387"><span class="lineNum">     387</span> <span class="tlaGNC">         362 :             static T getMaxZ(const CPosType&amp; position){</span></span>
 <span id="L388"><span class="lineNum">     388</span>              :                 static_assert(ContainerPositionConcept&lt;CPosType&gt;, &quot;CPosType должен удовлетворять ContainerPositionConcept&quot;);</span>
-<span id="L389"><span class="lineNum">     389</span> <span class="tlaGNC">          21 :                 return std::max({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});</span></span>
+<span id="L389"><span class="lineNum">     389</span> <span class="tlaGNC">         362 :                 return std::max({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});</span></span>
 <span id="L390"><span class="lineNum">     390</span>              :             }</span>
 <span id="L391"><span class="lineNum">     391</span>              : </span>
 <span id="L392"><span class="lineNum">     392</span>              : </span>
-<span id="L393"><span class="lineNum">     393</span> <span class="tlaGNC">          36 :             static bool pointincontainer(Point&lt;T&gt;&amp; p, CPosType&amp; position){</span></span>
+<span id="L393"><span class="lineNum">     393</span> <span class="tlaGNC">         531 :             static bool pointincontainer(Point&lt;T&gt;&amp; p, CPosType&amp; position){</span></span>
 <span id="L394"><span class="lineNum">     394</span>              :                 static_assert(PointConcept&lt;Point&lt;T&gt;&gt;, &quot;T должен удовлетворять PointConcept&quot;);</span>
 <span id="L395"><span class="lineNum">     395</span>              :                 static_assert(ContainerPositionConcept&lt;CPosType&gt;, &quot;CPosType должен удовлетворять ContainerPositionConcept&quot;);</span>
-<span id="L396"><span class="lineNum">     396</span> <span class="tlaGNC">          36 :                 T minX = getMinX(position);</span></span>
-<span id="L397"><span class="lineNum">     397</span> <span class="tlaGNC">          36 :                 T maxX = getMaxX(position);</span></span>
-<span id="L398"><span class="lineNum">     398</span> <span class="tlaGNC">          36 :                 T minY = getMinY(position);</span></span>
-<span id="L399"><span class="lineNum">     399</span> <span class="tlaGNC">          36 :                 T maxY = getMaxY(position);</span></span>
-<span id="L400"><span class="lineNum">     400</span> <span class="tlaGNC">          36 :                 T minZ = getMinZ(position);</span></span>
-<span id="L401"><span class="lineNum">     401</span> <span class="tlaGNC">          36 :                 T maxZ = getMaxZ(position);</span></span>
-<span id="L402"><span class="lineNum">     402</span> <span class="tlaGNC">          36 :                 return (p.x &gt;= minX &amp;&amp; p.x &lt;= maxX &amp;&amp; p.y &gt;= minY &amp;&amp; p.y &lt;= maxY &amp;&amp; p.z &gt;= minZ &amp;&amp; p.z &lt;= maxZ);</span></span>
+<span id="L396"><span class="lineNum">     396</span> <span class="tlaGNC">         531 :                 T minX = getMinX(position);</span></span>
+<span id="L397"><span class="lineNum">     397</span> <span class="tlaGNC">         531 :                 T maxX = getMaxX(position);</span></span>
+<span id="L398"><span class="lineNum">     398</span> <span class="tlaGNC">         531 :                 T minY = getMinY(position);</span></span>
+<span id="L399"><span class="lineNum">     399</span> <span class="tlaGNC">         531 :                 T maxY = getMaxY(position);</span></span>
+<span id="L400"><span class="lineNum">     400</span> <span class="tlaGNC">         531 :                 T minZ = getMinZ(position);</span></span>
+<span id="L401"><span class="lineNum">     401</span> <span class="tlaGNC">         531 :                 T maxZ = getMaxZ(position);</span></span>
+<span id="L402"><span class="lineNum">     402</span> <span class="tlaGNC">         531 :                 return (p.x &gt;= minX &amp;&amp; p.x &lt;= maxX &amp;&amp; p.y &gt;= minY &amp;&amp; p.y &lt;= maxY &amp;&amp; p.z &gt;= minZ &amp;&amp; p.z &lt;= maxZ);</span></span>
 <span id="L403"><span class="lineNum">     403</span>              :             }</span>
 <span id="L404"><span class="lineNum">     404</span>              : </span>
 <span id="L405"><span class="lineNum">     405</span>              : </span>
 <span id="L406"><span class="lineNum">     406</span>              :         private:</span>
 <span id="L407"><span class="lineNum">     407</span>              : </span>
 <span id="L408"><span class="lineNum">     408</span>              : </span>
-<span id="L409"><span class="lineNum">     409</span> <span class="tlaGNC">         552 :         void  searchUnderOct(Node* node, std::vector&lt;std::pair&lt;CPosType, N&gt;&gt;&amp; vec){</span></span>
-<span id="L410"><span class="lineNum">     410</span> <span class="tlaGNC">         552 :             if(node == nullptr){</span></span>
-<span id="L411"><span class="lineNum">     411</span> <span class="tlaGNC">         488 :                 return;</span></span>
+<span id="L409"><span class="lineNum">     409</span> <span class="tlaGNC">       20149 :         void  searchUnderOct(Node* node, std::vector&lt;std::pair&lt;CPosType, N&gt;&gt;&amp; vec){</span></span>
+<span id="L410"><span class="lineNum">     410</span> <span class="tlaGNC">       20149 :             if(node == nullptr){</span></span>
+<span id="L411"><span class="lineNum">     411</span> <span class="tlaGNC">       17696 :                 return;</span></span>
 <span id="L412"><span class="lineNum">     412</span>              :             }</span>
-<span id="L413"><span class="lineNum">     413</span> <span class="tlaGNC">          64 :             if(!node-&gt;con.empty()){</span></span>
-<span id="L414"><span class="lineNum">     414</span> <span class="tlaGNC">          25 :                 vec.insert(vec.end(), node-&gt;con.begin(), node-&gt;con.end());</span></span>
+<span id="L413"><span class="lineNum">     413</span> <span class="tlaGNC">        2453 :             if(!node-&gt;con.empty()){</span></span>
+<span id="L414"><span class="lineNum">     414</span> <span class="tlaGNC">         409 :                 vec.insert(vec.end(), node-&gt;con.begin(), node-&gt;con.end());</span></span>
 <span id="L415"><span class="lineNum">     415</span>              :             }</span>
-<span id="L416"><span class="lineNum">     416</span> <span class="tlaGNC">         576 :             for(int i = 0; i &lt; 8; ++i){</span></span>
-<span id="L417"><span class="lineNum">     417</span> <span class="tlaGNC">         512 :                 searchUnderOct(node-&gt;children[i], vec);</span></span>
+<span id="L416"><span class="lineNum">     416</span> <span class="tlaGNC">       22077 :             for(int i = 0; i &lt; 8; ++i){</span></span>
+<span id="L417"><span class="lineNum">     417</span> <span class="tlaGNC">       19624 :                 searchUnderOct(node-&gt;children[i], vec);</span></span>
 <span id="L418"><span class="lineNum">     418</span>              :             }</span>
 <span id="L419"><span class="lineNum">     419</span>              :         }</span>
 <span id="L420"><span class="lineNum">     420</span>              : </span>
@@ -501,132 +501,132 @@
 <span id="L439"><span class="lineNum">     439</span>              :         }</span>
 <span id="L440"><span class="lineNum">     440</span>              : </span>
 <span id="L441"><span class="lineNum">     441</span>              : </span>
-<span id="L442"><span class="lineNum">     442</span> <span class="tlaGNC tlaBgGNC">        2465 :         void searchDepth(Node* node, std::vector&lt;std::pair&lt;CPosType, N&gt;&gt;&amp; copyCache){</span></span>
-<span id="L443"><span class="lineNum">     443</span> <span class="tlaGNC">        2465 :             if(node == nullptr){</span></span>
-<span id="L444"><span class="lineNum">     444</span> <span class="tlaGNC">        2160 :                 return;</span></span>
+<span id="L442"><span class="lineNum">     442</span> <span class="tlaGNC tlaBgGNC">       82720 :         void searchDepth(Node* node, std::vector&lt;std::pair&lt;CPosType, N&gt;&gt;&amp; copyCache){</span></span>
+<span id="L443"><span class="lineNum">     443</span> <span class="tlaGNC">       82720 :             if(node == nullptr){</span></span>
+<span id="L444"><span class="lineNum">     444</span> <span class="tlaGNC">       72424 :                 return;</span></span>
 <span id="L445"><span class="lineNum">     445</span>              :             }</span>
-<span id="L446"><span class="lineNum">     446</span> <span class="tlaGNC">         305 :             if(!node-&gt;con.empty()){//</span></span>
-<span id="L447"><span class="lineNum">     447</span> <span class="tlaGNC">          43 :                 (copyCache).insert((copyCache).end(), node-&gt;con.begin(), node-&gt;con.end());</span></span>
+<span id="L446"><span class="lineNum">     446</span> <span class="tlaGNC">       10296 :             if(!node-&gt;con.empty()){//</span></span>
+<span id="L447"><span class="lineNum">     447</span> <span class="tlaGNC">         965 :                 (copyCache).insert((copyCache).end(), node-&gt;con.begin(), node-&gt;con.end());</span></span>
 <span id="L448"><span class="lineNum">     448</span>              :             }</span>
-<span id="L449"><span class="lineNum">     449</span> <span class="tlaGNC">        2745 :             for(int i = 0; i &lt; 8; ++i){</span></span>
-<span id="L450"><span class="lineNum">     450</span> <span class="tlaGNC">        2440 :                 searchDepth(node-&gt;children[i], copyCache);</span></span>
+<span id="L449"><span class="lineNum">     449</span> <span class="tlaGNC">       92664 :             for(int i = 0; i &lt; 8; ++i){</span></span>
+<span id="L450"><span class="lineNum">     450</span> <span class="tlaGNC">       82368 :                 searchDepth(node-&gt;children[i], copyCache);</span></span>
 <span id="L451"><span class="lineNum">     451</span>              :             }</span>
 <span id="L452"><span class="lineNum">     452</span>              :         }</span>
 <span id="L453"><span class="lineNum">     453</span>              : </span>
 <span id="L454"><span class="lineNum">     454</span>              : </span>
-<span id="L455"><span class="lineNum">     455</span> <span class="tlaGNC">         233 :         bool SearchInsert(N container, CPosType pos, Node* node, Node** copyCache, std::vector&lt;std::pair&lt;CPosType, N&gt;&gt;&amp; copy, bool&amp; collision){</span></span>
-<span id="L456"><span class="lineNum">     456</span> <span class="tlaGNC">         233 :             if(node == nullptr){</span></span>
+<span id="L455"><span class="lineNum">     455</span> <span class="tlaGNC">        5721 :         bool SearchInsert(N container, CPosType pos, Node* node, Node** copyCache, std::vector&lt;std::pair&lt;CPosType, N&gt;&gt;&amp; copy, bool&amp; collision){</span></span>
+<span id="L456"><span class="lineNum">     456</span> <span class="tlaGNC">        5721 :             if(node == nullptr){</span></span>
 <span id="L457"><span class="lineNum">     457</span> <span class="tlaUNC tlaBgUNC">           0 :                 return false;</span></span>
 <span id="L458"><span class="lineNum">     458</span>              :             }</span>
-<span id="L459"><span class="lineNum">     459</span> <span class="tlaGNC tlaBgGNC">         298 :              if (!node-&gt;box.contains(pos.LLDown) || !node-&gt;box.contains(pos.LLUp) ||</span></span>
-<span id="L460"><span class="lineNum">     460</span> <span class="tlaGNC">          64 :                 !node-&gt;box.contains(pos.LRDown) || !node-&gt;box.contains(pos.LRUp) ||</span></span>
-<span id="L461"><span class="lineNum">     461</span> <span class="tlaGNC">          61 :                 !node-&gt;box.contains(pos.RLDown) || !node-&gt;box.contains(pos.RLUp) ||</span></span>
-<span id="L462"><span class="lineNum">     462</span> <span class="tlaGNC">         298 :                 !node-&gt;box.contains(pos.RRDown) || !node-&gt;box.contains(pos.RRUp)) {</span></span>
-<span id="L463"><span class="lineNum">     463</span> <span class="tlaGNC">         172 :                 return false;</span></span>
+<span id="L459"><span class="lineNum">     459</span> <span class="tlaGNC tlaBgGNC">        6933 :              if (!node-&gt;box.contains(pos.LLDown) || !node-&gt;box.contains(pos.LLUp) ||</span></span>
+<span id="L460"><span class="lineNum">     460</span> <span class="tlaGNC">        1099 :                 !node-&gt;box.contains(pos.LRDown) || !node-&gt;box.contains(pos.LRUp) ||</span></span>
+<span id="L461"><span class="lineNum">     461</span> <span class="tlaGNC">        1075 :                 !node-&gt;box.contains(pos.RLDown) || !node-&gt;box.contains(pos.RLUp) ||</span></span>
+<span id="L462"><span class="lineNum">     462</span> <span class="tlaGNC">        6933 :                 !node-&gt;box.contains(pos.RRDown) || !node-&gt;box.contains(pos.RRUp)) {</span></span>
+<span id="L463"><span class="lineNum">     463</span> <span class="tlaGNC">        4652 :                 return false;</span></span>
 <span id="L464"><span class="lineNum">     464</span>              :             }</span>
-<span id="L465"><span class="lineNum">     465</span> <span class="tlaGNC">          61 :             if(!node-&gt;con.empty()){</span></span>
-<span id="L466"><span class="lineNum">     466</span> <span class="tlaGNC">          26 :                 (copy).insert((copy).end(), node-&gt;con.begin(), node-&gt;con.end());</span></span>
+<span id="L465"><span class="lineNum">     465</span> <span class="tlaGNC">        1069 :             if(!node-&gt;con.empty()){</span></span>
+<span id="L466"><span class="lineNum">     466</span> <span class="tlaGNC">         434 :                 (copy).insert((copy).end(), node-&gt;con.begin(), node-&gt;con.end());</span></span>
 <span id="L467"><span class="lineNum">     467</span>              :             }</span>
-<span id="L468"><span class="lineNum">     468</span> <span class="tlaGNC">          61 :             if (node-&gt;isLeaf() == false &amp;&amp; collision == false &amp;&amp; *copyCache == nullptr) {</span></span>
-<span id="L469"><span class="lineNum">     469</span> <span class="tlaGNC">         216 :                 for (size_t i = 0; i &lt; 8; ++i) {</span></span>
-<span id="L470"><span class="lineNum">     470</span> <span class="tlaGNC">         192 :                      SearchInsert(container, pos, node-&gt;children[i], copyCache, copy, collision);</span></span>
+<span id="L468"><span class="lineNum">     468</span> <span class="tlaGNC">        1069 :             if (node-&gt;isLeaf() == false &amp;&amp; collision == false &amp;&amp; *copyCache == nullptr) {</span></span>
+<span id="L469"><span class="lineNum">     469</span> <span class="tlaGNC">        5832 :                 for (size_t i = 0; i &lt; 8; ++i) {</span></span>
+<span id="L470"><span class="lineNum">     470</span> <span class="tlaGNC">        5184 :                      SearchInsert(container, pos, node-&gt;children[i], copyCache, copy, collision);</span></span>
 <span id="L471"><span class="lineNum">     471</span>              :                 }</span>
 <span id="L472"><span class="lineNum">     472</span>              :             }</span>
-<span id="L473"><span class="lineNum">     473</span> <span class="tlaGNC">          61 :             if(collision == false &amp;&amp; *copyCache == nullptr){</span></span>
+<span id="L473"><span class="lineNum">     473</span> <span class="tlaGNC">        1069 :             if(collision == false &amp;&amp; *copyCache == nullptr){</span></span>
 <span id="L474"><span class="lineNum">     474</span>              :                 </span>
-<span id="L475"><span class="lineNum">     475</span> <span class="tlaGNC">          40 :                 searchUnderOct(node, copy);</span></span>
+<span id="L475"><span class="lineNum">     475</span> <span class="tlaGNC">         525 :                 searchUnderOct(node, copy);</span></span>
 <span id="L476"><span class="lineNum">     476</span>              :                 </span>
-<span id="L477"><span class="lineNum">     477</span> <span class="tlaGNC">          40 :                 if(!checkCollision(container, pos, copy)){</span></span>
-<span id="L478"><span class="lineNum">     478</span> <span class="tlaGNC">          39 :                     *copyCache = node;</span></span>
-<span id="L479"><span class="lineNum">     479</span> <span class="tlaGNC">          39 :                     return true;</span></span>
+<span id="L477"><span class="lineNum">     477</span> <span class="tlaGNC">         525 :                 if(!checkCollision(container, pos, copy)){</span></span>
+<span id="L478"><span class="lineNum">     478</span> <span class="tlaGNC">         417 :                     *copyCache = node;</span></span>
+<span id="L479"><span class="lineNum">     479</span> <span class="tlaGNC">         417 :                     return true;</span></span>
 <span id="L480"><span class="lineNum">     480</span>              :                 }else{</span>
-<span id="L481"><span class="lineNum">     481</span> <span class="tlaGNC">           1 :                     collision = true;</span></span>
-<span id="L482"><span class="lineNum">     482</span> <span class="tlaGNC">           1 :                     return false;</span></span>
+<span id="L481"><span class="lineNum">     481</span> <span class="tlaGNC">         108 :                     collision = true;</span></span>
+<span id="L482"><span class="lineNum">     482</span> <span class="tlaGNC">         108 :                     return false;</span></span>
 <span id="L483"><span class="lineNum">     483</span>              :                 }</span>
-<span id="L484"><span class="lineNum">     484</span> <span class="tlaGNC">          21 :             }else if(collision == false &amp;&amp; *copyCache != nullptr){</span></span>
-<span id="L485"><span class="lineNum">     485</span> <span class="tlaGNC">          19 :                 return true;</span></span>
+<span id="L484"><span class="lineNum">     484</span> <span class="tlaGNC">         544 :             }else if(collision == false &amp;&amp; *copyCache != nullptr){</span></span>
+<span id="L485"><span class="lineNum">     485</span> <span class="tlaGNC">         356 :                 return true;</span></span>
 <span id="L486"><span class="lineNum">     486</span>              :             }</span>
-<span id="L487"><span class="lineNum">     487</span> <span class="tlaGNC">           2 :             return false;</span></span>
+<span id="L487"><span class="lineNum">     487</span> <span class="tlaGNC">         188 :             return false;</span></span>
 <span id="L488"><span class="lineNum">     488</span>              :         }</span>
 <span id="L489"><span class="lineNum">     489</span>              : </span>
 <span id="L490"><span class="lineNum">     490</span>              : </span>
-<span id="L491"><span class="lineNum">     491</span> <span class="tlaGNC">         100 :             void searchR(std::string id, Node* node, Node** copyCache){</span></span>
-<span id="L492"><span class="lineNum">     492</span> <span class="tlaGNC">         100 :                 if(node == nullptr){</span></span>
+<span id="L491"><span class="lineNum">     491</span> <span class="tlaGNC">        2190 :             void searchR(std::string id, Node* node, Node** copyCache){</span></span>
+<span id="L492"><span class="lineNum">     492</span> <span class="tlaGNC">        2190 :                 if(node == nullptr){</span></span>
 <span id="L493"><span class="lineNum">     493</span> <span class="tlaUNC tlaBgUNC">           0 :                     return;</span></span>
 <span id="L494"><span class="lineNum">     494</span>              :                 }</span>
-<span id="L495"><span class="lineNum">     495</span> <span class="tlaGNC tlaBgGNC">         100 :                 if(node-&gt;con.empty() == false){</span></span>
-<span id="L496"><span class="lineNum">     496</span> <span class="tlaGNC">          27 :                 for(auto&amp; i : node-&gt;con){</span></span>
-<span id="L497"><span class="lineNum">     497</span> <span class="tlaGNC">          18 :                     if(i.first.LLDown.x != -1 &amp;&amp; i.second != nullptr &amp;&amp; number(i.first.LLDown) == id){</span></span>
-<span id="L498"><span class="lineNum">     498</span> <span class="tlaGNC">           3 :                         *copyCache = node;</span></span>
-<span id="L499"><span class="lineNum">     499</span> <span class="tlaGNC">           3 :                         return;</span></span>
+<span id="L495"><span class="lineNum">     495</span> <span class="tlaGNC tlaBgGNC">        2190 :                 if(node-&gt;con.empty() == false){</span></span>
+<span id="L496"><span class="lineNum">     496</span> <span class="tlaGNC">         540 :                 for(auto&amp; i : node-&gt;con){</span></span>
+<span id="L497"><span class="lineNum">     497</span> <span class="tlaGNC">         336 :                     if(i.first.LLDown.x != -1 &amp;&amp; i.second != nullptr &amp;&amp; number(i.first.LLDown) == id){</span></span>
+<span id="L498"><span class="lineNum">     498</span> <span class="tlaGNC">          60 :                         *copyCache = node;</span></span>
+<span id="L499"><span class="lineNum">     499</span> <span class="tlaGNC">          60 :                         return;</span></span>
 <span id="L500"><span class="lineNum">     500</span>              :                     }</span>
 <span id="L501"><span class="lineNum">     501</span>              :                 }</span>
 <span id="L502"><span class="lineNum">     502</span>              :             }</span>
-<span id="L503"><span class="lineNum">     503</span> <span class="tlaGNC">          97 :             if(node-&gt;isLeaf() == false){</span></span>
-<span id="L504"><span class="lineNum">     504</span> <span class="tlaGNC">         108 :                 for(int i = 0; i &lt; 8; ++i){</span></span>
-<span id="L505"><span class="lineNum">     505</span> <span class="tlaGNC">          96 :                     searchR(id, node-&gt;children[i], copyCache);</span></span>
+<span id="L503"><span class="lineNum">     503</span> <span class="tlaGNC">        2130 :             if(node-&gt;isLeaf() == false){</span></span>
+<span id="L504"><span class="lineNum">     504</span> <span class="tlaGNC">        2376 :                 for(int i = 0; i &lt; 8; ++i){</span></span>
+<span id="L505"><span class="lineNum">     505</span> <span class="tlaGNC">        2112 :                     searchR(id, node-&gt;children[i], copyCache);</span></span>
 <span id="L506"><span class="lineNum">     506</span>              :                 }</span>
 <span id="L507"><span class="lineNum">     507</span>              :             }</span>
 <span id="L508"><span class="lineNum">     508</span>              :         }</span>
 <span id="L509"><span class="lineNum">     509</span>              : </span>
 <span id="L510"><span class="lineNum">     510</span>              : </span>
-<span id="L511"><span class="lineNum">     511</span> <span class="tlaUNC tlaBgUNC">           0 :             void removeR(std::string id, Node* node, bool&amp; collision){</span></span>
-<span id="L512"><span class="lineNum">     512</span> <span class="tlaUNC">           0 :                 if(node == nullptr){</span></span>
-<span id="L513"><span class="lineNum">     513</span> <span class="tlaUNC">           0 :                     return;</span></span>
+<span id="L511"><span class="lineNum">     511</span> <span class="tlaGNC">        1338 :             void removeR(std::string id, Node* node, bool&amp; collision){</span></span>
+<span id="L512"><span class="lineNum">     512</span> <span class="tlaGNC">        1338 :                 if(node == nullptr){</span></span>
+<span id="L513"><span class="lineNum">     513</span> <span class="tlaUNC tlaBgUNC">           0 :                     return;</span></span>
 <span id="L514"><span class="lineNum">     514</span>              :                 }</span>
-<span id="L515"><span class="lineNum">     515</span> <span class="tlaUNC">           0 :                 if(collision == true || node == nullptr){</span></span>
-<span id="L516"><span class="lineNum">     516</span> <span class="tlaUNC">           0 :                     return;</span></span>
+<span id="L515"><span class="lineNum">     515</span> <span class="tlaGNC tlaBgGNC">        1338 :                 if(collision == true || node == nullptr){</span></span>
+<span id="L516"><span class="lineNum">     516</span> <span class="tlaGNC">         408 :                     return;</span></span>
 <span id="L517"><span class="lineNum">     517</span>              :                 }</span>
-<span id="L518"><span class="lineNum">     518</span> <span class="tlaUNC">           0 :                 if(node-&gt;con.empty() == false){</span></span>
-<span id="L519"><span class="lineNum">     519</span> <span class="tlaUNC">           0 :                     for(auto&amp; i : node-&gt;con){</span></span>
-<span id="L520"><span class="lineNum">     520</span> <span class="tlaUNC">           0 :                         if(i.first.LLDown.x != -1 &amp;&amp; i.second != nullptr &amp;&amp; number(i.first.LLDown) == id){</span></span>
-<span id="L521"><span class="lineNum">     521</span> <span class="tlaUNC">           0 :                             delete i.second;</span></span>
-<span id="L522"><span class="lineNum">     522</span> <span class="tlaUNC">           0 :                             node-&gt;con.erase(std::remove(node-&gt;con.begin(), node-&gt;con.end(), i), node-&gt;con.end());</span></span>
-<span id="L523"><span class="lineNum">     523</span> <span class="tlaUNC">           0 :                             collision = true;</span></span>
-<span id="L524"><span class="lineNum">     524</span> <span class="tlaUNC">           0 :                             return;</span></span>
+<span id="L518"><span class="lineNum">     518</span> <span class="tlaGNC">         930 :                 if(node-&gt;con.empty() == false){</span></span>
+<span id="L519"><span class="lineNum">     519</span> <span class="tlaGNC">         282 :                     for(auto&amp; i : node-&gt;con){</span></span>
+<span id="L520"><span class="lineNum">     520</span> <span class="tlaGNC">         168 :                         if(i.first.LLDown.x != -1 &amp;&amp; i.second != nullptr &amp;&amp; number(i.first.LLDown) == id){</span></span>
+<span id="L521"><span class="lineNum">     521</span> <span class="tlaGNC">          42 :                             delete i.second;</span></span>
+<span id="L522"><span class="lineNum">     522</span> <span class="tlaGNC">          42 :                             node-&gt;con.erase(std::remove(node-&gt;con.begin(), node-&gt;con.end(), i), node-&gt;con.end());</span></span>
+<span id="L523"><span class="lineNum">     523</span> <span class="tlaGNC">          42 :                             collision = true;</span></span>
+<span id="L524"><span class="lineNum">     524</span> <span class="tlaGNC">          42 :                             return;</span></span>
 <span id="L525"><span class="lineNum">     525</span>              :                         }</span>
 <span id="L526"><span class="lineNum">     526</span>              :                     }</span>
 <span id="L527"><span class="lineNum">     527</span>              :                 }</span>
-<span id="L528"><span class="lineNum">     528</span> <span class="tlaUNC">           0 :                 if(node-&gt;isLeaf() == false){</span></span>
-<span id="L529"><span class="lineNum">     529</span> <span class="tlaUNC">           0 :                     for(int i = 0; i &lt; 8; ++i){</span></span>
-<span id="L530"><span class="lineNum">     530</span> <span class="tlaUNC">           0 :                         removeR(id, node-&gt;children[i], collision);</span></span>
+<span id="L528"><span class="lineNum">     528</span> <span class="tlaGNC">         888 :                 if(node-&gt;isLeaf() == false){</span></span>
+<span id="L529"><span class="lineNum">     529</span> <span class="tlaGNC">        1458 :                     for(int i = 0; i &lt; 8; ++i){</span></span>
+<span id="L530"><span class="lineNum">     530</span> <span class="tlaGNC">        1296 :                         removeR(id, node-&gt;children[i], collision);</span></span>
 <span id="L531"><span class="lineNum">     531</span>              :                     }</span>
 <span id="L532"><span class="lineNum">     532</span>              :                 }</span>
 <span id="L533"><span class="lineNum">     533</span>              : </span>
 <span id="L534"><span class="lineNum">     534</span>              :             }</span>
 <span id="L535"><span class="lineNum">     535</span>              : </span>
 <span id="L536"><span class="lineNum">     536</span>              : </span>
-<span id="L537"><span class="lineNum">     537</span> <span class="tlaGNC tlaBgGNC">          95 :             bool ContainEntity(CPosType pos1, CPosType pos2) const {</span></span>
+<span id="L537"><span class="lineNum">     537</span> <span class="tlaGNC">        1141 :             bool ContainEntity(CPosType pos1, CPosType pos2) const {</span></span>
 <span id="L538"><span class="lineNum">     538</span>              :                 </span>
-<span id="L539"><span class="lineNum">     539</span> <span class="tlaGNC">          95 :                 int pos1MinX = getMinX(pos1);</span></span>
-<span id="L540"><span class="lineNum">     540</span> <span class="tlaGNC">          95 :                 int pos1MaxX = getMaxX(pos1);</span></span>
-<span id="L541"><span class="lineNum">     541</span> <span class="tlaGNC">          95 :                 int pos1MinY = getMinY(pos1);</span></span>
-<span id="L542"><span class="lineNum">     542</span> <span class="tlaGNC">          95 :                 int pos1MaxY = getMaxY(pos1);</span></span>
-<span id="L543"><span class="lineNum">     543</span> <span class="tlaGNC">          95 :                 int pos1MinZ = getMinZ(pos1);</span></span>
-<span id="L544"><span class="lineNum">     544</span> <span class="tlaGNC">          95 :                 int pos1MaxZ = getMaxZ(pos1);</span></span>
+<span id="L539"><span class="lineNum">     539</span> <span class="tlaGNC">        1141 :                 int pos1MinX = getMinX(pos1);</span></span>
+<span id="L540"><span class="lineNum">     540</span> <span class="tlaGNC">        1141 :                 int pos1MaxX = getMaxX(pos1);</span></span>
+<span id="L541"><span class="lineNum">     541</span> <span class="tlaGNC">        1141 :                 int pos1MinY = getMinY(pos1);</span></span>
+<span id="L542"><span class="lineNum">     542</span> <span class="tlaGNC">        1141 :                 int pos1MaxY = getMaxY(pos1);</span></span>
+<span id="L543"><span class="lineNum">     543</span> <span class="tlaGNC">        1141 :                 int pos1MinZ = getMinZ(pos1);</span></span>
+<span id="L544"><span class="lineNum">     544</span> <span class="tlaGNC">        1141 :                 int pos1MaxZ = getMaxZ(pos1);</span></span>
 <span id="L545"><span class="lineNum">     545</span>              :                 </span>
 <span id="L546"><span class="lineNum">     546</span>              : </span>
-<span id="L547"><span class="lineNum">     547</span> <span class="tlaGNC">          95 :                 int pos2MinX = getMinX(pos2);</span></span>
-<span id="L548"><span class="lineNum">     548</span> <span class="tlaGNC">          95 :                 int pos2MaxX = getMaxX(pos2);</span></span>
-<span id="L549"><span class="lineNum">     549</span> <span class="tlaGNC">          95 :                 int pos2MinY = getMinY(pos2);</span></span>
-<span id="L550"><span class="lineNum">     550</span> <span class="tlaGNC">          95 :                 int pos2MaxY = getMaxY(pos2);</span></span>
-<span id="L551"><span class="lineNum">     551</span> <span class="tlaGNC">          95 :                 int pos2MinZ = getMinZ(pos2);</span></span>
-<span id="L552"><span class="lineNum">     552</span> <span class="tlaGNC">          95 :                 int pos2MaxZ = getMaxZ(pos2);</span></span>
+<span id="L547"><span class="lineNum">     547</span> <span class="tlaGNC">        1141 :                 int pos2MinX = getMinX(pos2);</span></span>
+<span id="L548"><span class="lineNum">     548</span> <span class="tlaGNC">        1141 :                 int pos2MaxX = getMaxX(pos2);</span></span>
+<span id="L549"><span class="lineNum">     549</span> <span class="tlaGNC">        1141 :                 int pos2MinY = getMinY(pos2);</span></span>
+<span id="L550"><span class="lineNum">     550</span> <span class="tlaGNC">        1141 :                 int pos2MaxY = getMaxY(pos2);</span></span>
+<span id="L551"><span class="lineNum">     551</span> <span class="tlaGNC">        1141 :                 int pos2MinZ = getMinZ(pos2);</span></span>
+<span id="L552"><span class="lineNum">     552</span> <span class="tlaGNC">        1141 :                 int pos2MaxZ = getMaxZ(pos2);</span></span>
 <span id="L553"><span class="lineNum">     553</span>              : </span>
 <span id="L554"><span class="lineNum">     554</span>              : </span>
-<span id="L555"><span class="lineNum">     555</span> <span class="tlaGNC">          61 :                 return (pos1MinX &lt;= pos2MaxX &amp;&amp; pos1MaxX &gt;= pos2MinX) &amp;&amp;</span></span>
-<span id="L556"><span class="lineNum">     556</span> <span class="tlaGNC">         199 :                     (pos1MinY &lt;= pos2MaxY &amp;&amp; pos1MaxY &gt;= pos2MinY) &amp;&amp;</span></span>
-<span id="L557"><span class="lineNum">     557</span> <span class="tlaGNC">         138 :                     (pos1MinZ &lt;= pos2MaxZ &amp;&amp; pos1MaxZ &gt;= pos2MinZ);</span></span>
+<span id="L555"><span class="lineNum">     555</span> <span class="tlaGNC">         818 :                 return (pos1MinX &lt;= pos2MaxX &amp;&amp; pos1MaxX &gt;= pos2MinX) &amp;&amp;</span></span>
+<span id="L556"><span class="lineNum">     556</span> <span class="tlaGNC">        2511 :                     (pos1MinY &lt;= pos2MaxY &amp;&amp; pos1MaxY &gt;= pos2MinY) &amp;&amp;</span></span>
+<span id="L557"><span class="lineNum">     557</span> <span class="tlaGNC">        1693 :                     (pos1MinZ &lt;= pos2MaxZ &amp;&amp; pos1MaxZ &gt;= pos2MinZ);</span></span>
 <span id="L558"><span class="lineNum">     558</span>              :             }</span>
 <span id="L559"><span class="lineNum">     559</span>              : </span>
 <span id="L560"><span class="lineNum">     560</span>              : </span>
-<span id="L561"><span class="lineNum">     561</span> <span class="tlaGNC">          40 :             bool checkCollision(N container, CPosType pos, std::vector&lt;std::pair&lt;CPosType, N&gt;&gt; copy) const {</span></span>
-<span id="L562"><span class="lineNum">     562</span> <span class="tlaGNC">         134 :                 for(auto it : copy){</span></span>
-<span id="L563"><span class="lineNum">     563</span> <span class="tlaGNC">          95 :                     if(ContainEntity(it.first, pos)){</span></span>
-<span id="L564"><span class="lineNum">     564</span> <span class="tlaGNC">           1 :                         return true;</span></span>
+<span id="L561"><span class="lineNum">     561</span> <span class="tlaGNC">         525 :             bool checkCollision(N container, CPosType pos, std::vector&lt;std::pair&lt;CPosType, N&gt;&gt; copy) const {</span></span>
+<span id="L562"><span class="lineNum">     562</span> <span class="tlaGNC">        1558 :                 for(auto it : copy){</span></span>
+<span id="L563"><span class="lineNum">     563</span> <span class="tlaGNC">        1141 :                     if(ContainEntity(it.first, pos)){</span></span>
+<span id="L564"><span class="lineNum">     564</span> <span class="tlaGNC">         108 :                         return true;</span></span>
 <span id="L565"><span class="lineNum">     565</span>              :                     }</span>
 <span id="L566"><span class="lineNum">     566</span>              :                 }</span>
-<span id="L567"><span class="lineNum">     567</span> <span class="tlaGNC">          39 :                 return false; </span></span>
+<span id="L567"><span class="lineNum">     567</span> <span class="tlaGNC">         417 :                 return false; </span></span>
 <span id="L568"><span class="lineNum">     568</span>              :             }</span>
 <span id="L569"><span class="lineNum">     569</span>              : </span>
 <span id="L570"><span class="lineNum">     570</span>              : </span>
@@ -641,8 +641,8 @@
 <span id="L579"><span class="lineNum">     579</span>              :                 }</span>
 <span id="L580"><span class="lineNum">     580</span>              :             }</span>
 <span id="L581"><span class="lineNum">     581</span>              : </span>
-<span id="L582"><span class="lineNum">     582</span> <span class="tlaGNC">          18 :             std::string number(const Point&lt;T&gt;&amp; p) const{</span></span>
-<span id="L583"><span class="lineNum">     583</span> <span class="tlaGNC">          18 :             return std::to_string(p.x) + &quot;_&quot; + std::to_string(p.y) + &quot;_&quot; + std::to_string(p.z);</span></span>
+<span id="L582"><span class="lineNum">     582</span> <span class="tlaUNC tlaBgUNC">           0 :             std::string number(const Point&lt;T&gt;&amp; p) const{</span></span>
+<span id="L583"><span class="lineNum">     583</span> <span class="tlaUNC">           0 :             return std::to_string(p.x) + &quot;_&quot; + std::to_string(p.y) + &quot;_&quot; + std::to_string(p.z);</span></span>
 <span id="L584"><span class="lineNum">     584</span>              :         }</span>
 <span id="L585"><span class="lineNum">     585</span>              : </span>
 <span id="L586"><span class="lineNum">     586</span>              : </span>

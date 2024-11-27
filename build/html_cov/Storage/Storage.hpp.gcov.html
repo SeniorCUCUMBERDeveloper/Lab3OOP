@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2024-11-27 17:19:27</td>
+            <td class="headerValue">2024-11-27 21:06:48</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryLo">0.0&nbsp;%</td>
@@ -104,34 +104,38 @@
 <span id="L42"><span class="lineNum">      42</span> <span class="tlaUNC">           0 :             delete containers;</span></span>
 <span id="L43"><span class="lineNum">      43</span> <span class="tlaUNC">           0 :             }</span></span>
 <span id="L44"><span class="lineNum">      44</span>              : </span>
-<span id="L45"><span class="lineNum">      45</span>              :           void check();</span>
-<span id="L46"><span class="lineNum">      46</span>              : </span>
-<span id="L47"><span class="lineNum">      47</span>              : </span>
-<span id="L48"><span class="lineNum">      48</span>              :         private:</span>
-<span id="L49"><span class="lineNum">      49</span>              :           std::mutex mtx;</span>
-<span id="L50"><span class="lineNum">      50</span>              :           mutable std::shared_mutex shared_mtx;</span>
-<span id="L51"><span class="lineNum">      51</span>              :           std::atomic&lt;bool&gt; containerAdded{false}; </span>
-<span id="L52"><span class="lineNum">      52</span>              :           Storage&amp; operator=(const Storage&amp; other);</span>
-<span id="L53"><span class="lineNum">      53</span>              :           int calculateDepth();</span>
-<span id="L54"><span class="lineNum">      54</span>              :           static bool comparePosition(std::pair&lt;ContainerPosition&lt;int&gt;, IContainer*&gt;&amp; pos1, std::pair&lt;ContainerPosition&lt;int&gt;, IContainer*&gt;&amp; pos2);</span>
-<span id="L55"><span class="lineNum">      55</span>              :           static bool comparePositionReverse(std::pair&lt;ContainerPosition&lt;int&gt;, IContainer*&gt;&amp; pos1, std::pair&lt;ContainerPosition&lt;int&gt;, IContainer*&gt;&amp; pos2);</span>
-<span id="L56"><span class="lineNum">      56</span>              :           bool isNoTop(const ContainerPosition&lt;int&gt;&amp; position);</span>
-<span id="L57"><span class="lineNum">      57</span>              :           std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;,IContainer*&gt;&gt; searchUnderContainer(ContainerPosition&lt;int&gt;&amp; position);</span>
-<span id="L58"><span class="lineNum">      58</span>              :           static double calculatemass(std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;, IContainer*&gt;&gt; con, size_t it);</span>
-<span id="L59"><span class="lineNum">      59</span>              :           bool addContainerR(IContainer* container,  int yStart, int yEnd);</span>
-<span id="L60"><span class="lineNum">      60</span>              :           ContainerPosition&lt;int&gt; calculateContainerPosition(int x, int y, int z, int l, int w, int h);</span>
-<span id="L61"><span class="lineNum">      61</span>              :           bool moveContainer(std::pair&lt;ContainerPosition&lt;int&gt;, IContainer*&gt; it);</span>
-<span id="L62"><span class="lineNum">      62</span>              :           std::pair&lt;ContainerPosition&lt;int&gt;, IContainer*&gt; isTop(const ContainerPosition&lt;int&gt;&amp; position);</span>
-<span id="L63"><span class="lineNum">      63</span>              :            void multitread(IContainer* container, int X, int Y, int Z);</span>
-<span id="L64"><span class="lineNum">      64</span>              :            std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;,IContainer*&gt;&gt; searchUpperContainer(ContainerPosition&lt;int&gt;&amp; position);</span>
-<span id="L65"><span class="lineNum">      65</span>              :            void howContai(IContainer* container, std::vector&lt;size_t&gt;&amp; result, size_t method);</span>
-<span id="L66"><span class="lineNum">      66</span>              :            static bool checkSupport(ContainerPosition&lt;int&gt;&amp; position, std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;,IContainer*&gt;&gt; con);</span>
-<span id="L67"><span class="lineNum">      67</span>              :            static void checkTemperature(Storage&amp; storage, IContainer* container, ContainerPosition&lt;int&gt; position);</span>
-<span id="L68"><span class="lineNum">      68</span>              :            static void checkPressure(Storage&amp; storage, IContainer* container, ContainerPosition&lt;int&gt; position);</span>
-<span id="L69"><span class="lineNum">      69</span>              :           </span>
-<span id="L70"><span class="lineNum">      70</span>              : </span>
-<span id="L71"><span class="lineNum">      71</span>              : };</span>
-<span id="L72"><span class="lineNum">      72</span>              : #endif</span>
+<span id="L45"><span class="lineNum">      45</span>              :           std::pair&lt;ContainerPosition&lt;int&gt;, IContainer*&gt; find(std::string id){</span>
+<span id="L46"><span class="lineNum">      46</span>              :               return containers-&gt;findI(id);</span>
+<span id="L47"><span class="lineNum">      47</span>              :           }</span>
+<span id="L48"><span class="lineNum">      48</span>              : </span>
+<span id="L49"><span class="lineNum">      49</span>              :           void check();</span>
+<span id="L50"><span class="lineNum">      50</span>              : </span>
+<span id="L51"><span class="lineNum">      51</span>              : </span>
+<span id="L52"><span class="lineNum">      52</span>              :         private:</span>
+<span id="L53"><span class="lineNum">      53</span>              :           std::mutex mtx;</span>
+<span id="L54"><span class="lineNum">      54</span>              :           mutable std::shared_mutex shared_mtx;</span>
+<span id="L55"><span class="lineNum">      55</span>              :           std::atomic&lt;bool&gt; containerAdded{false}; </span>
+<span id="L56"><span class="lineNum">      56</span>              :           Storage&amp; operator=(const Storage&amp; other);</span>
+<span id="L57"><span class="lineNum">      57</span>              :           int calculateDepth();</span>
+<span id="L58"><span class="lineNum">      58</span>              :           static bool comparePosition(std::pair&lt;ContainerPosition&lt;int&gt;, IContainer*&gt;&amp; pos1, std::pair&lt;ContainerPosition&lt;int&gt;, IContainer*&gt;&amp; pos2);</span>
+<span id="L59"><span class="lineNum">      59</span>              :           static bool comparePositionReverse(std::pair&lt;ContainerPosition&lt;int&gt;, IContainer*&gt;&amp; pos1, std::pair&lt;ContainerPosition&lt;int&gt;, IContainer*&gt;&amp; pos2);</span>
+<span id="L60"><span class="lineNum">      60</span>              :           bool isNoTop(const ContainerPosition&lt;int&gt;&amp; position);</span>
+<span id="L61"><span class="lineNum">      61</span>              :           std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;,IContainer*&gt;&gt; searchUnderContainer(ContainerPosition&lt;int&gt;&amp; position);</span>
+<span id="L62"><span class="lineNum">      62</span>              :           static double calculatemass(std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;, IContainer*&gt;&gt; con, size_t it);</span>
+<span id="L63"><span class="lineNum">      63</span>              :           bool addContainerR(IContainer* container,  int yStart, int yEnd);</span>
+<span id="L64"><span class="lineNum">      64</span>              :           ContainerPosition&lt;int&gt; calculateContainerPosition(int x, int y, int z, int l, int w, int h);</span>
+<span id="L65"><span class="lineNum">      65</span>              :           bool moveContainer(std::pair&lt;ContainerPosition&lt;int&gt;, IContainer*&gt; it);</span>
+<span id="L66"><span class="lineNum">      66</span>              :           std::pair&lt;ContainerPosition&lt;int&gt;, IContainer*&gt; isTop(const ContainerPosition&lt;int&gt;&amp; position);</span>
+<span id="L67"><span class="lineNum">      67</span>              :            void multitread(IContainer* container, int X, int Y, int Z);</span>
+<span id="L68"><span class="lineNum">      68</span>              :            std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;,IContainer*&gt;&gt; searchUpperContainer(ContainerPosition&lt;int&gt;&amp; position);</span>
+<span id="L69"><span class="lineNum">      69</span>              :            void howContai(IContainer* container, std::vector&lt;size_t&gt;&amp; result, size_t method);</span>
+<span id="L70"><span class="lineNum">      70</span>              :            static bool checkSupport(ContainerPosition&lt;int&gt;&amp; position, std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;,IContainer*&gt;&gt; con);</span>
+<span id="L71"><span class="lineNum">      71</span>              :            static void checkTemperature(Storage&amp; storage, IContainer* container, ContainerPosition&lt;int&gt; position);</span>
+<span id="L72"><span class="lineNum">      72</span>              :            static void checkPressure(Storage&amp; storage, IContainer* container, ContainerPosition&lt;int&gt; position);</span>
+<span id="L73"><span class="lineNum">      73</span>              :           </span>
+<span id="L74"><span class="lineNum">      74</span>              : </span>
+<span id="L75"><span class="lineNum">      75</span>              : };</span>
+<span id="L76"><span class="lineNum">      76</span>              : #endif</span>
         </pre>
               </td>
             </tr>

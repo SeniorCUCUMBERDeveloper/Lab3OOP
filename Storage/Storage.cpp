@@ -387,9 +387,6 @@ void Storage::rotateContainer(std::string id, int method) {
 
 void Storage::multitread(IContainer* container, int X, int Y, int Z){
     std::unique_lock<std::mutex> ul(mtx, std::defer_lock);
-    if(X < 0 || Y < 0 || Z < 0){
-        throw std::invalid_argument("Coordinates should be positive");
-    }
     ContainerPosition<int> pos = calculateContainerPosition(X, Y, Z, container->getLength(), container->getWidth(), container->getHeight());
     ul.lock();
     auto cache = containers->SearchInsert(container, pos); //Иначе будет data race shared_mutex юзать нет смысла много записи 
@@ -397,29 +394,7 @@ void Storage::multitread(IContainer* container, int X, int Y, int Z){
     if(cache == nullptr){
         throw std::invalid_argument("Valid place for container doesn t exist");
     }
-    IRefragedContainer* ref = dynamic_cast<IRefragedContainer*>(container);
-    if(((*container).isType() == "Refraged" || (*container).isType() == "Fragile and Refraged Container") &&
-    temperature > (*ref).getMaxTemperature())
-    {
-        throw std::invalid_argument("Container is too hot");
-    }
-    if(pos.LLDown.z != 0){
-        std::vector<std::pair<ContainerPosition<int>,IContainer*>> con = searchUnderContainer(pos);
-        if(con.empty() || con[0].first.LLDown.z != 0){
-            throw std::invalid_argument("Container can t fly 1");
-        }
-        int max = 0;
-         if(!checkSupport(pos, con)){
-            throw std::invalid_argument("Support doesn t exist");
-        }
-        for(size_t i = 0; i < con.size(); i++){
-            ContainerPosition<int> check = con[i].first;
-            max = std::max(max, Octree<int, IContainer*, ContainerPosition<int>>::getMaxZ(check));
-            if(((*con[i].second).isType() == "Fragile" || (*con[i].second).isType() == "Fragile and Refraged Container") && calculatemass(con, i) + (*container).getMass() > (*(dynamic_cast<IFragileContainer*>(con[i].second))).getMaxPressure()){
-                throw std::invalid_argument("Container would be too heavy");
-            }
-        }
-    }
+    checker.applyChecks(*this, container, pos);
     ul.lock();
     if(!containerAdded.load()){
         containerAdded.store(true);
@@ -478,41 +453,54 @@ void Storage::removeContainer(std::string id){
     }
     std::vector<std::pair<ContainerPosition<int>, IContainer*>> con = searchUpperContainer(cache.first);
     if(con.empty()){
+        //Простой случай, если на верху нет 
         containers->remove(id);
     }else{
-        for(auto& i : cache2->con){
-            if(i.second->getId() == id){
-                cache2->con.erase(std::remove(cache2->con.begin(), cache2->con.end(), i), cache2->con.end());
-                break;
-            }
+        //Сложный случай, если на верху есть контейнеры
+        std::pair<ContainerPosition<int>, IContainer *> copy_delete = std::make_pair(cache.first, cache.second->Clone());
+        std::vector<std::pair<ContainerPosition<int>, IContainer*>> con_copy;
+        containers->remove(id);
+        
+        
+        //Удаляем контейнеры, делаем их копии, т.к. они в разных узлах дерева
+
+
+        for(auto& i : con){
+            con_copy.insert(con_copy.begin(), std::make_pair(i.first, i.second->Clone()));
+            containers->remove(i.second->getId());
         }
-        for(auto& container : con){
-            std::cout << container.second->getId() << std::endl;
-            IContainer* copy = container.second->Clone();
-            ContainerPosition<int> pos = container.first;
-            std::string a = container.second->getId();
-            containers->remove(container.second->getId());
-            if(a == "0_0_5"){
-                auto i = containers->searchDepth();
-                for(auto& it : i){
-                    std::cout <<"До " << it.second->getId() << std::endl;
-                }
-            }
-            std::string newId = addContainer(copy);
-            if(a == "0_0_5"){
-                auto i = containers->searchDepth();
-                for(auto& it : i){
-                    std::cout <<"После " << it.second->getId() << std::endl;
-                }
-                std::cout << "---------------------" << newId << std::endl;
-            }
+
+
+        //Пытаемся раскидать контейнеры по новым позициям
+
+        std::vector<std::string> newPlacement;
+        for(auto& container : con_copy){
+            std::string newId = addContainer(container.second->Clone());
+
+            //Возврат, если не получилось раскидать контейнеры
             if(newId == "_"){
-                containers->insert(cache.second, cache.first, cache2);
-                addContainer(copy, pos.LLDown.x, pos.LLDown.y, pos.LLDown.z);
+                for(auto& return_containerId : newPlacement){
+                    containers->remove(return_containerId);
+                }
+                addContainer(copy_delete.second, copy_delete.first.LLDown.x, copy_delete.first.LLDown.y, copy_delete.first.LLDown.z);
+                for(auto& ret : con_copy){
+                    addContainer(ret.second, ret.first.LLDown.x, ret.first.LLDown.y, ret.first.LLDown.z);
+                }
                 throw std::invalid_argument("No space found to move container with id " + id);
             }
+            //           
+            
+            else{
+                newPlacement.push_back(newId);
+            }
+
+
         }
-        delete cache.second;
+        //Удаляем копии контейнеров
+        for(auto& i : con_copy){
+            delete i.second;
+        }
+        delete copy_delete.second;
     }
 }
 
@@ -597,14 +585,10 @@ void Storage::checkTemperature(Storage& storage, IContainer* container, Containe
 void Storage::checkPressure(Storage& storage, IContainer* container, ContainerPosition<int> pos){
     if(pos.LLDown.z != 0){
         std::vector<std::pair<ContainerPosition<int>,IContainer*>> con = storage.searchUnderContainer(pos);
-        if(con.empty()){
+        if(con.empty() || con[0].first.LLDown.z != 0){
             throw std::invalid_argument("Container can t fly 1");
         }
         if(!checkSupport(pos, con)){
-            for(auto& c : con){
-                std::cout << "Pod " << c.second->getId() << std::endl;
-            }
-            std::cout << container->getId() << std::endl;
             throw std::invalid_argument("Support doesn t exist");
         }
         for(size_t i = 0; i < con.size(); i++){

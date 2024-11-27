@@ -111,6 +111,79 @@ TEST(StorageTest, Move){
     EXPECT_EQ(result.find("0_0_5") != std::string::npos, false);
 }
 
+
+TEST(StorageTest, Rotate){
+    Storage storage(1, 100, 100, 100, 20.0);
+    IContainer* container = new FragileContainer("_", "Cargo B", 2, 5, 2, 23.5, 2.5, 11.3);
+    storage.addContainer(container, 0, 0, 0);
+    container =  new Container("_", "Cargo A", 1, 4, 1, 21.2, 1.1);
+    storage.addContainer(container, 0, 0 , 3);
+    container =  new Container("_", "Cargo A", 14, 4, 12, 21.2, 1.1);
+    storage.addContainer(container, 16, 16 , 0);
+    container =  new Container("_", "Cargo A", 7, 4, 3, 21.2, 1.1);
+    storage.addContainer(container, 80, 80 , 0);
+    container =  new Container("_", "Cargo A", 1, 1, 1, 21.2, 1.1);
+    storage.addContainer(container, 0, 0 , 5);
+    EXPECT_THROW(storage.rotateContainer("0_0_3", 0), std::invalid_argument);
+    EXPECT_THROW(storage.rotateContainer("0_0_0", 0), std::invalid_argument);
+    storage.rotateContainer("80_80_0", 5);
+    auto i = storage.find("80_80_0");
+    EXPECT_EQ(i.second->getLength(), 3);
+    EXPECT_EQ(i.second->getWidth(), 4);
+    EXPECT_EQ(i.second->getHeight(), 7);
+    Storage st(1, 100, 100, 2, 20.0);
+    container =  new Container("_", "Cargo A", 7, 4, 1, 21.2, 1.1);
+    st.addContainer(container, 0, 0, 0);
+    EXPECT_THROW(st.rotateContainer("0_0_0", 3), std::invalid_argument);
+    i = st.find("0_0_0");
+    EXPECT_EQ(i.second->getLength(), 7);
+    EXPECT_EQ(i.second->getWidth(), 4);
+    EXPECT_EQ(i.second->getHeight(), 1);
+    EXPECT_THROW(st.rotateContainer("99_0_0", 3), std::invalid_argument);
+}
+
+
+TEST(StorageTest, Remove){
+    Storage storage(1, 32, 32, 16, 20.0);
+    IContainer* container = new FragileContainer("_", "Cargo B", 5, 5, 2, 23.5, 2.5, 11.3);
+    storage.addContainer(container, 0, 0, 0);//1
+    container =  new Container("_", "Cargo A", 4, 4, 1, 21.2, 1.1);
+    storage.addContainer(container, 0, 0 , 3);//2
+    container =  new Container("_", "Cargo A", 14, 4, 12, 21.2, 1.1);
+    storage.addContainer(container, 5, 16 , 0);//3
+    container =  new Container("_", "Cargo A", 7, 4, 3, 21.2, 1.1);
+    storage.addContainer(container, 5, 16 , 13);//4
+    container =  new Container("_", "Cargo A", 4, 3, 1, 21.2, 1.1);
+    storage.addContainer(container, 0, 0 , 5);//5
+    container =  new Container("_", "Cargo A", 4, 3, 1, 21.2, 1.1);
+    storage.addContainer(container, 0, 0 , 7);//6
+    container =  new Container("_", "Cargo A", 3, 2, 3, 21.2, 1.1);
+    storage.addContainer(container, 0, 0 , 9);//7
+    container =  new Container("_", "Cargo A", 1, 2, 1, 21.2, 1.1);
+    storage.addContainer(container, 0, 0 , 13);//8
+    std::cout << storage.getInfo() << std::endl;
+    std::cout<< std::endl;
+    EXPECT_THROW(storage.removeContainer("90_1056_14"), std::invalid_argument);
+    storage.removeContainer("0_0_13");
+    std::vector<std::string> result = storage.getListContainers();
+    EXPECT_EQ(result.size(), 7);
+    std::cout << storage.getInfo() << std::endl;
+    std::cout<< std::endl;
+    storage.removeContainer("0_0_3");
+    result = storage.getListContainers();
+    EXPECT_EQ(result.size(), 6);
+    std::cout << storage.getInfo() << std::endl;
+    std::cout<< std::endl;
+    storage.removeContainer("5_16_0");
+    result = storage.getListContainers();
+    EXPECT_EQ(result.size(), 5);
+    std::cout << storage.getInfo() << std::endl;
+    std::cout<< std::endl;
+    EXPECT_NO_THROW(storage.getSize(100, 100, 32));
+    storage.getInfo();
+    
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
