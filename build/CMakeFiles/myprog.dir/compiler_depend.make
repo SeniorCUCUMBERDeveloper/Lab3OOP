@@ -3,12 +3,7 @@
 
 CMakeFiles/myprog.dir/Storage/Storage.cpp.o: /mnt/c/л3/Lab3OOP/Storage/Storage.cpp \
   /mnt/c/л3/Lab3OOP/Container/I/IContainer.hpp \
-  /mnt/c/л3/Lab3OOP/Container/I/IFragile.hpp \
-  /mnt/c/л3/Lab3OOP/Container/I/IRefragedContainer.hpp \
   /mnt/c/л3/Lab3OOP/Container/Container.hpp \
-  /mnt/c/л3/Lab3OOP/Container/Frag_and_Ref.hpp \
-  /mnt/c/л3/Lab3OOP/Container/FragileContainer.hpp \
-  /mnt/c/л3/Lab3OOP/Container/RefragedContainer.hpp \
   /mnt/c/л3/Lab3OOP/Checker/Checker.hpp \
   /mnt/c/л3/Lab3OOP/Container/I/IContainer.hpp \
   /mnt/c/л3/Lab3OOP/Container/I/IFragile.hpp \
@@ -322,12 +317,7 @@ CMakeFiles/myprog.dir/Storage/Storage.cpp.o: /mnt/c/л3/Lab3OOP/Storage/Storage.
 
 CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: /mnt/c/л3/Lab3OOP/Terminal/Terminal.cpp \
   /mnt/c/л3/Lab3OOP/Container/I/IContainer.hpp \
-  /mnt/c/л3/Lab3OOP/Container/I/IFragile.hpp \
-  /mnt/c/л3/Lab3OOP/Container/I/IRefragedContainer.hpp \
   /mnt/c/л3/Lab3OOP/Container/Container.hpp \
-  /mnt/c/л3/Lab3OOP/Container/Frag_and_Ref.hpp \
-  /mnt/c/л3/Lab3OOP/Container/FragileContainer.hpp \
-  /mnt/c/л3/Lab3OOP/Container/RefragedContainer.hpp \
   /mnt/c/л3/Lab3OOP/Checker/Checker.hpp \
   /mnt/c/л3/Lab3OOP/Container/I/IContainer.hpp \
   /mnt/c/л3/Lab3OOP/Octree/ContainerPosition.hpp \
@@ -616,10 +606,6 @@ CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: /mnt/c/л3/Lab3OOP/Terminal/Termi
   /usr/lib/linux/uapi/x86/asm/unistd_64.h
 
 CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP/test.cpp \
-  /mnt/c/л3/Lab3OOP/Container/Container.hpp \
-  /mnt/c/л3/Lab3OOP/Container/Frag_and_Ref.hpp \
-  /mnt/c/л3/Lab3OOP/Container/FragileContainer.hpp \
-  /mnt/c/л3/Lab3OOP/Container/RefragedContainer.hpp \
   /mnt/c/л3/Lab3OOP/Container/I/IContainer.hpp \
   /mnt/c/л3/Lab3OOP/Container/I/IFragile.hpp \
   /mnt/c/л3/Lab3OOP/Container/I/IRefragedContainer.hpp \
@@ -627,6 +613,8 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP/test.cpp \
   /mnt/c/л3/Lab3OOP/Container/Frag_and_Ref.hpp \
   /mnt/c/л3/Lab3OOP/Container/FragileContainer.hpp \
   /mnt/c/л3/Lab3OOP/Container/RefragedContainer.hpp \
+  /mnt/c/л3/Lab3OOP/Container/I/IContainer.hpp \
+  /mnt/c/л3/Lab3OOP/Container/Container.hpp \
   /mnt/c/л3/Lab3OOP/Checker/Checker.hpp \
   /mnt/c/л3/Lab3OOP/Container/I/IContainer.hpp \
   /mnt/c/л3/Lab3OOP/Octree/ContainerPosition.hpp \
@@ -1153,6 +1141,10 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP/test.cpp \
 
 /usr/include/assert.h:
 
+/mnt/c/л3/Lab3OOP/Container/FragileContainer.hpp:
+
+/mnt/c/л3/Lab3OOP/Container/Frag_and_Ref.hpp:
+
 /usr/include/c++/13/bits/codecvt.h:
 
 /usr/include/c++/13/bits/stl_tree.h:
@@ -1239,15 +1231,7 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP/test.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/struct_sigstack.h:
-
-/usr/include/c++/13/bits/stl_multimap.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
+/usr/include/c++/13/debug/assertions.h:
 
 /usr/include/c++/13/ctime:
 
@@ -1345,6 +1329,8 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP/test.cpp \
 
 /usr/include/c++/13/bits/refwrap.h:
 
+/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
+
 /usr/include/c++/13/bits/stl_function.h:
 
 /usr/include/c++/13/tr1/beta_function.tcc:
@@ -1375,6 +1361,12 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP/test.cpp \
 
 /usr/include/c++/13/bits/ranges_cmp.h:
 
+/usr/include/x86_64-linux-gnu/bits/signum-generic.h:
+
+/mnt/c/л3/Lab3OOP/Container/RefragedContainer.hpp:
+
+/usr/include/c++/13/iosfwd:
+
 /usr/include/c++/13/utility:
 
 /usr/include/c++/13/bits/stl_heap.h:
@@ -1389,7 +1381,15 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP/test.cpp \
 
 /usr/include/c++/13/numbers:
 
-/usr/include/c++/13/bits/memoryfwd.h:
+/usr/include/c++/13/cwctype:
+
+/usr/include/c++/13/optional:
+
+/usr/include/c++/13/bits/vector.tcc:
+
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
+
+/usr/include/c++/13/bits/exception_defines.h:
 
 /usr/include/c++/13/bits/atomic_timed_wait.h:
 
@@ -1409,6 +1409,12 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP/test.cpp \
 
 /usr/include/c++/13/bits/node_handle.h:
 
+/usr/include/c++/13/cerrno:
+
+/usr/include/c++/13/bits/basic_ios.tcc:
+
+/usr/include/c++/13/pstl/execution_defs.h:
+
 /usr/include/c++/13/bits/basic_ios.h:
 
 /usr/include/x86_64-linux-gnu/bits/time64.h:
@@ -1421,13 +1427,83 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP/test.cpp \
 
 /mnt/c/л3/Lab3OOP/Container/I/IFragile.hpp:
 
+/usr/include/alloca.h:
+
+/usr/include/c++/13/bits/basic_string.tcc:
+
+/usr/include/c++/13/bits/allocated_ptr.h:
+
+/usr/include/c++/13/bit:
+
 /usr/include/c++/13/algorithm:
 
-/mnt/c/л3/Lab3OOP/Container/FragileContainer.hpp:
+/usr/include/c++/13/backward/binders.h:
 
-/usr/include/c++/13/bits/basic_ios.tcc:
+/usr/include/c++/13/bits/stl_vector.h:
 
-/usr/include/c++/13/pstl/execution_defs.h:
+/usr/include/c++/13/bits/stl_tempbuf.h:
+
+/mnt/c/л3/Lab3OOP/Octree/Point.hpp:
+
+/usr/include/c++/13/bits/range_access.h:
+
+/usr/include/c++/13/tr1/hypergeometric.tcc:
+
+/usr/include/c++/13/type_traits:
+
+/usr/include/c++/13/bits/atomic_lockfree_defines.h:
+
+/usr/include/c++/13/bits/streambuf.tcc:
+
+/usr/include/c++/13/bits/specfun.h:
+
+/usr/include/c++/13/bits/basic_string.h:
+
+/usr/include/c++/13/cxxabi.h:
+
+/usr/include/c++/13/tr1/poly_laguerre.tcc:
+
+/usr/include/c++/13/atomic:
+
+/usr/lib/linux/uapi/x86/asm/bitsperlong.h:
+
+/mnt/c/л3/Lab3OOP/Container/I/IContainer.hpp:
+
+/usr/include/c++/13/bits/unique_lock.h:
+
+/usr/include/c++/13/mutex:
+
+/usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
+
+/usr/include/c++/13/bits/charconv.h:
+
+/usr/include/c++/13/cstdio:
+
+/usr/include/c++/13/bits/locale_facets.h:
+
+/usr/include/c++/13/ext/type_traits.h:
+
+/usr/include/x86_64-linux-gnu/c++/13/bits/cpu_defines.h:
+
+/mnt/c/л3/Lab3OOP/Container/I/IRefragedContainer.hpp:
+
+/usr/include/c++/13/ostream:
+
+/usr/include/c++/13/tr1/riemann_zeta.tcc:
+
+/usr/include/c++/13/bits/locale_facets_nonio.h:
+
+/usr/include/x86_64-linux-gnu/bits/confname.h:
+
+/usr/include/c++/13/bits/functional_hash.h:
+
+/usr/include/errno.h:
+
+/mnt/c/л3/Lab3OOP/Octree/ContainerPosition.hpp:
+
+/usr/include/linux/close_range.h:
+
+/usr/include/c++/13/bits/move.h:
 
 /usr/include/c++/13/array:
 
@@ -1447,107 +1523,9 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP/test.cpp \
 
 /usr/include/c++/13/bits/ranges_util.h:
 
-/usr/include/c++/13/backward/binders.h:
+/usr/include/x86_64-linux-gnu/sys/select.h:
 
-/usr/include/c++/13/bits/stl_vector.h:
-
-/usr/include/c++/13/bits/stl_tempbuf.h:
-
-/mnt/c/л3/Lab3OOP/Octree/Point.hpp:
-
-/usr/include/c++/13/bits/range_access.h:
-
-/usr/include/c++/13/tr1/hypergeometric.tcc:
-
-/usr/include/c++/13/type_traits:
-
-/usr/include/c++/13/bits/atomic_lockfree_defines.h:
-
-/usr/lib/linux/uapi/x86/asm/bitsperlong.h:
-
-/mnt/c/л3/Lab3OOP/Container/I/IContainer.hpp:
-
-/usr/include/c++/13/bits/unique_lock.h:
-
-/usr/include/c++/13/mutex:
-
-/usr/include/c++/13/bits/allocated_ptr.h:
-
-/usr/include/c++/13/bit:
-
-/usr/include/c++/13/bits/basic_string.tcc:
-
-/usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
-
-/usr/include/c++/13/bits/charconv.h:
-
-/mnt/c/л3/Lab3OOP/Container/Frag_and_Ref.hpp:
-
-/usr/include/c++/13/cstdio:
-
-/usr/include/c++/13/bits/locale_facets.h:
-
-/usr/include/x86_64-linux-gnu/c++/13/bits/cpu_defines.h:
-
-/mnt/c/л3/Lab3OOP/Container/I/IRefragedContainer.hpp:
-
-/usr/include/c++/13/ostream:
-
-/usr/include/c++/13/tr1/riemann_zeta.tcc:
-
-/usr/include/c++/13/bits/locale_facets_nonio.h:
-
-/usr/include/x86_64-linux-gnu/bits/confname.h:
-
-/usr/include/c++/13/bits/functional_hash.h:
-
-/usr/include/errno.h:
-
-/usr/include/c++/13/optional:
-
-/usr/include/c++/13/bits/vector.tcc:
-
-/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
-
-/usr/include/c++/13/bits/exception_defines.h:
-
-/usr/include/c++/13/bits/move.h:
-
-/usr/include/c++/13/ext/type_traits.h:
-
-/usr/include/c++/13/cerrno:
-
-/usr/include/x86_64-linux-gnu/bits/signum-generic.h:
-
-/usr/include/c++/13/iosfwd:
-
-/mnt/c/л3/Lab3OOP/Container/RefragedContainer.hpp:
-
-/mnt/c/л3/Lab3OOP/Octree/ContainerPosition.hpp:
-
-/usr/include/linux/close_range.h:
-
-/usr/include/c++/13/bits/streambuf.tcc:
-
-/usr/include/c++/13/bits/specfun.h:
-
-/usr/include/c++/13/atomic:
-
-/usr/include/c++/13/bits/basic_string.h:
-
-/usr/include/c++/13/cxxabi.h:
-
-/usr/include/c++/13/tr1/poly_laguerre.tcc:
-
-/usr/include/c++/13/bits/ranges_algo.h:
-
-/usr/include/c++/13/bits/invoke.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h:
-
-/usr/include/x86_64-linux-gnu/bits/environments.h:
-
-/usr/include/alloca.h:
+/usr/include/c++/13/cwchar:
 
 /usr/include/x86_64-linux-gnu/bits/endianness.h:
 
@@ -1631,13 +1609,15 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP/test.cpp \
 
 /usr/include/c++/13/bits/locale_classes.tcc:
 
-/usr/include/x86_64-linux-gnu/sys/select.h:
+/usr/include/c++/13/bits/ranges_algo.h:
 
-/usr/include/c++/13/cwchar:
+/usr/include/c++/13/bits/invoke.h:
 
-/usr/include/c++/13/cwctype:
+/usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h:
 
-/usr/include/c++/13/debug/assertions.h:
+/usr/include/x86_64-linux-gnu/bits/environments.h:
+
+/usr/include/c++/13/bits/memoryfwd.h:
 
 /usr/include/c++/13/pstl/glue_memory_defs.h:
 
@@ -1845,9 +1825,9 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP/test.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/semaphore.h:
 
-/usr/include/time.h:
-
 /usr/include/x86_64-linux-gnu/bits/getopt_posix.h:
+
+/usr/include/time.h:
 
 /usr/include/x86_64-linux-gnu/bits/setjmp.h:
 
@@ -1878,3 +1858,11 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP/test.cpp \
 /usr/include/math.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__FILE.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct_sigstack.h:
+
+/usr/include/c++/13/bits/stl_multimap.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:

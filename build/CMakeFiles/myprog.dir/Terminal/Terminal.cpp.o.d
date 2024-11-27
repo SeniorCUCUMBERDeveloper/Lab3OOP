@@ -229,13 +229,4 @@ CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: \
  /usr/include/c++/13/bits/enable_special_members.h \
  /usr/include/c++/13/array \
  /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/Container.hpp \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/./I/IContainer.hpp \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/FragileContainer.hpp \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/./I/IFragile.hpp \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/./I/IContainer.hpp \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/RefragedContainer.hpp \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/./I/IRefragedContainer.hpp \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/Frag_and_Ref.hpp \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/FragileContainer.hpp \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/RefragedContainer.hpp \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Storage/Storage.hpp
+ /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/./I/IContainer.hpp

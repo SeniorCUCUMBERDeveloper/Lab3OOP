@@ -88,6 +88,29 @@ TEST(StorageTest, setSize){
     EXPECT_EQ(result.find("0_0_5") != std::string::npos, true);
 }
 
+
+TEST(StorageTest, Move){
+    Storage storage(1, 100, 100, 100, 20.0);
+    IContainer* container = new FragileContainer("_", "Cargo B", 2, 5, 2, 23.5, 2.5, 11.3);
+    storage.addContainer(container, 0, 0, 0);
+    container =  new Container("_", "Cargo A", 1, 4, 1, 21.2, 1.1);
+    storage.addContainer(container, 0, 0 , 3);
+    container =  new Container("_", "Cargo A", 14, 4, 12, 21.2, 1.1);
+    storage.addContainer(container, 16, 16 , 0);
+    container =  new Container("_", "Cargo A", 7, 4, 3, 21.2, 1.1);
+    storage.addContainer(container, 80, 80 , 0);
+    container =  new Container("_", "Cargo A", 1, 1, 1, 21.2, 1.1);
+    storage.addContainer(container, 0, 0 , 5);
+    EXPECT_THROW(storage.moveContainer("0_0_0", -1, 0, 0), std::invalid_argument);
+    EXPECT_THROW(storage.moveContainer("3_0_7", 1, 0, 0), std::invalid_argument);
+    EXPECT_THROW(storage.moveContainer("0_0_3", 1, 0, 0), std::invalid_argument);
+    EXPECT_THROW(storage.moveContainer("0_0_5", 1, 0, 0), std::invalid_argument);
+    storage.moveContainer("0_0_5", 90, 8, 0);
+    std::string result = storage.getInfo();
+    EXPECT_EQ(result.find("90_8_0") != std::string::npos, true);
+    EXPECT_EQ(result.find("0_0_5") != std::string::npos, false);
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

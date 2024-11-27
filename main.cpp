@@ -17,38 +17,19 @@ void checkTemperature(Storage& storage, IContainer* container, ContainerPosition
 }
 
 
-void checkPressure(Storage& storage, IContainer* container, ContainerPosition<int> pos){
-    if(pos.LLDown.z != 0){
-        std::vector<std::pair<ContainerPosition<int>,IContainer*>> con = storage.searchUnderContainer(pos);
-        if(con.empty()){
-            throw std::invalid_argument("Container can t fly 1");
-        }
-        if(!storage.checkSupport(pos, con)){
-            throw std::invalid_argument("Support doesn t exist");
-        }
-        for(size_t i = 0; i < con.size(); i++){
-            ContainerPosition<int> check = con[i].first;
-            if(((*con[i].second).isType() == "Fragile" || (*con[i].second).isType() == "Fragile and Refraged Container") && storage.calculatemass(con, i) + (*container).getMass() > (*(dynamic_cast<IFragileContainer*>(con[i].second))).getMaxPressure()){
-                throw std::invalid_argument("Container would be too heavy");
-            }
-        }
-    }
-}
-
-
-
 int main(){
    Terminal terminal;
    
    // Создаем новый склад
    Storage* st = new Storage(1, 32, 32, 16, 23.4);
      terminal.add(1, st);
+     st->addExternalCheckFunction(checkTemperature);
   //  Request request(st, 30);
   //  std::thread requestThread(&Request::RequestQ, &request);
   //   requestThread.join();
    // //st->getInfoAboutStorage();
   IContainer* container = new FragileContainer("_", "Cargo A", 2, 5, 2, 21.2, 2.1, 300.0);
-  IContainer* container2 = new Container("_", "Cargo A", 2, 5, 1, 21.2, 2222222.1);
+  IContainer* container2 = new Container("_", "Cargo A", 2, 5, 1, 21.2, 2.3);
   IContainer* container3 = new Container("x", "Cargo A", 2, 5, 1, 21.2, 11.1);
   IContainer* container4 = new Container("_", "Cargo A", 1, 7, 1, 21.2, 2.1);
   IContainer* container5 = new Container("_", "Cargo A", 2, 1, 1, 21.2, 2.1);
@@ -63,8 +44,12 @@ int main(){
   st->addContainer(container6,0, 20, 0);
   st->addContainer(container7, 0, 20, 2);
   st->addContainer(container8, 0, 20, 6);
-  st->check();
-  st->getSize(100, 100, 16);
+  //std::cout << st->getInfo() << std::endl;
+  //st->removeContainer("0_0_0");
+  //st->check();
+  st->removeContainer("0_0_0");
+  std::cout << st->getInfo() << std::endl;
+   st->getSize(100, 100, 16);
   std::cout << st->getInfoAboutStorage() << std::endl;
   std::cout << st->getInfo() << std::endl;
   // Storage ser(*st);

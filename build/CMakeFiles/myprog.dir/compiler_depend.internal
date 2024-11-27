@@ -4,12 +4,7 @@
 CMakeFiles/myprog.dir/Storage/Storage.cpp.o
  /mnt/c/л3/Lab3OOP/Storage/Storage.cpp
  /mnt/c/л3/Lab3OOP/Container/I/IContainer.hpp
- /mnt/c/л3/Lab3OOP/Container/I/IFragile.hpp
- /mnt/c/л3/Lab3OOP/Container/I/IRefragedContainer.hpp
  /mnt/c/л3/Lab3OOP/Container/Container.hpp
- /mnt/c/л3/Lab3OOP/Container/Frag_and_Ref.hpp
- /mnt/c/л3/Lab3OOP/Container/FragileContainer.hpp
- /mnt/c/л3/Lab3OOP/Container/RefragedContainer.hpp
  /mnt/c/л3/Lab3OOP/Checker/Checker.hpp
  /mnt/c/л3/Lab3OOP/Container/I/IContainer.hpp
  /mnt/c/л3/Lab3OOP/Container/I/IFragile.hpp
@@ -324,12 +319,7 @@ CMakeFiles/myprog.dir/Storage/Storage.cpp.o
 CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o
  /mnt/c/л3/Lab3OOP/Terminal/Terminal.cpp
  /mnt/c/л3/Lab3OOP/Container/I/IContainer.hpp
- /mnt/c/л3/Lab3OOP/Container/I/IFragile.hpp
- /mnt/c/л3/Lab3OOP/Container/I/IRefragedContainer.hpp
  /mnt/c/л3/Lab3OOP/Container/Container.hpp
- /mnt/c/л3/Lab3OOP/Container/Frag_and_Ref.hpp
- /mnt/c/л3/Lab3OOP/Container/FragileContainer.hpp
- /mnt/c/л3/Lab3OOP/Container/RefragedContainer.hpp
  /mnt/c/л3/Lab3OOP/Checker/Checker.hpp
  /mnt/c/л3/Lab3OOP/Container/I/IContainer.hpp
  /mnt/c/л3/Lab3OOP/Octree/ContainerPosition.hpp
@@ -619,10 +609,6 @@ CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o
 
 CMakeFiles/myprog.dir/test.cpp.o
  /mnt/c/л3/Lab3OOP/test.cpp
- /mnt/c/л3/Lab3OOP/Container/Container.hpp
- /mnt/c/л3/Lab3OOP/Container/Frag_and_Ref.hpp
- /mnt/c/л3/Lab3OOP/Container/FragileContainer.hpp
- /mnt/c/л3/Lab3OOP/Container/RefragedContainer.hpp
  /mnt/c/л3/Lab3OOP/Container/I/IContainer.hpp
  /mnt/c/л3/Lab3OOP/Container/I/IFragile.hpp
  /mnt/c/л3/Lab3OOP/Container/I/IRefragedContainer.hpp
@@ -630,6 +616,8 @@ CMakeFiles/myprog.dir/test.cpp.o
  /mnt/c/л3/Lab3OOP/Container/Frag_and_Ref.hpp
  /mnt/c/л3/Lab3OOP/Container/FragileContainer.hpp
  /mnt/c/л3/Lab3OOP/Container/RefragedContainer.hpp
+ /mnt/c/л3/Lab3OOP/Container/I/IContainer.hpp
+ /mnt/c/л3/Lab3OOP/Container/Container.hpp
  /mnt/c/л3/Lab3OOP/Checker/Checker.hpp
  /mnt/c/л3/Lab3OOP/Container/I/IContainer.hpp
  /mnt/c/л3/Lab3OOP/Octree/ContainerPosition.hpp

@@ -24,11 +24,16 @@ int Storage::calculateDepth(){
 }
 
 
+  void Storage::addExternalCheckFunction(const std::function<void(Storage&, IContainer*, ContainerPosition<int>)>& externalFunc) {
+        checker.addCheckFunction(externalFunc);
+    }
+
+
 void Storage::check(){
     for(auto it = containers->begin(); it != containers->end(); ++it){
         if (*it == nullptr) {
             std::cout << "Invalid container found.\n";
-            continue; // Пропустите этот контейнер
+            continue;
         }
         if(!(*it)->con.empty()){
             for(auto it2 = (*it)->con.begin(); it2 != (*it)->con.end(); ++it2){
@@ -39,7 +44,7 @@ void Storage::check(){
 }
 
 
-Storage::Storage(int number, int length, int width, int height, double temperature){
+Storage::Storage(int number, int length, int width, int height, double temperature) : checker(){
     this->number = number;
     this->length = length;
     this->width = width;
@@ -47,8 +52,12 @@ Storage::Storage(int number, int length, int width, int height, double temperatu
     this->temperature = temperature;
     BoundingBox<int> bound(Point<int>(0, 0, 0), Point<int>(length, width, height));
     this->containers = new Octree<int, IContainer*, ContainerPosition<int>>(bound, calculateDepth());
-    this->checker.addCheckFunction(std::bind(&Storage::checkTemperature, this, std::placeholders::_1, std::placeholders::_2));
-    this->checker.addCheckFunction(std::bind(&Storage::checkPressure, this, std::placeholders::_1, std::placeholders::_2));
+    this->checker.addCheckFunction([this](Storage& storage, IContainer* container, ContainerPosition<int> position) {
+        checkTemperature(storage, container, position);
+    });
+    this->checker.addCheckFunction([this](Storage& storage, IContainer* container, ContainerPosition<int> position) {
+        checkPressure(storage, container, position);
+    });
 }
 
 
@@ -100,6 +109,9 @@ void Storage::getSize(int l, int w, int h){
     Storage newStorage(this->number, l, w, h, this->temperature);
     auto i = this->containers->searchDepth();
     std::sort(i.begin(), i.end(), comparePosition);
+    for(auto& it : i){
+        std::cout << it.second->getId() << std::endl;
+    }
     for(auto& it : i){
         newStorage.addContainer(it.second->Clone(), it.first.LLDown.x, it.first.LLDown.y, it.first.LLDown.z);
     }
@@ -255,7 +267,7 @@ void Storage::addContainer(IContainer* container, int X, int Y, int Z){
     if(cache == nullptr){
         throw std::invalid_argument("Valid place for container doesn t exist");
     }
-    checker.applyChecks(container, pos);
+    checker.applyChecks(*this ,container, pos);
     (*containers).insert(container, pos, cache);
     container->setId(X, Y, Z);
 }
@@ -407,9 +419,6 @@ void Storage::multitread(IContainer* container, int X, int Y, int Z){
                 throw std::invalid_argument("Container would be too heavy");
             }
         }
-        if(max + 1 != pos.LLDown.z){
-            throw std::invalid_argument("Container can t fly");
-        }
     }
     ul.lock();
     if(!containerAdded.load()){
@@ -478,10 +487,25 @@ void Storage::removeContainer(std::string id){
             }
         }
         for(auto& container : con){
+            std::cout << container.second->getId() << std::endl;
             IContainer* copy = container.second->Clone();
             ContainerPosition<int> pos = container.first;
+            std::string a = container.second->getId();
             containers->remove(container.second->getId());
+            if(a == "0_0_5"){
+                auto i = containers->searchDepth();
+                for(auto& it : i){
+                    std::cout <<"До " << it.second->getId() << std::endl;
+                }
+            }
             std::string newId = addContainer(copy);
+            if(a == "0_0_5"){
+                auto i = containers->searchDepth();
+                for(auto& it : i){
+                    std::cout <<"После " << it.second->getId() << std::endl;
+                }
+                std::cout << "---------------------" << newId << std::endl;
+            }
             if(newId == "_"){
                 containers->insert(cache.second, cache.first, cache2);
                 addContainer(copy, pos.LLDown.x, pos.LLDown.y, pos.LLDown.z);
@@ -560,23 +584,27 @@ std::vector<std::string> Storage::getListContainers() const{
 }
 
 
-void Storage::checkTemperature(IContainer* container, ContainerPosition<int> pos){
+void Storage::checkTemperature(Storage& storage, IContainer* container, ContainerPosition<int> pos){
     IRefragedContainer* ref = dynamic_cast<IRefragedContainer*>(container);
     if(((*container).isType() == "Refraged" || (*container).isType() == "Fragile and Refraged Container") &&
-    temperature > (*ref).getMaxTemperature())
+    storage.temperature > (*ref).getMaxTemperature())
     {
         throw std::invalid_argument("Container is too hot");
     }
 }
 
 
-void Storage::checkPressure(IContainer* container, ContainerPosition<int> pos){
+void Storage::checkPressure(Storage& storage, IContainer* container, ContainerPosition<int> pos){
     if(pos.LLDown.z != 0){
-        std::vector<std::pair<ContainerPosition<int>,IContainer*>> con = searchUnderContainer(pos);
+        std::vector<std::pair<ContainerPosition<int>,IContainer*>> con = storage.searchUnderContainer(pos);
         if(con.empty()){
             throw std::invalid_argument("Container can t fly 1");
         }
         if(!checkSupport(pos, con)){
+            for(auto& c : con){
+                std::cout << "Pod " << c.second->getId() << std::endl;
+            }
+            std::cout << container->getId() << std::endl;
             throw std::invalid_argument("Support doesn t exist");
         }
         for(size_t i = 0; i < con.size(); i++){

@@ -226,16 +226,8 @@ CMakeFiles/myprog.dir/Storage/Storage.cpp.o: \
  /usr/include/c++/13/bits/erase_if.h /usr/include/c++/13/array \
  /mnt/c/л3/Lab3OOP/Storage/../Checker/../Container/Container.hpp \
  /mnt/c/л3/Lab3OOP/Storage/../Checker/../Container/./I/IContainer.hpp \
- /mnt/c/л3/Lab3OOP/Storage/../Checker/../Container/FragileContainer.hpp \
- /mnt/c/л3/Lab3OOP/Storage/../Checker/../Container/./I/IFragile.hpp \
- /mnt/c/л3/Lab3OOP/Storage/../Checker/../Container/./I/IContainer.hpp \
- /mnt/c/л3/Lab3OOP/Storage/../Checker/../Container/RefragedContainer.hpp \
- /mnt/c/л3/Lab3OOP/Storage/../Checker/../Container/./I/IRefragedContainer.hpp \
- /mnt/c/л3/Lab3OOP/Storage/../Checker/../Container/Frag_and_Ref.hpp \
- /mnt/c/л3/Lab3OOP/Storage/../Checker/../Container/FragileContainer.hpp \
- /mnt/c/л3/Lab3OOP/Storage/../Checker/../Container/RefragedContainer.hpp \
- /mnt/c/л3/Lab3OOP/Storage/../Checker/../Storage/Storage.hpp \
  /mnt/c/л3/Lab3OOP/Storage/../Container/I/IFragile.hpp \
+ /mnt/c/л3/Lab3OOP/Storage/../Container/I/IContainer.hpp \
  /mnt/c/л3/Lab3OOP/Storage/../Container/I/IRefragedContainer.hpp \
  /usr/include/c++/13/numeric /usr/include/c++/13/bits/stl_numeric.h \
  /usr/include/c++/13/pstl/glue_numeric_defs.h /usr/include/c++/13/cmath \

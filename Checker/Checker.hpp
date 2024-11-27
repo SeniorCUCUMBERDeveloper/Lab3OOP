@@ -7,16 +7,18 @@
 #include <stdexcept>
 #include <iostream>
 #include "../Container/Container.hpp"
-#include "../Container/FragileContainer.hpp"
-#include "../Container/RefragedContainer.hpp"
-#include "../Container/Frag_and_Ref.hpp"
-#include "../Storage/Storage.hpp"
 
+
+class Storage;
 
 template <typename T>
 class Checker {
 public:
-    using CheckFunction = std::function<void(IContainer*, ContainerPosition<T>)>;
+    using CheckFunction = std::function<void(Storage&, IContainer*, ContainerPosition<T>)>;
+private:
+    std::vector<CheckFunction> checkFunctions;
+
+public:
 
 
 
@@ -38,14 +40,12 @@ public:
     }
 
     
-    void applyChecks(IContainer* container, ContainerPosition<int> position) const {
+    void applyChecks(Storage& storage, IContainer* container, ContainerPosition<int> position) const {
         for (const auto& func : checkFunctions) {
-            func(container, position);
+            func(storage, container, position);
         }
     }
 
-private:
-    std::vector<CheckFunction> checkFunctions;
 };
 
 
