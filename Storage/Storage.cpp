@@ -475,10 +475,12 @@ void Storage::removeContainer(std::string id){
 
         std::vector<std::string> newPlacement;
         for(auto& container : con_copy){
-            std::string newId = addContainer(container.second->Clone());
+            auto last = container.second->Clone();
+            std::string newId = addContainer(last);
 
             //Возврат, если не получилось раскидать контейнеры
             if(newId == "_"){
+                delete last;
                 for(auto& return_containerId : newPlacement){
                     containers->remove(return_containerId);
                 }
@@ -488,7 +490,7 @@ void Storage::removeContainer(std::string id){
                 }
                 throw std::invalid_argument("No space found to move container with id " + id);
             }
-            //           
+            //Страховка         
             
             else{
                 newPlacement.push_back(newId);
@@ -528,7 +530,6 @@ void Storage::howContai(IContainer* container, std::vector<size_t>& result, size
     Storage st(*this);
     while (true) 
     {
-        try{
         if (st.addContainer(currentContainer) != "_") {
             result[method]++;
             currentContainer = currentContainer->Clone(result[method], method);
@@ -537,12 +538,8 @@ void Storage::howContai(IContainer* container, std::vector<size_t>& result, size
             std::cout << "Cannot add more containers for method " << method << ", total added: " << result[method] << "\n";
             break;
         }
-        }catch (const std::exception& e) {
-             std::cerr << "Error: " << e.what() << "\n";
-        }
     }
     delete currentContainer;
-    //return result;
 }
 
 

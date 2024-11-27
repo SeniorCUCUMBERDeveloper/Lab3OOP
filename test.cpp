@@ -181,7 +181,53 @@ TEST(StorageTest, Remove){
     std::cout<< std::endl;
     EXPECT_NO_THROW(storage.getSize(100, 100, 32));
     storage.getInfo();
-    
+    Storage st(2, 10, 1, 3, 20.0);
+    container =  new Container("_", "Cargo A", 1, 1, 1, 21.2, 1.1);
+    st.addContainer(container, 0, 0 , 0);
+    container =  new Container("_", "Cargo A", 8, 1, 1, 21.2, 1.1);
+    st.addContainer(container,2, 0, 0);
+    container =  new Container("_", "Cargo A", 10, 1, 1, 21.2, 1.1);
+    st.addContainer(container,0, 0, 2);
+    EXPECT_THROW(st.removeContainer("2_0_0"), std::invalid_argument);
+    Storage lastT(2, 11, 1, 3, 20.0);
+    container =  new Container("_", "Cargo A", 2, 1, 1, 21.2, 1.1);
+    lastT.addContainer(container, 0, 0, 0);
+    container =  new Container("_", "Cargo A", 8, 1, 1, 21.2, 1.1);
+    lastT.addContainer(container, 3, 0, 0);
+    container =  new Container("_", "Cargo A", 1, 1, 1, 21.2, 1.1);
+    lastT.addContainer(container,0, 0, 2);
+    container =  new Container("_", "Cargo A", 1, 1, 1, 21.2, 1.1);
+    lastT.addContainer(container,2, 0, 2);
+    container =  new Container("_", "Cargo A", 7, 1, 1, 21.2, 1.1);
+    lastT.addContainer(container,4, 0, 2);
+    EXPECT_NO_THROW(lastT.removeContainer("3_0_0"));
+}
+
+
+TEST(StorageTest, howContainersInStorage){
+    Storage storage(1, 10, 5, 1, 20.0);
+    IContainer* container = new Container("_", "Cargo B", 2, 1, 1, 23.5, 2.5);
+    storage.addContainer(container, 0, 0, 0);
+    container = new Container("_", "Cargo B", 1, 1, 1, 23.5, 2.5);
+    int max = storage.howContainer(container);
+    std::cout << max << std::endl;
+    EXPECT_EQ(max, 14);
+}
+
+
+void checkCheker(Storage& storage, IContainer* container, ContainerPosition<int> pos){
+    if(((*container).isType() == "Fragile and Refraged Container" ))
+    {
+        throw std::invalid_argument("Proved");
+    }
+}
+
+TEST(StorageTest, Checker){
+    Storage storage(1, 10, 5, 1, 29.0);
+    storage.addExternalCheckFunction(checkCheker);
+    IContainer* container = new FragileRefragedContainer("_", "Cargo B", 2, 1, 1, 23.5, 2.5, 24.5, 24.5);
+    EXPECT_THROW(storage.addContainer(container, 0, 0, 0), std::invalid_argument);
+    delete container;
 }
 
 int main(int argc, char **argv) {

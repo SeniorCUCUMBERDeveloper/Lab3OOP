@@ -80,10 +80,10 @@ class Octree{
             Node(BoundingBox<T>& box, int height) : box(box), height(height) {}
             ~Node() {
                 for (auto c : con) {
-                    delete c.second; // Освобождение памяти для контейнеров
+                    delete c.second; 
                 }
                 for (Node* child : children) {
-                    delete child; // Рекурсивное освобождение памяти для дочерних узлов
+                    delete child; 
                 }
             }
 
@@ -147,7 +147,6 @@ class Octree{
         Octree(BoundingBox<T>& bbox, int depth) {
         depth_ = depth;
         root = new Node(bbox, 0);
-        //createTree(root, depth);
     }
 
 
@@ -318,89 +317,94 @@ class Octree{
         }
 
 
-            static T getMinX(CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::min({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
-            }
+        static T getMinX(CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::min({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
+        }
 
 
-            static T getMaxX(CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::max({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
-            }
+        static T getMaxX(CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::max({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
+        }
 
 
-            static T getMinY(CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::min({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
-            }
+        static T getMinY(CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::min({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
+        }
 
 
-            static T getMaxY(CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::max({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
-            }
+        static T getMaxY(CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::max({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
+        }
 
 
-            static T getMinZ(CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::min({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
-            }
+        static T getMinZ(CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::min({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
+        }
 
 
-            static T getMaxZ(CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::max({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
-            }
+        static T getMaxZ(CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::max({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
+        }
 
 
-            static T getMinX(const CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::min({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
-            }
+        static T getMinX(const CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::min({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
+        }
 
-            static T getMaxX(const CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::max({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
-            }
-
-
-            static T getMinY(const CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::min({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
-            }
+        static T getMaxX(const CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::max({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
+        }
 
 
-            static T getMaxY(const CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::max({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
-            }
+        static T getMinY(const CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::min({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
+        }
+
+
+        static T getMaxY(const CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::max({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
+        }
 
 
 
-            static T getMinZ(const CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::min({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
-            }
+        static T getMinZ(const CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::min({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
+        }
 
 
-            static T getMaxZ(const CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::max({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
-            }
+        static T getMaxZ(const CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::max({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
+        }
 
 
-            static bool pointincontainer(Point<T>& p, CPosType& position){
-                static_assert(PointConcept<Point<T>>, "T должен удовлетворять PointConcept");
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                T minX = getMinX(position);
-                T maxX = getMaxX(position);
-                T minY = getMinY(position);
-                T maxY = getMaxY(position);
-                T minZ = getMinZ(position);
-                T maxZ = getMaxZ(position);
-                return (p.x >= minX && p.x <= maxX && p.y >= minY && p.y <= maxY && p.z >= minZ && p.z <= maxZ);
-            }
+        bool push(N container, CPosType& position){
+            Node* target = SearchInsert(container, position);
+            return insert(container, position, target);
+        }
+
+        static bool pointincontainer(Point<T>& p, CPosType& position){
+            static_assert(PointConcept<Point<T>>, "T должен удовлетворять PointConcept");
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            T minX = getMinX(position);
+            T maxX = getMaxX(position);
+            T minY = getMinY(position);
+            T maxY = getMaxY(position);
+            T minZ = getMinZ(position);
+            T maxZ = getMaxZ(position);
+            return (p.x >= minX && p.x <= maxX && p.y >= minY && p.y <= maxY && p.z >= minZ && p.z <= maxZ);
+        }
 
 
         private:
@@ -582,8 +586,6 @@ class Octree{
             std::string number(const Point<T>& p) const{
             return std::to_string(p.x) + "_" + std::to_string(p.y) + "_" + std::to_string(p.z);
         }
-
-
                 
 };
 
