@@ -51,6 +51,7 @@ class Request{
                 }
                 //std::this_thread::sleep_for(std::chrono::milliseconds(500)); не надо здесь
             }
+            try{
             for(int i = 0; i < 20; ++i){
                         id = storage->getListContainers();
                         if(id.empty()){
@@ -67,8 +68,7 @@ class Request{
                        std::cout << storage->getInfo() << std::endl;
             }
             std::cout << "\n-------------------------------\n" << std::endl;
-            try{
-            std::cout << storage->getInfo() << std::endl;
+                std::cout << storage->getInfo() << std::endl;
             }catch(std::exception& e){
                 std::cerr << "Error in RequestQ: " << e.what() << std::endl;
             }

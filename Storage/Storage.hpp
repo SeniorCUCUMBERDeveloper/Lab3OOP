@@ -42,11 +42,9 @@ class Storage{
             delete containers;
             }
 
-          std::pair<ContainerPosition<int>, IContainer*> find(std::string id){
-              return containers->findI(id);
-          }
+          std::pair<ContainerPosition<int>, IContainer*> find(std::string id);
 
-          void check();
+          std::vector<std::string> check();
 
 
         private:

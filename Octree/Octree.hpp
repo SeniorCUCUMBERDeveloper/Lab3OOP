@@ -525,8 +525,19 @@ class Octree{
                 if(node->con.empty() == false){
                     for(auto& i : node->con){
                         if(i.first.LLDown.x != -1 && i.second != nullptr && number(i.first.LLDown) == id){
-                            if(i.second != nullptr) delete i.second;
-                            node->con.erase(std::remove(node->con.begin(), node->con.end(), i), node->con.end());
+                            // std::vector<std::pair<CPosType, N>> newVector;
+                            // for(auto& j : node->con){
+                            //     if(j.second != nullptr && number(j.first.LLDown) != id){
+                            //         newVector.push_back(j);
+                            //     }
+                            // }
+                            //node->con.erase(std::remove(node->con.begin(), node->con.end(), i), node->con.end());
+                            if(i.second != nullptr){
+                                delete i.second;
+                                i.second = nullptr;
+                                node->con.erase(std::remove(node->con.begin(), node->con.end(), i), node->con.end());
+                            }
+                            //node->con = newVector;
                             collision = true;
                             *copyCache = node;
                             return;
@@ -542,47 +553,46 @@ class Octree{
             }
 
 
-            bool checkEmptyNode(Node* node){
-            return ( node->children[0] == nullptr || node->children[0]->con.empty()) &&
-           (node->children[1] == nullptr || node->children[1]->con.empty()) &&
-           (node->children[2] == nullptr || node->children[2]->con.empty()) &&
-           (node->children[3] == nullptr || node->children[3]->con.empty()) &&
-           (node->children[4] == nullptr || node->children[4]->con.empty()) &&
-           (node->children[5] == nullptr || node->children[5]->con.empty()) &&
-           (node->children[6] == nullptr || node->children[6]->con.empty()) &&
-           (node->children[7] == nullptr || node->children[7]->con.empty());
+            bool checkEmptyNode(Node* node) {
+            if (node == nullptr) return true; // Добавлена проверка на nullptr
+            for (int i = 0; i < 8; ++i) {
+                if (node->children[i] != nullptr && !node->children[i]->con.empty()) {
+                    return false;
+                }
             }
+            return true;
+        }
 
-            void mearge(Node* node){
-                if(node == nullptr || node->isLeaf()) return;
-                for(int i = 0; i < 8; ++i){
-                    if(!node->children[i]->con.empty()){
-                        node->con.insert(node->con.begin(), node->children[i]->con.begin(), node->children[i]->con.end());
+           void mearge(Node* node) {
+                if (node == nullptr || node->isLeaf()) return;
+                for (int i = 0; i < 8; ++i) {
+                    if (node->children[i] != nullptr && !node->children[i]->con.empty()) {
+                        node->con.insert(node->con.end(), node->children[i]->con.begin(), node->children[i]->con.end());
                         node->children[i]->con.clear();
                     }
                 }
-                for(int i = 0; i < 8; ++i){
+                for (int i = 0; i < 8; ++i) {
                     mearge(node->children[i]);
                 }
             }
 
-
-            void decreaseHightTree(Node* node){
-                if(node == nullptr || node->isLeaf()){
+            void decreaseHightTree(Node* node) {
+                if (node == nullptr || node->isLeaf()) {
                     return;
                 }
-                for(int i = 0; i < 8; ++i){
+                for (int i = 0; i < 8; ++i) {
                     decreaseHightTree(node->children[i]);
                 }
-                if(node->children[0] != nullptr && checkEmptyNode(node)){
-                    for(int i = 0; i < 8; ++i){
-                        delete node->children[i];
-                        std::cout<< "delete" << std::endl;
-                        node->children[i] = nullptr;
+                if (checkEmptyNode(node)) { // Проверяем, пустой ли узел
+                    for (int i = 0; i < 8; ++i) {
+                        if (node->children[i] != nullptr && node->children[i]->isLeaf()) { // Проверка на nullptr перед удалением
+                            delete node->children[i];
+                            std::cout << "Deleted" << std::endl;
+                            node->children[i] = nullptr;
+                        }
                     }
                 }
             }
-
 
 
             void Update(Node* node) {

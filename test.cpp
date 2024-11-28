@@ -291,6 +291,54 @@ TEST(StorageTest, RemoveHard){
 }
 
 
+TEST(OctreeTest, TestIterator){
+    Storage st =  Storage(1, 100, 100, 32, 23.4);
+    IContainer* container1 = new Container("_", "Cargo B", 6, 6, 1, 23.5, 2.5);
+    IContainer* container2 = new Container("_", "Cargo B", 8, 10, 1, 23.5, 2.5);
+    IContainer* container3 = new Container("_", "Cargo B", 10, 8, 1, 23.5, 2.5);
+    IContainer* container4 = new Container("_", "Cargo B", 9, 9, 1, 23.5, 2.5);
+    IContainer* container5 = new Container("_", "Cargo B", 8, 4, 1, 23.5, 2.5);
+    IContainer* container6 = new Container("_", "Cargo B", 5, 2, 1, 23.5, 2.5);
+    IContainer* container7 = new Container("_", "Cargo B", 1, 6, 1, 23.5, 2.5);
+    IContainer* container8 = new Container("_", "Cargo B", 3, 2, 1, 23.5, 2.5);
+    IContainer* container9 = new Container("_", "Cargo B", 2, 4, 1, 23.5, 2.5);
+    IContainer* container10 = new Container("_", "Cargo B", 4, 10, 1, 23.5, 2.5);
+    IContainer* container11 = new Container("_", "Cargo B", 7, 1, 1, 23.5, 2.5);
+    IContainer* container12 = new Container("_", "Cargo B", 4, 3, 1, 23.5, 2.5);
+    IContainer* container13 = new Container("_", "Cargo B", 8, 1, 1, 23.5, 2.5);
+    IContainer* container14 = new Container("_", "Cargo B", 2, 3, 1, 23.5, 2.5);
+    IContainer* container15 = new Container("_", "Cargo B", 7, 8, 1, 23.5, 2.5);
+    IContainer* container16 = new Container("_", "Cargo B", 2, 7, 1, 23.5, 2.5);
+    IContainer* container17 = new Container("_", "Cargo B", 7, 5, 1, 23.5, 2.5);
+    IContainer* container18 = new Container("_", "Cargo B", 4, 1, 1, 23.5, 2.5);
+    IContainer* container19 = new Container("_", "Cargo B", 8, 3, 1, 23.5, 2.5);
+    st.addContainer(container1, 12, 0, 0);
+    st.addContainer(container4, 2, 0, 0);
+    st.addContainer(container10, 5, 20, 0);
+    st.addContainer(container12, 0, 20, 0);
+    st.addContainer(container2, 10, 20, 0);
+    st.addContainer(container3, 8, 20, 2);
+    st.addContainer(container5, 6, 0, 2);
+    st.addContainer(container6, 0, 0, 2);
+    st.addContainer(container11, 0, 20, 2);
+    st.addContainer(container8, 0, 0, 4);
+    st.addContainer(container9, 4, 0, 4);
+    st.addContainer(container13, 0, 20, 4);
+    st.addContainer(container7, 4, 0, 6);
+    st.addContainer(container14, 0, 20, 6);
+    st.addContainer(container15, 1, 0, 8);
+    st.addContainer(container16, 0, 20, 8);
+    st.addContainer(container18, 0, 20, 10);
+    st.addContainer(container19, 0, 20, 12);
+    st.addContainer(container17, 0, 20, 14);
+    EXPECT_NO_THROW(st.removeContainer("0_20_2"));
+    EXPECT_THROW(st.find("0_20_2"), std::runtime_error);
+    EXPECT_NO_THROW(st.find("2_0_0"));
+    auto it = st.find("12_0_0");
+    EXPECT_EQ(it.second->getId(), "12_0_0");
+}
+
+
 
 
 int main(int argc, char **argv) {
