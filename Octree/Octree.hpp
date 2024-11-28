@@ -80,10 +80,11 @@ class Octree{
             Node(BoundingBox<T>& box, int height) : box(box), height(height) {}
             ~Node() {
                 for (auto c : con) {
-                    delete c.second; 
+
+                    if(c.second != nullptr) delete c.second; 
                 }
                 for (Node* child : children) {
-                    delete child; 
+                    if(child != nullptr) delete child; 
                 }
             }
 
@@ -182,7 +183,7 @@ class Octree{
 
 
         void split(Node* node){
-             Point<T> min = node->box.min;
+            Point<T> min = node->box.min;
             Point<T> max = node->box.max;
 
             T midX = (min.x + max.x) / 2;
@@ -273,11 +274,13 @@ class Octree{
 
         bool remove(std::string id){
             bool collision = false;
-            removeR(id, root, collision);
+            Node* copy = nullptr;
+            removeR(id, root, collision, &copy);
             if(collision == false){
                 return false;
             }
             collision = false;
+            Update(copy);
             return true;
         }
 
@@ -512,7 +515,7 @@ class Octree{
         }
 
 
-            void removeR(std::string id, Node* node, bool& collision){
+            void removeR(std::string id, Node* node, bool& collision, Node** copyCache){
                 if(node == nullptr){
                     return;
                 }
@@ -522,19 +525,76 @@ class Octree{
                 if(node->con.empty() == false){
                     for(auto& i : node->con){
                         if(i.first.LLDown.x != -1 && i.second != nullptr && number(i.first.LLDown) == id){
-                            delete i.second;
+                            if(i.second != nullptr) delete i.second;
                             node->con.erase(std::remove(node->con.begin(), node->con.end(), i), node->con.end());
                             collision = true;
+                            *copyCache = node;
                             return;
                         }
                     }
                 }
                 if(node->isLeaf() == false){
                     for(int i = 0; i < 8; ++i){
-                        removeR(id, node->children[i], collision);
+                        removeR(id, node->children[i], collision, copyCache);
                     }
                 }
 
+            }
+
+
+            bool checkEmptyNode(Node* node){
+            return ( node->children[0] == nullptr || node->children[0]->con.empty()) &&
+           (node->children[1] == nullptr || node->children[1]->con.empty()) &&
+           (node->children[2] == nullptr || node->children[2]->con.empty()) &&
+           (node->children[3] == nullptr || node->children[3]->con.empty()) &&
+           (node->children[4] == nullptr || node->children[4]->con.empty()) &&
+           (node->children[5] == nullptr || node->children[5]->con.empty()) &&
+           (node->children[6] == nullptr || node->children[6]->con.empty()) &&
+           (node->children[7] == nullptr || node->children[7]->con.empty());
+            }
+
+            void mearge(Node* node){
+                if(node == nullptr || node->isLeaf()) return;
+                for(int i = 0; i < 8; ++i){
+                    if(!node->children[i]->con.empty()){
+                        node->con.insert(node->con.begin(), node->children[i]->con.begin(), node->children[i]->con.end());
+                        node->children[i]->con.clear();
+                    }
+                }
+                for(int i = 0; i < 8; ++i){
+                    mearge(node->children[i]);
+                }
+            }
+
+
+            void decreaseHightTree(Node* node){
+                if(node == nullptr || node->isLeaf()){
+                    return;
+                }
+                for(int i = 0; i < 8; ++i){
+                    decreaseHightTree(node->children[i]);
+                }
+                if(node->children[0] != nullptr && checkEmptyNode(node)){
+                    for(int i = 0; i < 8; ++i){
+                        delete node->children[i];
+                        std::cout<< "delete" << std::endl;
+                        node->children[i] = nullptr;
+                    }
+                }
+            }
+
+
+
+            void Update(Node* node) {
+                if(node->parent == nullptr && node->isLeaf() == false && checkEmptyNode(node)){
+                    mearge(node);
+                    decreaseHightTree(node);
+                    return;
+                }
+                if(node->parent != nullptr && !node->parent->isLeaf() && checkEmptyNode(node->parent)){
+                    mearge(node->parent);
+                    decreaseHightTree(node->parent);
+                }
             }
 
 

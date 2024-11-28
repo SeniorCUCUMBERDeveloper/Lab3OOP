@@ -14,7 +14,7 @@ TEST(StorageTests, Initialization) {
 TEST(StorageTest, CopyConstructor){
     Storage storage(1, 100, 100, 100, 20.0);
     storage.addContainer(new Container("_", "Cargo A", 4, 10, 1, 21.2, 2.1));
-    Storage storageCopy(storage);
+    Storage storageCopy = storage;
     EXPECT_EQ(storageCopy.getInfoAboutStorage(), storage.getInfoAboutStorage());
 }
 
@@ -204,14 +204,15 @@ TEST(StorageTest, Remove){
 }
 
 
-TEST(StorageTest, howContainersInStorage){
-    Storage storage(1, 10, 5, 1, 20.0);
-    IContainer* container = new Container("_", "Cargo B", 2, 1, 1, 23.5, 2.5);
-    storage.addContainer(container, 0, 0, 0);
-    container = new Container("_", "Cargo B", 1, 1, 1, 23.5, 2.5);
+ TEST(StorageTest, howContainersInStorage){
+     Storage storage(1, 10, 5, 1, 20.0);
+     IContainer* container = new Container("_", "Cargo B", 2, 1, 1, 23.5, 2.5);
+     storage.addContainer(container, 0, 0, 0);
+     container = new Container("_", "Cargo B", 1, 1, 1, 23.5, 2.5);
     int max = storage.howContainer(container);
-    std::cout << max << std::endl;
-    EXPECT_EQ(max, 14);
+     std::cout << max << std::endl;
+     EXPECT_EQ(max, 14);
+        delete container;
 }
 
 
@@ -229,6 +230,68 @@ TEST(StorageTest, Checker){
     EXPECT_THROW(storage.addContainer(container, 0, 0, 0), std::invalid_argument);
     delete container;
 }
+
+
+
+TEST(StorageTest, RemoveHard){
+    Storage st =  Storage(1, 100, 100, 32, 23.4);
+    IContainer* container1 = new Container("_", "Cargo B", 6, 6, 1, 23.5, 2.5);
+    IContainer* container2 = new Container("_", "Cargo B", 8, 10, 1, 23.5, 2.5);
+    IContainer* container3 = new Container("_", "Cargo B", 10, 8, 1, 23.5, 2.5);
+    IContainer* container4 = new Container("_", "Cargo B", 9, 9, 1, 23.5, 2.5);
+    IContainer* container5 = new Container("_", "Cargo B", 8, 4, 1, 23.5, 2.5);
+    IContainer* container6 = new Container("_", "Cargo B", 5, 2, 1, 23.5, 2.5);
+    IContainer* container7 = new Container("_", "Cargo B", 1, 6, 1, 23.5, 2.5);
+    IContainer* container8 = new Container("_", "Cargo B", 3, 2, 1, 23.5, 2.5);
+    IContainer* container9 = new Container("_", "Cargo B", 2, 4, 1, 23.5, 2.5);
+    IContainer* container10 = new Container("_", "Cargo B", 4, 10, 1, 23.5, 2.5);
+    IContainer* container11 = new Container("_", "Cargo B", 7, 1, 1, 23.5, 2.5);
+    IContainer* container12 = new Container("_", "Cargo B", 4, 3, 1, 23.5, 2.5);
+    IContainer* container13 = new Container("_", "Cargo B", 8, 1, 1, 23.5, 2.5);
+    IContainer* container14 = new Container("_", "Cargo B", 2, 3, 1, 23.5, 2.5);
+    IContainer* container15 = new Container("_", "Cargo B", 7, 8, 1, 23.5, 2.5);
+    IContainer* container16 = new Container("_", "Cargo B", 2, 7, 1, 23.5, 2.5);
+    IContainer* container17 = new Container("_", "Cargo B", 7, 5, 1, 23.5, 2.5);
+    IContainer* container18 = new Container("_", "Cargo B", 4, 1, 1, 23.5, 2.5);
+    IContainer* container19 = new Container("_", "Cargo B", 8, 3, 1, 23.5, 2.5);
+    st.addContainer(container1, 12, 0, 0);
+    st.addContainer(container4, 2, 0, 0);
+    st.addContainer(container10, 5, 20, 0);
+    st.addContainer(container12, 0, 20, 0);
+    st.addContainer(container2, 10, 20, 0);
+    st.addContainer(container3, 8, 20, 2);
+    st.addContainer(container5, 6, 0, 2);
+    st.addContainer(container6, 0, 0, 2);
+    st.addContainer(container11, 0, 20, 2);
+    st.addContainer(container8, 0, 0, 4);
+    st.addContainer(container9, 4, 0, 4);
+    st.addContainer(container13, 0, 20, 4);
+    st.addContainer(container7, 4, 0, 6);
+    st.addContainer(container14, 0, 20, 6);
+    st.addContainer(container15, 1, 0, 8);
+    st.addContainer(container16, 0, 20, 8);
+    st.addContainer(container18, 0, 20, 10);
+    st.addContainer(container19, 0, 20, 12);
+    st.addContainer(container17, 0, 20, 14);
+    EXPECT_NO_THROW(st.removeContainer("10_20_0"));
+    std::cout << st.getInfo() << std::endl;
+    std::vector<std::string> result = st.getListContainers();
+    EXPECT_EQ(result.size(), 18);
+    Storage st1 =  Storage(1, 100, 100, 32, 23.4);
+    container1 = new Container("_", "Cargo B", 70, 80, 27, 23.5, 2.5);
+    container2 = new Container("_", "Cargo B", 1, 1, 1, 23.5, 2.5);
+    container3 = new Container("_", "Cargo B", 1, 1, 1, 23.5, 2.5);
+    st1.addContainer(container1, 0, 0, 0);
+    st1.addContainer(container2, 0, 0, 28);
+    st1.addContainer(container3, 98, 98, 0);
+    st1.removeContainer("0_0_0");
+    std::cout << st1.getInfo() << std::endl;
+    std::vector<std::string> result1 = st1.getListContainers();
+    EXPECT_EQ(result1.size(), 2);
+}
+
+
+
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);

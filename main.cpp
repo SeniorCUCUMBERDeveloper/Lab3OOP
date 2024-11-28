@@ -24,7 +24,7 @@ int main(){
    Storage* st = new Storage(1, 32, 32, 16, 23.4);
      terminal.add(1, st);
      st->addExternalCheckFunction(checkTemperature);
-   Request request(st, 30);
+   Request request(st, 50);
    std::thread requestThread(&Request::RequestQ, &request);
     requestThread.join();
    // //st->getInfoAboutStorage();

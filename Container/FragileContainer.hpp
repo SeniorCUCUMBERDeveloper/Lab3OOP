@@ -24,6 +24,8 @@ class FragileContainer : public IFragileContainer{
             this->maxPressure = maxM;
         }
 
+        ~FragileContainer(){}
+
         int getLength() const override{
             return length;
         }

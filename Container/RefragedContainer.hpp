@@ -25,6 +25,8 @@ class RefragedContainer : public IRefragedContainer{
         this->maxTemperature = maxT;
     }
 
+    ~RefragedContainer(){}
+
     int getLength() const override{
             return length;
         }
