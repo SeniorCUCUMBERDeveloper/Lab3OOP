@@ -44,6 +44,7 @@ class FragileRefragedContainer : public IFragileContainer , public IRefragedCont
         }
 
 
+
         void setId(int X, int Y, int Z) override{
             number = std::to_string(X) + "_" + std::to_string(Y) + "_" + std::to_string(Z);
         }
@@ -82,6 +83,7 @@ class FragileRefragedContainer : public IFragileContainer , public IRefragedCont
                 return new FragileRefragedContainer(number, client, length, width, height, cost, mass,  maxPressure, maxTemperature);
             }
         }
+        ~FragileRefragedContainer() override{}
 };
 
 

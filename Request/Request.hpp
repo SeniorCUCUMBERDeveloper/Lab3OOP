@@ -19,7 +19,7 @@ class Request{
         void RequestQ(){
             std::random_device rd;
             std::mt19937 gen(rd());
-            std::uniform_int_distribution<int> actionDist(0, 3);
+            std::uniform_int_distribution<int> actionDist(0, 1);
             std::uniform_int_distribution<int> DimensionsDist(1, 10);
             std::uniform_int_distribution<int> ZDist(1, 2);
             std::uniform_int_distribution<int> RotateMethodDist(0, 5);
@@ -45,7 +45,14 @@ class Request{
                        std::cout << op[i] << std::endl;
                        std::cout << storage->getInfo() << std::endl;
                     } 
-                    if(action == 1){
+                }catch(std::exception& e){
+                    std::cerr << "Error in RequestQ: " << e.what() << std::endl;
+                    --i;
+                }
+                //std::this_thread::sleep_for(std::chrono::milliseconds(500)); не надо здесь
+            }
+            try{
+            for(int i = 0; i < 20; ++i){
                         id = storage->getListContainers();
                         if(id.empty()){
                             throw std::invalid_argument("Empty");
@@ -59,49 +66,15 @@ class Request{
                         std::cout << "\n-------------------------------\n" << std::endl;
                        std::cout << op[i] << std::endl;
                        std::cout << storage->getInfo() << std::endl;
-                    }
-                    if(action == 2){
-                        id = storage->getListContainers();
-                        if(id.empty()){
-                            throw std::invalid_argument("Empty");
-                        }
-                        auto it = id.begin() + DimensionsDist(gen) % (id.size());  
-                        int method = RotateMethodDist(gen);
-                        storage->rotateContainer(*it, method);
-                        std::cout << "Complete random Rotate Method" << std::endl;
-                        op[i] = "rotate " + (*it) + " " + std::to_string(method) + "\n";
-                        std::cout << "\n-------------------------------\n" << std::endl;
-                       std::cout << op[i] << std::endl;
-                       std::cout << storage->getInfo() << std::endl;
-                    }
-                    if(action == 3){
-                        id = storage->getListContainers();
-                        if(id.empty()){
-                            throw std::invalid_argument("Empty");
-                        }
-                        auto it = id.begin() + DimensionsDist(gen) % (id.size());  
-                        int X = DimensionsDist(gen);
-                        int Y = DimensionsDist(gen);
-                        int Z = DimensionsDist(gen);
-                        storage->moveContainer(*it, X, Y, Z);
-                        std::cout << "Container moved successfully" << std::endl;
-                        op[i] = "move " + (*it) + " to " + std::to_string(X) + " " + std::to_string(Y) + " " + std::to_string(Z) + "\n";
-                        std::cout << "\n-------------------------------\n" << std::endl;
-                       std::cout << op[i] << std::endl;
-                       std::cout << storage->getInfo() << std::endl;
-                        
-                    }
-                }catch(std::exception& e){
-                    std::cerr << "Error in RequestQ: " << e.what() << std::endl;
-                    --i;
-                }
-                //std::this_thread::sleep_for(std::chrono::milliseconds(500)); не надо здесь
             }
             std::cout << "\n-------------------------------\n" << std::endl;
-            std::cout << storage->getInfo() << std::endl;
-            for(size_t i = 0; i < operation; ++i){
-                std::cout << "Operation " << i + 1 << ": " << op[i];
+                std::cout << storage->getInfo() << std::endl;
+            }catch(std::exception& e){
+                std::cerr << "Error in RequestQ: " << e.what() << std::endl;
             }
+            // for(size_t i = 0; i < operation; ++i){
+            //     std::cout << "Operation " << i + 1 << ": " << op[i];
+            // }
         }
 };
 

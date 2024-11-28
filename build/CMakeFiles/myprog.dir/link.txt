@@ -1,0 +1,1 @@
+/usr/bin/c++  -fprofile-arcs -ftest-coverage -g  -fprofile-arcs -ftest-coverage -g CMakeFiles/myprog.dir/test.cpp.o CMakeFiles/myprog.dir/Storage/Storage.cpp.o CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o -o myprog  -lgtest -lpthread

@@ -24,7 +24,12 @@ int Storage::calculateDepth(){
 }
 
 
-Storage::Storage(int number, int length, int width, int height, double temperature){
+  void Storage::addExternalCheckFunction(const std::function<void(Storage&, IContainer*, ContainerPosition<int>)>& externalFunc) {
+        checker.addCheckFunction(externalFunc);
+    }
+
+
+Storage::Storage(int number, int length, int width, int height, double temperature) : checker(){
     this->number = number;
     this->length = length;
     this->width = width;
@@ -32,6 +37,12 @@ Storage::Storage(int number, int length, int width, int height, double temperatu
     this->temperature = temperature;
     BoundingBox<int> bound(Point<int>(0, 0, 0), Point<int>(length, width, height));
     this->containers = new Octree<int, IContainer*, ContainerPosition<int>>(bound, calculateDepth());
+    this->checker.addCheckFunction([this](Storage& storage, IContainer* container, ContainerPosition<int> position) {
+        checkTemperature(storage, container, position);
+    });
+    this->checker.addCheckFunction([this](Storage& storage, IContainer* container, ContainerPosition<int> position) {
+        checkPressure(storage, container, position);
+    });
 }
 
 
@@ -58,6 +69,7 @@ Storage& Storage::operator=(const Storage& other) {
             for(auto& it : i){
                 addContainer(it.second->Clone(), it.first.LLDown.x, it.first.LLDown.y, it.first.LLDown.z);
             }
+            Checker checker = other.checker;
         }
         return *this;
     }
@@ -69,9 +81,9 @@ Storage::Storage(const Storage& other)
         auto i = other.containers->searchDepth();
         std::sort(i.begin(), i.end(), comparePosition);
         for(auto& it : i){
-            //std::cout << it.second->getId() << std::endl;
             addContainer(it.second->Clone(), it.first.LLDown.x, it.first.LLDown.y, it.first.LLDown.z);
         }
+        Checker checker = other.checker;
     }
 
 
@@ -82,6 +94,9 @@ void Storage::getSize(int l, int w, int h){
     Storage newStorage(this->number, l, w, h, this->temperature);
     auto i = this->containers->searchDepth();
     std::sort(i.begin(), i.end(), comparePosition);
+    for(auto& it : i){
+        std::cout << it.second->getId() << std::endl;
+    }
     for(auto& it : i){
         newStorage.addContainer(it.second->Clone(), it.first.LLDown.x, it.first.LLDown.y, it.first.LLDown.z);
     }
@@ -237,32 +252,7 @@ void Storage::addContainer(IContainer* container, int X, int Y, int Z){
     if(cache == nullptr){
         throw std::invalid_argument("Valid place for container doesn t exist");
     }
-    IRefragedContainer* ref = dynamic_cast<IRefragedContainer*>(container);
-    if(((*container).isType() == "Refraged" || (*container).isType() == "Fragile and Refraged Container") &&
-    temperature > (*ref).getMaxTemperature())
-    {
-        throw std::invalid_argument("Container is too hot");
-    }
-    if(pos.LLDown.z != 0){
-        std::vector<std::pair<ContainerPosition<int>,IContainer*>> con = searchUnderContainer(pos);
-        if(con.empty()){
-            throw std::invalid_argument("Container can t fly 1");
-        }
-        if(!checkSupport(pos, con)){
-            throw std::invalid_argument("Support doesn t exist");
-        }
-        int max = 0;
-        for(size_t i = 0; i < con.size(); i++){
-            ContainerPosition<int> check = con[i].first;
-            max = std::max(max, Octree<int, IContainer*, ContainerPosition<int>>::getMaxZ(check));
-            if(((*con[i].second).isType() == "Fragile" || (*con[i].second).isType() == "Fragile and Refraged Container") && calculatemass(con, i) + (*container).getMass() > (*(dynamic_cast<IFragileContainer*>(con[i].second))).getMaxPressure()){
-                throw std::invalid_argument("Container would be too heavy");
-            }
-        }
-        if(max + 1 != pos.LLDown.z){
-            throw std::invalid_argument("Container can t fly");
-        }
-    }
+    checker.applyChecks(*this ,container, pos);
     (*containers).insert(container, pos, cache);
     container->setId(X, Y, Z);
 }
@@ -382,9 +372,6 @@ void Storage::rotateContainer(std::string id, int method) {
 
 void Storage::multitread(IContainer* container, int X, int Y, int Z){
     std::unique_lock<std::mutex> ul(mtx, std::defer_lock);
-    if(X < 0 || Y < 0 || Z < 0){
-        throw std::invalid_argument("Coordinates should be positive");
-    }
     ContainerPosition<int> pos = calculateContainerPosition(X, Y, Z, container->getLength(), container->getWidth(), container->getHeight());
     ul.lock();
     auto cache = containers->SearchInsert(container, pos); //Иначе будет data race shared_mutex юзать нет смысла много записи 
@@ -392,32 +379,7 @@ void Storage::multitread(IContainer* container, int X, int Y, int Z){
     if(cache == nullptr){
         throw std::invalid_argument("Valid place for container doesn t exist");
     }
-    IRefragedContainer* ref = dynamic_cast<IRefragedContainer*>(container);
-    if(((*container).isType() == "Refraged" || (*container).isType() == "Fragile and Refraged Container") &&
-    temperature > (*ref).getMaxTemperature())
-    {
-        throw std::invalid_argument("Container is too hot");
-    }
-    if(pos.LLDown.z != 0){
-        std::vector<std::pair<ContainerPosition<int>,IContainer*>> con = searchUnderContainer(pos);
-        if(con.empty() || con[0].first.LLDown.z != 0){
-            throw std::invalid_argument("Container can t fly 1");
-        }
-        int max = 0;
-         if(!checkSupport(pos, con)){
-            throw std::invalid_argument("Support doesn t exist");
-        }
-        for(size_t i = 0; i < con.size(); i++){
-            ContainerPosition<int> check = con[i].first;
-            max = std::max(max, Octree<int, IContainer*, ContainerPosition<int>>::getMaxZ(check));
-            if(((*con[i].second).isType() == "Fragile" || (*con[i].second).isType() == "Fragile and Refraged Container") && calculatemass(con, i) + (*container).getMass() > (*(dynamic_cast<IFragileContainer*>(con[i].second))).getMaxPressure()){
-                throw std::invalid_argument("Container would be too heavy");
-            }
-        }
-        if(max + 1 != pos.LLDown.z){
-            throw std::invalid_argument("Container can t fly");
-        }
-    }
+    checker.applyChecks(*this, container, pos);
     ul.lock();
     if(!containerAdded.load()){
         containerAdded.store(true);
@@ -471,31 +433,63 @@ std::string Storage::addContainer(IContainer* container){
 void Storage::removeContainer(std::string id){
     auto cache2 = containers->search(id);
     auto cache = containers->findI(id);
-    if(cache.second == nullptr){
+    if(cache2 == nullptr){
         throw std::invalid_argument("No container on storage with id " + id);
     }
     std::vector<std::pair<ContainerPosition<int>, IContainer*>> con = searchUpperContainer(cache.first);
     if(con.empty()){
+        //Простой случай, если на верху нет 
         containers->remove(id);
     }else{
-        for(auto& i : cache2->con){
-            if(i.second->getId() == id){
-                cache2->con.erase(std::remove(cache2->con.begin(), cache2->con.end(), i), cache2->con.end());
-                break;
+        //Сложный случай, если на верху есть контейнеры
+        std::pair<ContainerPosition<int>, IContainer *> copy_delete = std::make_pair(cache.first, cache.second->Clone());
+        std::vector<std::pair<ContainerPosition<int>, IContainer*>> con_copy;
+        
+        
+        //Удаляем контейнеры, делаем их копии, т.к. они в разных узлах дерева
+
+
+        for(auto& i : con){
+            if(i.second != nullptr){
+                con_copy.insert(con_copy.begin(), std::make_pair(i.first, i.second->Clone()));
+                //con_copy = con;
+                containers->remove(i.second->getId());
             }
         }
-        for(auto& container : con){
-            IContainer* copy = container.second->Clone();
-            ContainerPosition<int> pos = container.first;
-            containers->remove(container.second->getId());
-            std::string newId = addContainer(copy);
+
+        containers->remove(id);
+        //Пытаемся раскидать контейнеры по новым позициям
+
+        std::vector<std::string> newPlacement;
+        for(auto& container : con_copy){
+            auto last = container.second->Clone();
+            std::string newId = addContainer(last);
+
+            //Возврат, если не получилось раскидать контейнеры
             if(newId == "_"){
-                containers->insert(cache.second, cache.first, cache2);
-                addContainer(copy, pos.LLDown.x, pos.LLDown.y, pos.LLDown.z);
+                delete last;
+                for(auto& return_containerId : newPlacement){
+                    containers->remove(return_containerId);
+                }
+                addContainer(copy_delete.second, copy_delete.first.LLDown.x, copy_delete.first.LLDown.y, copy_delete.first.LLDown.z);
+                for(auto& ret : con_copy){
+                    addContainer(ret.second, ret.first.LLDown.x, ret.first.LLDown.y, ret.first.LLDown.z);
+                }
                 throw std::invalid_argument("No space found to move container with id " + id);
             }
+            //Страховка         
+            
+            else{
+                newPlacement.push_back(newId);
+            }
+
+
         }
-        delete cache.second;
+        //Удаляем копии контейнеров
+        for(auto& i : con_copy){
+            delete i.second;
+        }
+        delete copy_delete.second;
     }
 }
 
@@ -523,7 +517,6 @@ void Storage::howContai(IContainer* container, std::vector<size_t>& result, size
     Storage st(*this);
     while (true) 
     {
-        try{
         if (st.addContainer(currentContainer) != "_") {
             result[method]++;
             currentContainer = currentContainer->Clone(result[method], method);
@@ -532,12 +525,8 @@ void Storage::howContai(IContainer* container, std::vector<size_t>& result, size
             std::cout << "Cannot add more containers for method " << method << ", total added: " << result[method] << "\n";
             break;
         }
-        }catch (const std::exception& e) {
-             std::cerr << "Error: " << e.what() << "\n";
-        }
     }
     delete currentContainer;
-    //return result;
 }
 
 
@@ -554,14 +543,65 @@ void Storage::howContai(IContainer* container, std::vector<size_t>& result, size
 }
 
 
+std::pair<ContainerPosition<int>, IContainer*> Storage::find(std::string id){
+    auto it = containers->findI(id);
+    if(it.second == nullptr){
+        throw std::runtime_error("Container not found");
+    }
+    return it;
+}
+
+
 std::vector<std::string> Storage::getListContainers() const{
-    std::vector<std::string> result;
-    auto container = containers->searchDepth();
-    if(container.empty()){
-        throw std::invalid_argument("No containers on storage.");
+    std::vector<std::string> con;
+    for(auto it = containers->begin(); it != containers->end(); ++it){
+        if (*it == nullptr) {
+            std::cout << "Invalid container found.\n";
+            continue;
+        }
+        if(!(*it)->con.empty()){
+            for(auto it2 = (*it)->con.begin(); it2 != (*it)->con.end(); ++it2){
+                con.push_back((*it2).second->getId());
+            }
+        }
     }
-    for(auto& con : container){
-        result.push_back(con.second->getId());
+    return con;
+}
+
+
+void Storage::checkTemperature(Storage& storage, IContainer* container, ContainerPosition<int> pos){
+    IRefragedContainer* ref = dynamic_cast<IRefragedContainer*>(container);
+    if(container == nullptr){
+        throw std::invalid_argument("Container is not refraged");
     }
-    return result;
+    if(((*container).isType() == "Refraged" || (*container).isType() == "Fragile and Refraged Container") &&
+    storage.temperature > (*ref).getMaxTemperature())
+    {
+        throw std::invalid_argument("Container is too hot");
+    }
+}
+
+
+void Storage::checkPressure(Storage& storage, IContainer* container, ContainerPosition<int> pos){
+    if(container == nullptr){
+        throw std::invalid_argument("Container is not fragile");
+    }
+    if(pos.LLDown.z != 0){
+        std::vector<std::pair<ContainerPosition<int>,IContainer*>> con = storage.searchUnderContainer(pos);
+        if(con.empty() || con[0].first.LLDown.z != 0){
+            throw std::invalid_argument("Container can t fly 1");
+        }
+        if(!checkSupport(pos, con)){
+            throw std::invalid_argument("Support doesn t exist");
+        }
+        for(size_t i = 0; i < con.size(); i++){
+            ContainerPosition<int> check = con[i].first;
+            if(con[i].second == nullptr){
+                continue;
+            }
+            if(((*con[i].second).isType() == "Fragile" || (*con[i].second).isType() == "Fragile and Refraged Container") && calculatemass(con, i) + (*container).getMass() > (*(dynamic_cast<IFragileContainer*>(con[i].second))).getMaxPressure()){
+                throw std::invalid_argument("Container would be too heavy");
+            }
+        }
+    }
 }
