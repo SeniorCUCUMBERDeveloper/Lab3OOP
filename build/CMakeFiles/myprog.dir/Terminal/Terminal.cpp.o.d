@@ -1,6 +1,6 @@
 CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: \
- /mnt/c/л3/Lab3OOP/Terminal/Terminal.cpp /usr/include/stdc-predef.h \
- /mnt/c/л3/Lab3OOP/Terminal/Terminal.hpp /usr/include/c++/13/map \
+ /mnt/c/l3/Lab3OOP/Terminal/Terminal.cpp /usr/include/stdc-predef.h \
+ /mnt/c/l3/Lab3OOP/Terminal/Terminal.hpp /usr/include/c++/13/map \
  /usr/include/c++/13/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
@@ -161,8 +161,8 @@ CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: \
  /usr/include/c++/13/bits/basic_ios.tcc \
  /usr/include/c++/13/bits/ostream.tcc /usr/include/c++/13/istream \
  /usr/include/c++/13/bits/istream.tcc \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/Storage.hpp \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Container/I/IContainer.hpp \
+ /mnt/c/l3/Lab3OOP/Terminal/../Storage/Storage.hpp \
+ /mnt/c/l3/Lab3OOP/Terminal/../Storage/../Container/I/IContainer.hpp \
  /usr/include/c++/13/vector /usr/include/c++/13/bits/stl_uninitialized.h \
  /usr/include/c++/13/bits/stl_vector.h \
  /usr/include/c++/13/bits/stl_bvector.h \
@@ -205,7 +205,7 @@ CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: \
  /usr/include/x86_64-linux-gnu/sys/time.h /usr/include/semaphore.h \
  /usr/include/x86_64-linux-gnu/bits/semaphore.h /usr/include/c++/13/mutex \
  /usr/include/c++/13/bits/unique_lock.h /usr/include/c++/13/shared_mutex \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Octree/Octree.hpp \
+ /mnt/c/l3/Lab3OOP/Terminal/../Storage/../Octree/Octree.hpp \
  /usr/include/c++/13/algorithm /usr/include/c++/13/bits/stl_algo.h \
  /usr/include/c++/13/bits/algorithmfwd.h \
  /usr/include/c++/13/bits/stl_heap.h \
@@ -215,12 +215,12 @@ CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: \
  /usr/include/c++/13/bits/ranges_algobase.h \
  /usr/include/c++/13/pstl/glue_algorithm_defs.h \
  /usr/include/c++/13/pstl/execution_defs.h \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Octree/ContainerPosition.hpp \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Octree/Point.hpp \
+ /mnt/c/l3/Lab3OOP/Terminal/../Storage/../Octree/ContainerPosition.hpp \
+ /mnt/c/l3/Lab3OOP/Terminal/../Storage/../Octree/Point.hpp \
  /usr/include/c++/13/stack /usr/include/c++/13/deque \
  /usr/include/c++/13/bits/stl_deque.h /usr/include/c++/13/bits/deque.tcc \
  /usr/include/c++/13/bits/stl_stack.h \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/Checker.hpp \
+ /mnt/c/l3/Lab3OOP/Terminal/../Storage/../Checker/Checker.hpp \
  /usr/include/c++/13/functional /usr/include/c++/13/bits/std_function.h \
  /usr/include/c++/13/unordered_map \
  /usr/include/c++/13/bits/unordered_map.h \
@@ -228,5 +228,5 @@ CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: \
  /usr/include/c++/13/bits/hashtable_policy.h \
  /usr/include/c++/13/bits/enable_special_members.h \
  /usr/include/c++/13/array \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/Container.hpp \
- /mnt/c/л3/Lab3OOP/Terminal/../Storage/../Checker/../Container/./I/IContainer.hpp
+ /mnt/c/l3/Lab3OOP/Terminal/../Storage/../Checker/../Container/Container.hpp \
+ /mnt/c/l3/Lab3OOP/Terminal/../Storage/../Checker/../Container/./I/IContainer.hpp

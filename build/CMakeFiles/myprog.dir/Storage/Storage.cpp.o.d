@@ -1,7 +1,7 @@
 CMakeFiles/myprog.dir/Storage/Storage.cpp.o: \
- /mnt/c/л3/Lab3OOP/Storage/Storage.cpp /usr/include/stdc-predef.h \
- /mnt/c/л3/Lab3OOP/Storage/Storage.hpp \
- /mnt/c/л3/Lab3OOP/Storage/../Container/I/IContainer.hpp \
+ /mnt/c/l3/Lab3OOP/Storage/Storage.cpp /usr/include/stdc-predef.h \
+ /mnt/c/l3/Lab3OOP/Storage/Storage.hpp \
+ /mnt/c/l3/Lab3OOP/Storage/../Container/I/IContainer.hpp \
  /usr/include/c++/13/tuple /usr/include/c++/13/bits/stl_pair.h \
  /usr/include/c++/13/type_traits \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
@@ -200,7 +200,7 @@ CMakeFiles/myprog.dir/Storage/Storage.cpp.o: \
  /usr/include/x86_64-linux-gnu/sys/time.h /usr/include/semaphore.h \
  /usr/include/x86_64-linux-gnu/bits/semaphore.h /usr/include/c++/13/mutex \
  /usr/include/c++/13/bits/unique_lock.h /usr/include/c++/13/shared_mutex \
- /mnt/c/л3/Lab3OOP/Storage/../Octree/Octree.hpp \
+ /mnt/c/l3/Lab3OOP/Storage/../Octree/Octree.hpp \
  /usr/include/c++/13/algorithm /usr/include/c++/13/bits/stl_algo.h \
  /usr/include/c++/13/bits/algorithmfwd.h \
  /usr/include/c++/13/bits/stl_heap.h \
@@ -210,11 +210,11 @@ CMakeFiles/myprog.dir/Storage/Storage.cpp.o: \
  /usr/include/c++/13/bits/ranges_algobase.h \
  /usr/include/c++/13/pstl/glue_algorithm_defs.h \
  /usr/include/c++/13/pstl/execution_defs.h \
- /mnt/c/л3/Lab3OOP/Storage/../Octree/ContainerPosition.hpp \
- /mnt/c/л3/Lab3OOP/Storage/../Octree/Point.hpp /usr/include/c++/13/stack \
+ /mnt/c/l3/Lab3OOP/Storage/../Octree/ContainerPosition.hpp \
+ /mnt/c/l3/Lab3OOP/Storage/../Octree/Point.hpp /usr/include/c++/13/stack \
  /usr/include/c++/13/deque /usr/include/c++/13/bits/stl_deque.h \
  /usr/include/c++/13/bits/deque.tcc /usr/include/c++/13/bits/stl_stack.h \
- /mnt/c/л3/Lab3OOP/Storage/../Checker/Checker.hpp \
+ /mnt/c/l3/Lab3OOP/Storage/../Checker/Checker.hpp \
  /usr/include/c++/13/functional /usr/include/c++/13/bits/std_function.h \
  /usr/include/c++/13/unordered_map \
  /usr/include/c++/13/bits/unordered_map.h \
@@ -224,11 +224,11 @@ CMakeFiles/myprog.dir/Storage/Storage.cpp.o: \
  /usr/include/c++/13/bits/enable_special_members.h \
  /usr/include/c++/13/bits/node_handle.h \
  /usr/include/c++/13/bits/erase_if.h /usr/include/c++/13/array \
- /mnt/c/л3/Lab3OOP/Storage/../Checker/../Container/Container.hpp \
- /mnt/c/л3/Lab3OOP/Storage/../Checker/../Container/./I/IContainer.hpp \
- /mnt/c/л3/Lab3OOP/Storage/../Container/I/IFragile.hpp \
- /mnt/c/л3/Lab3OOP/Storage/../Container/I/IContainer.hpp \
- /mnt/c/л3/Lab3OOP/Storage/../Container/I/IRefragedContainer.hpp \
+ /mnt/c/l3/Lab3OOP/Storage/../Checker/../Container/Container.hpp \
+ /mnt/c/l3/Lab3OOP/Storage/../Checker/../Container/./I/IContainer.hpp \
+ /mnt/c/l3/Lab3OOP/Storage/../Container/I/IFragile.hpp \
+ /mnt/c/l3/Lab3OOP/Storage/../Container/I/IContainer.hpp \
+ /mnt/c/l3/Lab3OOP/Storage/../Container/I/IRefragedContainer.hpp \
  /usr/include/c++/13/numeric /usr/include/c++/13/bits/stl_numeric.h \
  /usr/include/c++/13/pstl/glue_numeric_defs.h /usr/include/c++/13/cmath \
  /usr/include/math.h /usr/include/x86_64-linux-gnu/bits/math-vector.h \

@@ -80,7 +80,7 @@ class Container: public IContainer{
     std::string isType() const override{
         return "Default Container";
     }
-    ~Container() override{}
+    ~Container() override {}
 
 };
 

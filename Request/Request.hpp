@@ -72,10 +72,11 @@ class Request{
             }catch(std::exception& e){
                 std::cerr << "Error in RequestQ: " << e.what() << std::endl;
             }
-            // for(size_t i = 0; i < operation; ++i){
-            //     std::cout << "Operation " << i + 1 << ": " << op[i];
-            // }
-        }
+        //     // for(size_t i = 0; i < operation; ++i){
+        //     //     std::cout << "Operation " << i + 1 << ": " << op[i];
+        //     // }
+         }
+
 };
 
 

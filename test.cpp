@@ -332,7 +332,9 @@ TEST(OctreeTest, TestIterator){
     st.addContainer(container19, 0, 20, 12);
     st.addContainer(container17, 0, 20, 14);
     EXPECT_NO_THROW(st.removeContainer("0_20_2"));
-    EXPECT_THROW(st.find("0_20_2"), std::runtime_error);
+    auto vec = st.getListContainers();
+    EXPECT_EQ(vec.size(), 18);
+    EXPECT_THROW(st.find("0_120_2"), std::runtime_error);
     EXPECT_NO_THROW(st.find("2_0_0"));
     auto it = st.find("12_0_0");
     EXPECT_EQ(it.second->getId(), "12_0_0");

@@ -77,10 +77,9 @@ class Octree{
             BoundingBox<T> box;
             Node* parent = nullptr;
             int height;
-            Node(BoundingBox<T>& box, int height) : box(box), height(height) {}
+            Node(BoundingBox<T> box, int height) : box(box), height(height) {}
             ~Node() {
                 for (auto c : con) {
-
                     if(c.second != nullptr) delete c.second; 
                 }
                 for (Node* child : children) {
@@ -145,7 +144,7 @@ class Octree{
         Node* root = nullptr;
         int depth_;
     public:
-        Octree(BoundingBox<T>& bbox, int depth) {
+        Octree(BoundingBox<T> bbox, int depth) {
         depth_ = depth;
         root = new Node(bbox, 0);
     }
@@ -175,95 +174,60 @@ class Octree{
                 return false;
             }
             target->con.push_back(std::make_pair(position, container));
-            if (target->con.empty() == false && target->isLeaf() && target->height < depth_){
+            if (target->con.empty() == false && target->con.size() > 4 && target->isLeaf() && target->height < depth_){
                 split(target);
             }
             return true;
         }
 
 
-        void split(Node* node){
-            Point<T> min = node->box.min;
-            Point<T> max = node->box.max;
+       void split(Node* node) {
+    if (!node) return;  // Проверка на nullptr
+    if (node->children[0] != nullptr) return;  // Если дочерние узлы уже созданы, ничего не делаем
 
-            T midX = (min.x + max.x) / 2;
-            T midY = (min.y + max.y) / 2;
-            T midZ = (min.z + max.z) / 2;
+    Point<T> min = node->box.min;
+    Point<T> max = node->box.max;
 
-            Point<T> first = min;
-            Point<T> second = Point<T>(midX, midY, midZ);
-            BoundingBox<T> box = BoundingBox<T>(first, second);
-            node->children[0] = new Node(box, node->height + 1); // 0: min
-            node->children[0]->parent = node;
+    T midX = (min.x + max.x) / 2;
+    T midY = (min.y + max.y) / 2;
+    T midZ = (min.z + max.z) / 2;
 
+    // Создание детей с их соответствующими границами
+    node->children[0] = new Node(BoundingBox<T>(min, Point<T>(midX, midY, midZ)), node->height + 1); // 0: мин
+    node->children[1] = new Node(BoundingBox<T>(Point<T>(midX, min.y, min.z), Point<T>(max.x, midY, midZ)), node->height + 1); // 1: x+
+    node->children[2] = new Node(BoundingBox<T>(Point<T>(min.x, midY, min.z), Point<T>(midX, max.y, midZ)), node->height + 1); // 2: y+
+    node->children[3] = new Node(BoundingBox<T>(Point<T>(midX, midY, min.z), Point<T>(max.x, max.y, midZ)), node->height + 1); // 3: xy+
+    node->children[4] = new Node(BoundingBox<T>(Point<T>(min.x, min.y, midZ), Point<T>(midX, midY, max.z)), node->height + 1); // 4: z+
+    node->children[5] = new Node(BoundingBox<T>(Point<T>(midX, min.y, midZ), Point<T>(max.x, midY, max.z)), node->height + 1); // 5: x+z+
+    node->children[6] = new Node(BoundingBox<T>(Point<T>(min.x, midY, midZ), Point<T>(midX, max.y, max.z)), node->height + 1); // 6: y+z+
+    node->children[7] = new Node(BoundingBox<T>(Point<T>(midX, midY, midZ), max), node->height + 1); // 7: xyz+
 
-            first = Point<T>(midX, min.y, min.z);
-            second = Point<T>(max.x, midY, midZ);
-            box = BoundingBox<T>(first, second);
-            node->children[1] = new Node(box, node->height + 1); // 1: x+
-            node->children[1]->parent = node;
+    // Перемещение объектов из текущего узла в дочерние
+    for (auto it = node->con.begin(); it != node->con.end(); ) {
+        bool moved = false;  // Флаг для отслеживания перемещения
 
-
-            first = Point<T>(min.x, midY, min.z);
-            second = Point<T>(midX, max.y, midZ);
-            box = BoundingBox<T>(first, second);
-            node->children[2] = new Node(box, node->height + 1); // 2: y+
-            node->children[2]->parent = node;
-
-
-            first = Point<T>(midX, midY, min.z);
-            second = Point<T>(max.x, max.y, midZ);
-            box = BoundingBox<T>(first, second);
-            node->children[3] = new Node(box, node->height + 1); // 3: xy+
-            node->children[3]->parent = node;
-
-
-            first = Point<T>(min.x, min.y, midZ);
-            second = Point<T>(midX, midY, max.z);
-            box = BoundingBox<T>(first, second);
-            node->children[4] = new Node(box, node->height + 1); // 4: z+
-            node->children[4]->parent = node;
-
-
-            first = Point<T>(midX, min.y, midZ);
-            second = Point<T>(max.x, midY, max.z);
-            box = BoundingBox<T>(first, second);
-            node->children[5] = new Node(box, node->height + 1); // 5: x+z+
-            node->children[5]->parent = node;
-
-
-            first = Point<T>(min.x, midY, midZ);
-            second =  Point<T>(midX, max.y, max.z);
-            box = BoundingBox<T>(first, second);
-            node->children[6] = new Node(box, node->height + 1); // 6: y+z+
-            node->children[6]->parent = node;
-
-
-            first = Point<T>(midX, midY, midZ);
-            second = max;
-            box = BoundingBox<T>(first, second);
-            node->children[7] = new Node(box, node->height + 1); // 7: xyz+
-            node->children[7]->parent = node;
-
-
-            for (auto& item : node->con) {
-                for (int i = 0; i < 8; ++i) {
-                    if (node->children[i]->box.contains(item.first.LLDown) &&
-                    node->children[i]->box.contains(item.first.LLUp) &&
-                    node->children[i]->box.contains(item.first.LRDown) &&
-                    node->children[i]->box.contains(item.first.LRUp) &&
-                    node->children[i]->box.contains(item.first.RLDown) &&
-                    node->children[i]->box.contains(item.first.RLUp) &&
-                    node->children[i]->box.contains(item.first.RRDown) &&
-                    node->children[i]->box.contains(item.first.RRUp)) {
-                        node->children[i]->con.push_back(item);
-                        node->con.erase(std::remove(node->con.begin(), node->con.end(), item), node->con.end());
-                        break;
-                    }
-                }
+        for (int i = 0; i < 8; ++i) {
+            if (node->children[i]->box.contains(it->first.LLDown) && 
+                node->children[i]->box.contains(it->first.LLUp) &&
+                node->children[i]->box.contains(it->first.LRDown) &&
+                node->children[i]->box.contains(it->first.LRUp) &&
+                node->children[i]->box.contains(it->first.RLDown) &&
+                node->children[i]->box.contains(it->first.RLUp) &&
+                node->children[i]->box.contains(it->first.RRDown) &&
+                node->children[i]->box.contains(it->first.RRUp)) {
+                node->children[i]->con.push_back(*it);
+                moved = true; // Успех перемещения
+                break; // Если успешно переместили, выходим из цикла
             }
         }
 
+        if (moved) {
+            it = node->con.erase(it); // Удаляем элемент и перемещаем итератор
+        } else {
+            ++it; // Если не переместили, просто увеличиваем итератор
+        }
+    }
+}
 
         Octree* Clone(){
             Octree* clone = new Octree(this->root->box, this->depth_);
