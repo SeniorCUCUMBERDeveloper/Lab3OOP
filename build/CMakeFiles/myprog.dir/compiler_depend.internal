@@ -616,6 +616,7 @@ CMakeFiles/myprog.dir/test.cpp.o
  /mnt/c/l3/Lab3OOP/Container/Frag_and_Ref.hpp
  /mnt/c/l3/Lab3OOP/Container/FragileContainer.hpp
  /mnt/c/l3/Lab3OOP/Container/RefragedContainer.hpp
+ /mnt/c/l3/Lab3OOP/Storage/Storage.hpp
  /mnt/c/l3/Lab3OOP/Container/I/IContainer.hpp
  /mnt/c/l3/Lab3OOP/Container/Container.hpp
  /mnt/c/l3/Lab3OOP/Checker/Checker.hpp
@@ -624,6 +625,7 @@ CMakeFiles/myprog.dir/test.cpp.o
  /mnt/c/l3/Lab3OOP/Octree/Octree.hpp
  /mnt/c/l3/Lab3OOP/Octree/Point.hpp
  /mnt/c/l3/Lab3OOP/Storage/Storage.hpp
+ /mnt/c/l3/Lab3OOP/Terminal/Terminal.hpp
  /usr/include/alloca.h
  /usr/include/asm-generic/bitsperlong.h
  /usr/include/asm-generic/errno-base.h

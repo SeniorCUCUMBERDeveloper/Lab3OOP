@@ -175,6 +175,7 @@ class Octree{
             }
             target->con.push_back(std::make_pair(position, container));
             if (target->con.empty() == false && target->con.size() > 4 && target->isLeaf() && target->height < depth_){
+                std::cout << "Split\n";
                 split(target);
             }
             return true;
@@ -547,9 +548,9 @@ class Octree{
                 for (int i = 0; i < 8; ++i) {
                     decreaseHightTree(node->children[i]);
                 }
-                if (checkEmptyNode(node)) { // Проверяем, пустой ли узел
+                if (checkEmptyNode(node)) {
                     for (int i = 0; i < 8; ++i) {
-                        if (node->children[i] != nullptr && node->children[i]->isLeaf()) { // Проверка на nullptr перед удалением
+                        if (node->children[i] != nullptr && node->children[i]->isLeaf()) { 
                             delete node->children[i];
                             std::cout << "Deleted" << std::endl;
                             node->children[i] = nullptr;
@@ -560,12 +561,13 @@ class Octree{
 
 
             void Update(Node* node) {
-                if(node->parent == nullptr && node->isLeaf() == false && checkEmptyNode(node)){
+                if(node->parent == nullptr && node->isLeaf() == false && node->con.empty()){
                     mearge(node);
                     decreaseHightTree(node);
                     return;
                 }
                 if(node->parent != nullptr && !node->parent->isLeaf() && checkEmptyNode(node->parent)){
+                    std::cout << "CheckEmptyNode" << std::endl;
                     mearge(node->parent);
                     decreaseHightTree(node->parent);
                 }

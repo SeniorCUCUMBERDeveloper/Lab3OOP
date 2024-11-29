@@ -21,6 +21,16 @@ class Storage{
         Checker<int> checker;
 
         public:
+          int getLength(){
+            return length;
+          }
+          int getWidth(){
+            return width;
+          }
+          int getHeight(){
+            return height;
+          }     
+          Storage(){}
           void addExternalCheckFunction(const std::function<void(Storage&, IContainer*, ContainerPosition<int>)>& externalFunc);
           Storage(int number, int length, int width, int height, double temperature);
           Storage(const Storage& other);
@@ -44,14 +54,13 @@ class Storage{
 
           std::pair<ContainerPosition<int>, IContainer*> find(std::string id);
 
-          std::vector<std::string> check();
+          Storage& operator=(const Storage& other);
 
 
         private:
           std::mutex mtx;
           mutable std::shared_mutex shared_mtx;
           std::atomic<bool> containerAdded{false}; 
-          Storage& operator=(const Storage& other);
           int calculateDepth();
           static bool comparePosition(std::pair<ContainerPosition<int>, IContainer*>& pos1, std::pair<ContainerPosition<int>, IContainer*>& pos2);
           static bool comparePositionReverse(std::pair<ContainerPosition<int>, IContainer*>& pos1, std::pair<ContainerPosition<int>, IContainer*>& pos2);

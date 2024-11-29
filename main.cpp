@@ -23,10 +23,12 @@ int main(){
    // Создаем новый склад
    Storage* st = new Storage(1, 32, 32, 16, 23.4);
      terminal.add(1, st);
+     Storage* s = terminal.find(1);
     //  st->addExternalCheckFunction(checkTemperature);
-   Request request(st, 50);
+   Request request(*s, 50);
    std::thread requestThread(&Request::RequestQ, &request);
     requestThread.join();
+    std::cout << s->getListContainers().size()  << std::endl;
    // //st->getInfoAboutStorage();
   // IContainer* container = new FragileContainer("_", "Cargo A", 3, 1, 1, 21.2, 2.1, 300000.0);
   // IContainer* container2 = new Container("_", "Cargo A", 9, 4, 1, 21.2, 2.3);

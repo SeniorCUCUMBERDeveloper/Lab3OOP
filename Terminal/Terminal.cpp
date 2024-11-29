@@ -15,7 +15,7 @@ void Terminal::remove(int id){
     terminal.erase(id);
 }
 
-void Terminal::getsizeIStorage(int id, int length, int width, int height){
+void Terminal::setsizeStorage(int id, int length, int width, int height){
     if(terminal.find(id) == terminal.end()){
         throw std::invalid_argument("Terminal does not exist");
     }
@@ -27,7 +27,16 @@ void Terminal::getallInfo(std::ostream& output){
         int id = entry.first;
         Storage* storage = entry.second;
         output << "Storage ID: " << id << std::endl;
+        std::cout << storage->getInfo() << std::endl;
     }
+}
+
+
+Storage* Terminal::find(int id){
+    if(terminal.find(id) == terminal.end()){
+        throw std::invalid_argument("Terminal does not exist");
+    }
+    return terminal[id];
 }
 
 Terminal::~Terminal(){

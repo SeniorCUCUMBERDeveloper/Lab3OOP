@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include "./Terminal/Terminal.hpp"
 #include "./Storage/Storage.hpp"
 #include "./Container/Container.hpp"
 #include "./Container/FragileContainer.hpp"
@@ -188,7 +189,9 @@ TEST(StorageTest, Remove){
     st.addContainer(container,2, 0, 0);
     container =  new Container("_", "Cargo A", 10, 1, 1, 21.2, 1.1);
     st.addContainer(container,0, 0, 2);
+    std::cout << st.getInfo() << std::endl;
     EXPECT_THROW(st.removeContainer("2_0_0"), std::invalid_argument);
+    std::cout << st.getInfo() << std::endl;
     Storage lastT(2, 11, 1, 3, 20.0);
     container =  new Container("_", "Cargo A", 2, 1, 1, 21.2, 1.1);
     lastT.addContainer(container, 0, 0, 0);
@@ -273,7 +276,7 @@ TEST(StorageTest, RemoveHard){
     st.addContainer(container18, 0, 20, 10);
     st.addContainer(container19, 0, 20, 12);
     st.addContainer(container17, 0, 20, 14);
-    EXPECT_NO_THROW(st.removeContainer("10_20_0"));
+    EXPECT_NO_THROW(st.removeContainer("2_0_0"));
     std::cout << st.getInfo() << std::endl;
     std::vector<std::string> result = st.getListContainers();
     EXPECT_EQ(result.size(), 18);
@@ -281,13 +284,40 @@ TEST(StorageTest, RemoveHard){
     container1 = new Container("_", "Cargo B", 70, 80, 27, 23.5, 2.5);
     container2 = new Container("_", "Cargo B", 1, 1, 1, 23.5, 2.5);
     container3 = new Container("_", "Cargo B", 1, 1, 1, 23.5, 2.5);
+    container4 = new Container("_", "Cargo B", 1, 1, 1, 23.5, 2.5);
+    container5 = new Container("_", "Cargo B", 1, 1, 1, 23.5, 2.5);
     st1.addContainer(container1, 0, 0, 0);
-    st1.addContainer(container2, 0, 0, 28);
+    st1.addContainer(container2, 71, 0, 0);
     st1.addContainer(container3, 98, 98, 0);
-    st1.removeContainer("0_0_0");
+    st1.addContainer(container4, 76, 0, 0);
+    st1.addContainer(container5, 80, 0, 0);
+    std::cout << "--------------------------------------------------------------\n";
+    EXPECT_NO_THROW(st1.removeContainer("0_0_0"));
+    std::cout << "--------------------------------------------------------------\n";
     std::cout << st1.getInfo() << std::endl;
     std::vector<std::string> result1 = st1.getListContainers();
-    EXPECT_EQ(result1.size(), 2);
+    EXPECT_EQ(result1.size(), 4);
+    Storage st2 =  Storage(1, 100, 100, 32, 23.4);
+    container1 = new Container("_", "Cargo B", 61, 80, 27, 23.5, 2.5);
+    container2 = new Container("_", "Cargo B", 1, 1, 1, 23.5, 2.5);
+    container3 = new Container("_", "Cargo B", 1, 1, 1, 23.5, 2.5);
+    container4 = new Container("_", "Cargo B", 1, 1, 1, 23.5, 2.5);
+    container5 = new Container("_", "Cargo B", 1, 1, 1, 23.5, 2.5);
+    container6 = new Container("_", "Cargo B", 27, 10, 1, 23.5, 2.5);
+    container7 = new Container("_", "Cargo B", 1, 1, 1, 23.5, 2.5);
+    st2.addContainer(container1, 0, 0, 0);
+    st2.addContainer(container2, 62, 0, 0);
+    st2.addContainer(container3, 64, 0, 0);
+    st2.addContainer(container4, 66, 0, 0);
+    st2.addContainer(container5, 68, 0, 0);
+    st2.addContainer(container7, 70, 0, 0);
+    st2.addContainer(container6, 72, 5, 0);
+    std::cout << "--------------------------------------------------------------\n";
+    EXPECT_NO_THROW(st2.removeContainer("73_0_0"));
+    std::cout << "--------------------------------------------------------------\n";
+    std::cout << st2.getInfo() << std::endl;
+    std::vector<std::string> result2 = st2.getListContainers();
+    EXPECT_EQ(result2.size(), 6);
 }
 
 
@@ -341,7 +371,77 @@ TEST(OctreeTest, TestIterator){
 }
 
 
+TEST(AddTerminalTest, Success) {
+    Terminal terminal;
+    Storage* storage = new Storage(1, 2, 2, 3, 20.0);
+    EXPECT_NO_THROW(terminal.add(1, storage));
+}
 
+
+TEST(AddTerminalTest, AlreadyExists) {
+    Terminal terminal;
+    Storage* storage =  new Storage(1, 2, 2, 3, 20.0);
+    terminal.add(1, storage);
+    EXPECT_THROW(terminal.add(1, storage), std::invalid_argument);
+}
+
+TEST(RemoveTerminalTest, Success) {
+    Terminal terminal;
+    Storage* storage = new Storage(1, 2, 2, 3, 20.0);
+    terminal.add(1, storage);
+    EXPECT_NO_THROW(terminal.remove(1));
+}
+
+TEST(RemoveTerminalTest, NotExists) {
+    Terminal terminal;
+    EXPECT_THROW(terminal.remove(1), std::invalid_argument);
+}
+
+TEST(GetSizeStorageTest, TerminalExists) {
+    Terminal terminal;
+    Storage* storage = new Storage(1, 2, 2, 3, 20.0);
+    terminal.add(1, storage);
+    int length = 4;
+    int width = 4;
+    int height = 4;
+    EXPECT_NO_THROW(terminal.setsizeStorage(1, length, width, height));
+    EXPECT_EQ(length, 4);
+    EXPECT_EQ(width, 4);
+    EXPECT_EQ(height, 4);
+}
+
+TEST(GetSizeStorageTest, TerminalNotExists) {
+    Terminal terminal;
+    int length, width, height;
+    EXPECT_THROW(terminal.setsizeStorage(1, length, width, height), std::invalid_argument);
+}
+
+TEST(GetAllInfoTest, OutputsCorrectInfo) {
+    Terminal terminal;
+    Storage* storage = new Storage(1, 2, 2, 3, 20.0);
+    terminal.add(1, storage);
+    testing::internal::CaptureStdout();
+    terminal.getallInfo(std::cout);
+    std::string output = testing::internal::GetCapturedStdout();
+    EXPECT_NE(output.find("Storage ID: 1"), std::string::npos);
+}
+
+
+TEST(FindTerminalTest, Success) {
+    Terminal terminal;
+    Storage* storage = new Storage(1, 2, 2, 3, 20.0);
+    terminal.add(1, storage);
+    Storage* foundStorage = terminal.find(1);
+    ASSERT_NE(foundStorage, nullptr);
+    EXPECT_EQ(foundStorage, storage);
+}
+
+TEST(FindTerminalTest, NotFound){
+    Terminal terminal;
+    Storage* storage = new Storage(1, 2, 2, 3, 20.0);
+    terminal.add(1, storage);
+    EXPECT_THROW(terminal.find(2), std::invalid_argument);
+}
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
