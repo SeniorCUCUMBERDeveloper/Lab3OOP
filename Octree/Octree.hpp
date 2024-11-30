@@ -202,7 +202,14 @@ class Octree{
     node->children[5] = new Node(BoundingBox<T>(Point<T>(midX, min.y, midZ), Point<T>(max.x, midY, max.z)), node->height + 1); // 5: x+z+
     node->children[6] = new Node(BoundingBox<T>(Point<T>(min.x, midY, midZ), Point<T>(midX, max.y, max.z)), node->height + 1); // 6: y+z+
     node->children[7] = new Node(BoundingBox<T>(Point<T>(midX, midY, midZ), max), node->height + 1); // 7: xyz+
-
+    node->children[0]->parent = node;
+    node->children[1]->parent = node;
+    node->children[2]->parent = node;
+    node->children[3]->parent = node;
+    node->children[4]->parent = node;
+    node->children[5]->parent = node;
+    node->children[6]->parent = node;
+    node->children[7]->parent = node;
     // Перемещение объектов из текущего узла в дочерние
     for (auto it = node->con.begin(); it != node->con.end(); ) {
         bool moved = false;  // Флаг для отслеживания перемещения
@@ -561,13 +568,13 @@ class Octree{
 
 
             void Update(Node* node) {
-                if(node->parent == nullptr && node->isLeaf() == false && node->con.empty()){
+                if(node == root && node->isLeaf() == false && node->con.empty()){
                     mearge(node);
                     decreaseHightTree(node);
                     return;
                 }
-                if(node->parent != nullptr && !node->parent->isLeaf() && checkEmptyNode(node->parent)){
-                    std::cout << "CheckEmptyNode" << std::endl;
+                if(checkEmptyNode(node->parent)){
+                    std::cout << "Ebat teb9 v rot\n";
                     mearge(node->parent);
                     decreaseHightTree(node->parent);
                 }

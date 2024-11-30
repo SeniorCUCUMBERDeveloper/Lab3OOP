@@ -313,7 +313,7 @@ TEST(StorageTest, RemoveHard){
     st2.addContainer(container7, 70, 0, 0);
     st2.addContainer(container6, 72, 5, 0);
     std::cout << "--------------------------------------------------------------\n";
-    EXPECT_NO_THROW(st2.removeContainer("73_0_0"));
+    EXPECT_NO_THROW(st2.removeContainer("72_5_0"));
     std::cout << "--------------------------------------------------------------\n";
     std::cout << st2.getInfo() << std::endl;
     std::vector<std::string> result2 = st2.getListContainers();

@@ -461,6 +461,7 @@ void Storage::removeContainer(std::string id){
         //Пытаемся раскидать контейнеры по новым позициям
 
         std::vector<std::string> newPlacement;
+        std::sort(con_copy.begin(), con_copy.end(), comparePosition);
         for(auto& container : con_copy){
             auto last = container.second->Clone();
             std::string newId = addContainer(last);
@@ -471,9 +472,20 @@ void Storage::removeContainer(std::string id){
                 for(auto& return_containerId : newPlacement){
                     containers->remove(return_containerId);
                 }
-                addContainer(copy_delete.second, copy_delete.first.LLDown.x, copy_delete.first.LLDown.y, copy_delete.first.LLDown.z);
-                for(auto& ret : con_copy){
-                    addContainer(ret.second, ret.first.LLDown.x, ret.first.LLDown.y, ret.first.LLDown.z);
+                try{
+                    addContainer(copy_delete.second, copy_delete.first.LLDown.x, copy_delete.first.LLDown.y, copy_delete.first.LLDown.z);
+                    for(auto& ret : con_copy){
+                        addContainer(ret.second, ret.first.LLDown.x, ret.first.LLDown.y, ret.first.LLDown.z);
+                    }
+                }catch(std::exception& e){//Худший случай
+                    std::cerr << "Critical error: " << e.what() << std::endl;
+                    bool flag = false;
+                    for(auto& ret : con_copy){
+                        flag = containers->remove(ret.second->getId());
+                        if(flag == false){
+                            delete ret.second;
+                        }
+                    }
                 }
                 throw std::invalid_argument("No space found to move container with id " + id);
             }
