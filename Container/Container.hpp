@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <string>
+#include <memory>
 #include "./I/IContainer.hpp"
 
 
@@ -57,23 +58,23 @@ class Container: public IContainer{
         output << "Cost: $" << cost << std::endl;
         output << "Mass: " << mass << " kg" << std::endl;
     };
-    IContainer* Clone(size_t i = 0, size_t method = 0) override{
+    std::shared_ptr<IContainer> Clone(size_t i = 0, size_t method = 0) override{
         switch (method)
         {
         case 0:
-            return new Container(number, client, length, width, height, cost, mass);
+            return std::make_shared<Container>(number, client, length, width, height, cost, mass);
         case 1:
-            return new Container(number, client, width, length, height, cost, mass);
+            return std::make_shared<Container>(number, client, width, length, height, cost, mass);
         case 2:
-            return new Container(number, client, length, height, width, cost, mass);
+            return std::make_shared<Container>(number, client, length, height, width, cost, mass);
         case 3:
-            return new Container(number, client, height, length, width, cost, mass);
+            return std::make_shared<Container>(number, client, height, length, width, cost, mass);
         case 4:
-            return new Container(number, client, width, height, length, cost, mass);
+            return std::make_shared<Container>(number, client, width, height, length, cost, mass);
         case 5:
-            return new Container(number, client, height, width, length, cost, mass);
+            return std::make_shared<Container>(number, client, height, width, length, cost, mass);
         default:
-            return new Container(number, client, length, width, height, cost, mass);
+            return std::make_shared<Container>(number, client, length, width, height, cost, mass);
         }
     }
 

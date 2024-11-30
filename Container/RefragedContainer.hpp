@@ -63,23 +63,23 @@ class RefragedContainer : public IRefragedContainer{
     double getMaxTemperature() const override{
         return maxTemperature;
     }
-    IContainer* Clone(size_t i = 0, size_t method = 0) override {
+    std::shared_ptr<IContainer> Clone(size_t i = 0, size_t method = 0) override {
         switch (method)
         {
         case 0:
-            return new RefragedContainer(number, client, length, width, height, cost, mass, maxTemperature);
+            return std::make_shared<RefragedContainer>(number, client, length, width, height, cost, mass, maxTemperature);
         case 1:
-            return new RefragedContainer(number, client, width, length, height, cost, mass, maxTemperature);
+            return std::make_shared<RefragedContainer>(number, client, width, length, height, cost, mass, maxTemperature);
         case 2:
-            return new RefragedContainer(number, client, length, height, width, cost, mass, maxTemperature);
+            return std::make_shared<RefragedContainer>(number, client, length, height, width, cost, mass, maxTemperature);
         case 3:
-            return new RefragedContainer(number, client, height, length, width, cost, mass, maxTemperature);
+            return std::make_shared<RefragedContainer>(number, client, height, length, width, cost, mass, maxTemperature);
         case 4:
-            return new RefragedContainer(number, client, width, height, length, cost, mass, maxTemperature);
+            return std::make_shared<RefragedContainer>(number, client, width, height, length, cost, mass, maxTemperature);
         case 5:
-            return new RefragedContainer(number, client, height, width, length, cost, mass, maxTemperature);
+            return std::make_shared<RefragedContainer>(number, client, height, width, length, cost, mass, maxTemperature);
         default:
-            return new RefragedContainer(number, client, length, width, height, cost, mass, maxTemperature);
+            return std::make_shared<RefragedContainer>(number, client, length, width, height, cost, mass, maxTemperature);
         }
     }
 };

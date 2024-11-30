@@ -29,12 +29,11 @@ class Request{
                 try{
                     int action = actionDist(gen);
                     if(action == 0){
-                        IContainer* c = new Container("0", "Andre", DimensionsDist(gen), DimensionsDist(gen), 1,(double)(DimensionsDist(gen)), (double)(DimensionsDist(gen)));
+                        std::shared_ptr<IContainer> c = std::make_shared<Container>("0", "Andre", DimensionsDist(gen), DimensionsDist(gen), 1, (double)(DimensionsDist(gen)), (double)(DimensionsDist(gen)));
                         std::string flag = storage.addContainer(c);
                         if(flag == "_"){
                             //std::cerr << "Error in RequestQ: Can't add container with this index" << std::endl;
                             --i;
-                            delete c;
                         }else{
                             std::cout << "Container added successfully" << std::endl;
                         }
@@ -49,7 +48,7 @@ class Request{
                 //std::this_thread::sleep_for(std::chrono::milliseconds(500)); не надо здесь
             }
             bool flag = false;
-            for(int i = 0; i < 150; ++i){
+            for(int i = 0; i < 25; ++i){
                 try{
                 id = storage.getListContainers();
                         if(id.empty()){
@@ -77,6 +76,7 @@ class Request{
         //     // }
          }
          Storage st(storage);
+         std::cout <<"Success\n";
         }
 
 

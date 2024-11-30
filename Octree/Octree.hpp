@@ -8,10 +8,16 @@
 #include "ContainerPosition.hpp"
 #include <tuple>
 #include <stack>
+#include <memory>
+#include <type_traits>
 
 
 template<typename T>
 concept NumericConcept = std::is_arithmetic_v<T> || std::convertible_to<T, double>;
+
+
+template <typename T>
+concept SmartPointerConcept = std::is_base_of<std::shared_ptr<typename T::element_type>, T>::value || std::is_base_of<std::unique_ptr<typename T::element_type>, T>::value;
 
 
 template<typename T>
@@ -42,7 +48,7 @@ concept ContainerPositionConcept = requires(T c) {
 
 
 template <typename N>
-concept ContainerConcept = std::is_pointer_v<N>;
+concept ContainerConcept = SmartPointerConcept<N>;
 
 
 template<typename T>
@@ -73,22 +79,14 @@ class Octree{
     public:
         struct Node{
             std::vector<std::pair<CPosType, N>> con;
-            Node* children[8] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+            std::array<std::shared_ptr<Node>, 8> children;
             BoundingBox<T> box;
-            Node* parent = nullptr;
+            std::weak_ptr<Node> parent;
             int height;
             Node(BoundingBox<T> box, int height) : box(box), height(height) {}
-            ~Node() {
-                for (auto c : con) {
-                    if(c.second != nullptr) delete c.second; 
-                }
-                for (Node* child : children) {
-                    if(child != nullptr) delete child; 
-                }
-            }
 
             bool isLeaf() const {
-                return children[0] == nullptr;
+               return std::all_of(children.begin(), children.end(), [](const std::shared_ptr<Node>& child) { return child == nullptr; });
             }
 
             std::vector<std::pair<CPosType, N>> getCon(){
@@ -100,10 +98,10 @@ class Octree{
 
         class iterator {
             private:
-                std::stack<Node*> nodeStack;
+                std::stack<std::shared_ptr<Node>> nodeStack;
 
             public:
-                using value_type = Node*;
+                using value_type = std::shared_ptr<Node>;
                 using pointer = value_type*;
                 using reference = value_type&;
                 using difference_type = std::ptrdiff_t;
@@ -111,7 +109,7 @@ class Octree{
 
             public:
 
-                explicit iterator(Node* root) {
+                explicit iterator(std::shared_ptr<Node>  root) {
                     if (root != nullptr) {
                         nodeStack.push(root);
                     }
@@ -124,7 +122,7 @@ class Octree{
 
                 iterator& operator++() {
                     if (nodeStack.empty()) return *this;
-                    Node* current = nodeStack.top();
+                    std::shared_ptr<Node> current = nodeStack.top();
                     nodeStack.pop();
                     for (int i = 7; i >= 0; --i) {
                         if (current->children[i]) {
@@ -141,21 +139,16 @@ class Octree{
         };
 
     private:
-        Node* root = nullptr;
+        std::shared_ptr<Node> root;
         int depth_;
     public:
         Octree(BoundingBox<T> bbox, int depth) {
         depth_ = depth;
-        root = new Node(bbox, 0);
+        root = std::make_shared<Node>(bbox, 0);
     }
 
 
-        ~Octree() {
-            delete root;
-        }
-
-
-        Node* getRoot(){
+        std::shared_ptr<Node>  getRoot(){
             return root;
         }
 
@@ -169,7 +162,7 @@ class Octree{
         }
 
 
-        bool insert(N container, CPosType& position, Node* target){
+        bool insert(N container, CPosType& position, std::shared_ptr<Node> target){
             if(target == nullptr){
                 return false;
             }
@@ -182,7 +175,7 @@ class Octree{
         }
 
 
-       void split(Node* node) {
+       void split(std::shared_ptr<Node> node) {
     if (!node) return;  // Проверка на nullptr
     if (node->children[0] != nullptr) return;  // Если дочерние узлы уже созданы, ничего не делаем
 
@@ -194,14 +187,14 @@ class Octree{
     T midZ = (min.z + max.z) / 2;
 
     // Создание детей с их соответствующими границами
-    node->children[0] = new Node(BoundingBox<T>(min, Point<T>(midX, midY, midZ)), node->height + 1); // 0: мин
-    node->children[1] = new Node(BoundingBox<T>(Point<T>(midX, min.y, min.z), Point<T>(max.x, midY, midZ)), node->height + 1); // 1: x+
-    node->children[2] = new Node(BoundingBox<T>(Point<T>(min.x, midY, min.z), Point<T>(midX, max.y, midZ)), node->height + 1); // 2: y+
-    node->children[3] = new Node(BoundingBox<T>(Point<T>(midX, midY, min.z), Point<T>(max.x, max.y, midZ)), node->height + 1); // 3: xy+
-    node->children[4] = new Node(BoundingBox<T>(Point<T>(min.x, min.y, midZ), Point<T>(midX, midY, max.z)), node->height + 1); // 4: z+
-    node->children[5] = new Node(BoundingBox<T>(Point<T>(midX, min.y, midZ), Point<T>(max.x, midY, max.z)), node->height + 1); // 5: x+z+
-    node->children[6] = new Node(BoundingBox<T>(Point<T>(min.x, midY, midZ), Point<T>(midX, max.y, max.z)), node->height + 1); // 6: y+z+
-    node->children[7] = new Node(BoundingBox<T>(Point<T>(midX, midY, midZ), max), node->height + 1); // 7: xyz+
+    node->children[0] = std::make_shared<Node>(BoundingBox<T>(min, Point<T>(midX, midY, midZ)), node->height + 1); // 0: мин
+    node->children[1] = std::make_shared<Node>(BoundingBox<T>(Point<T>(midX, min.y, min.z), Point<T>(max.x, midY, midZ)), node->height + 1); // 1: x+
+    node->children[2] = std::make_shared<Node>(BoundingBox<T>(Point<T>(min.x, midY, min.z), Point<T>(midX, max.y, midZ)), node->height + 1); // 2: y+
+    node->children[3] = std::make_shared<Node>(BoundingBox<T>(Point<T>(midX, midY, min.z), Point<T>(max.x, max.y, midZ)), node->height + 1); // 3: xy+
+    node->children[4] = std::make_shared<Node>(BoundingBox<T>(Point<T>(min.x, min.y, midZ), Point<T>(midX, midY, max.z)), node->height + 1); // 4: z+
+    node->children[5] = std::make_shared<Node>(BoundingBox<T>(Point<T>(midX, min.y, midZ), Point<T>(max.x, midY, max.z)), node->height + 1); // 5: x+z+
+    node->children[6] = std::make_shared<Node>(BoundingBox<T>(Point<T>(min.x, midY, midZ), Point<T>(midX, max.y, max.z)), node->height + 1); // 6: y+z+
+    node->children[7] = std::make_shared<Node>(BoundingBox<T>(Point<T>(midX, midY, midZ), max), node->height + 1); // 7: xyz+
     node->children[0]->parent = node;
     node->children[1]->parent = node;
     node->children[2]->parent = node;
@@ -237,8 +230,8 @@ class Octree{
     }
 }
 
-        Octree* Clone(){
-            Octree* clone = new Octree(this->root->box, this->depth_);
+        std::shared_ptr<Octree> Clone(){
+            auto clone = std::make_shared<Octree>(this->root->box, this->depth_);
             return clone;
         }
 
@@ -246,8 +239,8 @@ class Octree{
 
         bool remove(std::string id){
             bool collision = false;
-            Node* copy = nullptr;
-            removeR(id, root, collision, &copy);
+            std::shared_ptr<Node> copy = nullptr;
+            removeR(id, root, collision, copy);
             if(collision == false){
                 return false;
             }
@@ -257,9 +250,9 @@ class Octree{
         }
 
 
-        Node* search(std::string id){
-            Node* copyCache = nullptr;
-            searchR(id, root, &copyCache);
+        std::shared_ptr<Node> search(std::string id){
+            std::shared_ptr<Node> copyCache = nullptr;
+            searchR(id, root, copyCache);
             return copyCache;
         }
 
@@ -278,11 +271,11 @@ class Octree{
         }
 
 
-        Node* SearchInsert(N container, CPosType pos){
+        std::shared_ptr<Node> SearchInsert(N container, CPosType pos){
             bool collision = false;
-            Node* copyCache = nullptr;
+            std::shared_ptr<Node> copyCache = nullptr;
             std::vector<std::pair<CPosType, N>> copy(0);
-            SearchInsert(container, pos, root, &copyCache, copy, collision);
+            SearchInsert(container, pos, root, copyCache, copy, collision);
             return copyCache;
         }
 
@@ -365,7 +358,7 @@ class Octree{
 
 
         bool push(N container, CPosType& position){
-            Node* target = SearchInsert(container, position);
+            std::shared_ptr<Node> target = SearchInsert(container, position);
             return insert(container, position, target);
         }
 
@@ -385,7 +378,7 @@ class Octree{
         private:
 
 
-        void  searchUnderOct(Node* node, std::vector<std::pair<CPosType, N>>& vec){
+        void  searchUnderOct(std::shared_ptr<Node> node, std::vector<std::pair<CPosType, N>>& vec){
             if(node == nullptr){
                 return;
             }
@@ -398,7 +391,7 @@ class Octree{
         }
 
 
-        void findI(std::string id, Node* node, std::pair<CPosType, N>* it){
+        void findI(std::string id, std::shared_ptr<Node> node, std::pair<CPosType, N>* it){
             if(node == nullptr){
                 return;
             }
@@ -418,7 +411,7 @@ class Octree{
         }
 
 
-        void searchDepth(Node* node, std::vector<std::pair<CPosType, N>>& copyCache){
+        void searchDepth(std::shared_ptr<Node> node, std::vector<std::pair<CPosType, N>>& copyCache){
             if(node == nullptr){
                 return;
             }
@@ -431,7 +424,7 @@ class Octree{
         }
 
 
-        bool SearchInsert(N container, CPosType pos, Node* node, Node** copyCache, std::vector<std::pair<CPosType, N>>& copy, bool& collision){
+        bool SearchInsert(N container, CPosType pos, std::shared_ptr<Node> node, std::shared_ptr<Node>& copyCache, std::vector<std::pair<CPosType, N>>& copy, bool& collision){
             if(node == nullptr){
                 return false;
             }
@@ -444,37 +437,37 @@ class Octree{
             if(!node->con.empty()){
                 (copy).insert((copy).end(), node->con.begin(), node->con.end());
             }
-            if (node->isLeaf() == false && collision == false && *copyCache == nullptr) {
+            if (node->isLeaf() == false && collision == false && copyCache == nullptr) {
                 for (size_t i = 0; i < 8; ++i) {
                      SearchInsert(container, pos, node->children[i], copyCache, copy, collision);
                 }
             }
-            if(collision == false && *copyCache == nullptr){
+            if(collision == false && copyCache == nullptr){
                 
                 searchUnderOct(node, copy);
                 
                 if(!checkCollision(container, pos, copy)){
-                    *copyCache = node;
+                    copyCache = node;
                     return true;
                 }else{
                     collision = true;
                     return false;
                 }
-            }else if(collision == false && *copyCache != nullptr){
+            }else if(collision == false && copyCache != nullptr){
                 return true;
             }
             return false;
         }
 
 
-            void searchR(std::string id, Node* node, Node** copyCache){
+            void searchR(std::string id, std::shared_ptr<Node> node, std::shared_ptr<Node>& copyCache){
                 if(node == nullptr){
                     return;
                 }
                 if(node->con.empty() == false){
                 for(auto& i : node->con){
                     if(i.first.LLDown.x != -1 && i.second != nullptr && number(i.first.LLDown) == id){
-                        *copyCache = node;
+                        copyCache = node;
                         return;
                     }
                 }
@@ -487,7 +480,7 @@ class Octree{
         }
 
 
-            void removeR(std::string id, Node* node, bool& collision, Node** copyCache){
+            void removeR(std::string id, std::shared_ptr<Node> node, bool& collision, std::shared_ptr<Node>& copyCache){
                 if(node == nullptr){
                     return;
                 }
@@ -497,21 +490,13 @@ class Octree{
                 if(node->con.empty() == false){
                     for(auto& i : node->con){
                         if(i.first.LLDown.x != -1 && i.second != nullptr && number(i.first.LLDown) == id){
-                            // std::vector<std::pair<CPosType, N>> newVector;
-                            // for(auto& j : node->con){
-                            //     if(j.second != nullptr && number(j.first.LLDown) != id){
-                            //         newVector.push_back(j);
-                            //     }
-                            // }
-                            //node->con.erase(std::remove(node->con.begin(), node->con.end(), i), node->con.end());
                             if(i.second != nullptr){
-                                delete i.second;
-                                i.second = nullptr;
+                                i.second.reset();
+                                //i.second = nullptr;
                                 node->con.erase(std::remove(node->con.begin(), node->con.end(), i), node->con.end());
                             }
-                            //node->con = newVector;
                             collision = true;
-                            *copyCache = node;
+                            copyCache = node;
                             return;
                         }
                     }
@@ -525,7 +510,7 @@ class Octree{
             }
 
 
-            bool checkEmptyNode(Node* node) {
+            bool checkEmptyNode(std::shared_ptr<Node> node) {
             if (node == nullptr) return true; // Добавлена проверка на nullptr
             for (int i = 0; i < 8; ++i) {
                 if (node->children[i] != nullptr && !node->children[i]->con.empty()) {
@@ -535,7 +520,7 @@ class Octree{
             return true;
         }
 
-           void mearge(Node* node) {
+           void mearge(std::shared_ptr<Node> node) {
                 if (node == nullptr || node->isLeaf()) return;
                 for (int i = 0; i < 8; ++i) {
                     if (node->children[i] != nullptr && !node->children[i]->con.empty()) {
@@ -548,7 +533,7 @@ class Octree{
                 }
             }
 
-            void decreaseHightTree(Node* node) {
+            void decreaseHightTree(std::shared_ptr<Node> node) {
                 if (node == nullptr || node->isLeaf()) {
                     return;
                 }
@@ -558,8 +543,7 @@ class Octree{
                 if (checkEmptyNode(node)) {
                     for (int i = 0; i < 8; ++i) {
                         if (node->children[i] != nullptr && node->children[i]->isLeaf()) { 
-                            delete node->children[i];
-                            std::cout << "Deleted" << std::endl;
+                            node->children[i].reset();
                             node->children[i] = nullptr;
                         }
                     }
@@ -567,16 +551,16 @@ class Octree{
             }
 
 
-            void Update(Node* node) {
+            void Update(std::shared_ptr<Node> node) {
+                 auto parentNode = node->parent.lock(); 
                 if(node == root && node->isLeaf() == false && node->con.empty()){
                     mearge(node);
                     decreaseHightTree(node);
                     return;
                 }
-                if(checkEmptyNode(node->parent)){
-                    std::cout << "Ebat teb9 v rot\n";
-                    mearge(node->parent);
-                    decreaseHightTree(node->parent);
+                if(checkEmptyNode(parentNode)){
+                    mearge(parentNode);
+                    decreaseHightTree(parentNode);
                 }
             }
 
@@ -615,7 +599,7 @@ class Octree{
             }
 
 
-            void printNode(Node* node, int depth) const {
+            void printNode(std::shared_ptr<Node> node, int depth) const {
                 if (!node) return;
 
                 std::cout << std::string(depth, '-') << "Node at depth " << depth 
