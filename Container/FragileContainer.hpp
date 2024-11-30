@@ -24,7 +24,7 @@ class FragileContainer : public IFragileContainer{
             this->maxPressure = maxM;
         }
 
-        ~FragileContainer(){}
+        ~FragileContainer() override{}
 
         int getLength() const override{
             return length;
@@ -63,23 +63,23 @@ class FragileContainer : public IFragileContainer{
 
         double getMaxPressure() const override{ return maxPressure; }
 
-        IContainer* Clone(size_t i = 0, size_t method = 0) override { 
+        std::shared_ptr<IContainer> Clone(size_t i = 0, size_t method = 0) override { 
             switch (method)
             {
             case 0:
-                return new FragileContainer(number, client, length, width, height, cost, mass, maxPressure);
+                return std::make_shared<FragileContainer>(number, client, length, width, height, cost, mass, maxPressure);
             case 1:
-                return new FragileContainer(number, client, width, length, height, cost, mass, maxPressure);
+                return std::make_shared<FragileContainer>(number, client, width, length, height, cost, mass, maxPressure);
             case 2:
-                return new FragileContainer(number, client, length, height, width, cost, mass, maxPressure);
+                return std::make_shared<FragileContainer>(number, client, length, height, width, cost, mass, maxPressure);
             case 3:
-                return new FragileContainer(number, client, height, length, width, cost, mass, maxPressure);
+                return std::make_shared<FragileContainer>(number, client, height, length, width, cost, mass, maxPressure);
             case 4:
-                return new FragileContainer(number, client, width, height, length, cost, mass, maxPressure);
+                return std::make_shared<FragileContainer>(number, client, width, height, length, cost, mass, maxPressure);
             case 5:
-                return new FragileContainer(number, client, height, width, length, cost, mass, maxPressure);
+                return std::make_shared<FragileContainer>(number, client, height, width, length, cost, mass, maxPressure);
             default:
-                return new FragileContainer(number, client, length, width, height, cost, mass, maxPressure);
+                return std::make_shared<FragileContainer>(number, client, length, width, height, cost, mass, maxPressure);
             }
         }
 };

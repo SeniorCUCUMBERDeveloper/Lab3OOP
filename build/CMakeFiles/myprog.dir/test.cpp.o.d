@@ -1,4 +1,4 @@
-CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP/test.cpp \
+CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/l3/Lab3OOP/test.cpp \
  /usr/include/stdc-predef.h /usr/include/gtest/gtest.h \
  /usr/include/c++/13/cstddef \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
@@ -298,26 +298,28 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP/test.cpp \
  /usr/include/gtest/gtest-test-part.h \
  /usr/include/gtest/gtest-typed-test.h \
  /usr/include/gtest/gtest_pred_impl.h /usr/include/gtest/gtest_prod.h \
- /mnt/c/л3/Lab3OOP/./Storage/Storage.hpp \
- /mnt/c/л3/Lab3OOP/./Storage/../Container/I/IContainer.hpp \
+ /mnt/c/l3/Lab3OOP/./Terminal/Terminal.hpp \
+ /mnt/c/l3/Lab3OOP/./Terminal/../Storage/Storage.hpp \
+ /mnt/c/l3/Lab3OOP/./Terminal/../Storage/../Container/I/IContainer.hpp \
  /usr/include/c++/13/thread /usr/include/c++/13/shared_mutex \
- /mnt/c/л3/Lab3OOP/./Storage/../Octree/Octree.hpp \
+ /mnt/c/l3/Lab3OOP/./Terminal/../Storage/../Octree/Octree.hpp \
  /usr/include/c++/13/algorithm /usr/include/c++/13/bits/ranges_algo.h \
  /usr/include/c++/13/pstl/glue_algorithm_defs.h \
- /mnt/c/л3/Lab3OOP/./Storage/../Octree/ContainerPosition.hpp \
- /mnt/c/л3/Lab3OOP/./Storage/../Octree/Point.hpp \
+ /mnt/c/l3/Lab3OOP/./Terminal/../Storage/../Octree/ContainerPosition.hpp \
+ /mnt/c/l3/Lab3OOP/./Terminal/../Storage/../Octree/Point.hpp \
  /usr/include/c++/13/stack /usr/include/c++/13/deque \
  /usr/include/c++/13/bits/stl_deque.h /usr/include/c++/13/bits/deque.tcc \
  /usr/include/c++/13/bits/stl_stack.h \
- /mnt/c/л3/Lab3OOP/./Storage/../Checker/Checker.hpp \
- /mnt/c/л3/Lab3OOP/./Storage/../Checker/../Container/Container.hpp \
- /mnt/c/л3/Lab3OOP/./Storage/../Checker/../Container/./I/IContainer.hpp \
- /mnt/c/л3/Lab3OOP/./Container/Container.hpp \
- /mnt/c/л3/Lab3OOP/./Container/FragileContainer.hpp \
- /mnt/c/л3/Lab3OOP/./Container/./I/IFragile.hpp \
- /mnt/c/л3/Lab3OOP/./Container/./I/IContainer.hpp \
- /mnt/c/л3/Lab3OOP/./Container/RefragedContainer.hpp \
- /mnt/c/л3/Lab3OOP/./Container/./I/IRefragedContainer.hpp \
- /mnt/c/л3/Lab3OOP/./Container/Frag_and_Ref.hpp \
- /mnt/c/л3/Lab3OOP/./Container/FragileContainer.hpp \
- /mnt/c/л3/Lab3OOP/./Container/RefragedContainer.hpp
+ /mnt/c/l3/Lab3OOP/./Terminal/../Storage/../Checker/Checker.hpp \
+ /mnt/c/l3/Lab3OOP/./Terminal/../Storage/../Checker/../Container/Container.hpp \
+ /mnt/c/l3/Lab3OOP/./Terminal/../Storage/../Checker/../Container/./I/IContainer.hpp \
+ /mnt/c/l3/Lab3OOP/./Storage/Storage.hpp \
+ /mnt/c/l3/Lab3OOP/./Container/Container.hpp \
+ /mnt/c/l3/Lab3OOP/./Container/FragileContainer.hpp \
+ /mnt/c/l3/Lab3OOP/./Container/./I/IFragile.hpp \
+ /mnt/c/l3/Lab3OOP/./Container/./I/IContainer.hpp \
+ /mnt/c/l3/Lab3OOP/./Container/RefragedContainer.hpp \
+ /mnt/c/l3/Lab3OOP/./Container/./I/IRefragedContainer.hpp \
+ /mnt/c/l3/Lab3OOP/./Container/Frag_and_Ref.hpp \
+ /mnt/c/l3/Lab3OOP/./Container/FragileContainer.hpp \
+ /mnt/c/l3/Lab3OOP/./Container/RefragedContainer.hpp

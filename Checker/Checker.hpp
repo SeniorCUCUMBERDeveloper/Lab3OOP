@@ -14,7 +14,7 @@ class Storage;
 template <typename T>
 class Checker {
 public:
-    using CheckFunction = std::function<void(Storage&, IContainer*, ContainerPosition<T>)>;
+    using CheckFunction = std::function<void(Storage&, std::shared_ptr<IContainer>, ContainerPosition<T>)>;
 private:
     std::vector<CheckFunction> checkFunctions;
 
@@ -40,7 +40,7 @@ public:
     }
 
     
-    void applyChecks(Storage& storage, IContainer* container, ContainerPosition<int> position) const {
+    void applyChecks(Storage& storage, std::shared_ptr<IContainer> container, ContainerPosition<int> position) const {
         for (const auto& func : checkFunctions) {
             func(storage, container, position);
         }

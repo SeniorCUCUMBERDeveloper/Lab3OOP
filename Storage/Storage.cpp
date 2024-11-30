@@ -24,7 +24,7 @@ int Storage::calculateDepth(){
 }
 
 
-  void Storage::addExternalCheckFunction(const std::function<void(Storage&, IContainer*, ContainerPosition<int>)>& externalFunc) {
+  void Storage::addExternalCheckFunction(const std::function<void(Storage&, std::shared_ptr<IContainer>, ContainerPosition<int>)>& externalFunc) {
         checker.addCheckFunction(externalFunc);
     }
 
@@ -36,22 +36,22 @@ Storage::Storage(int number, int length, int width, int height, double temperatu
     this->height = height;
     this->temperature = temperature;
     BoundingBox<int> bound(Point<int>(0, 0, 0), Point<int>(length, width, height));
-    this->containers = new Octree<int, IContainer*, ContainerPosition<int>>(bound, calculateDepth());
-    this->checker.addCheckFunction([this](Storage& storage, IContainer* container, ContainerPosition<int> position) {
+    this->containers = std::make_shared<Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>>(bound, calculateDepth());
+    this->checker.addCheckFunction([this](Storage& storage, std::shared_ptr<IContainer> container, ContainerPosition<int> position) {
         checkTemperature(storage, container, position);
     });
-    this->checker.addCheckFunction([this](Storage& storage, IContainer* container, ContainerPosition<int> position) {
+    this->checker.addCheckFunction([this](Storage& storage, std::shared_ptr<IContainer> container, ContainerPosition<int> position) {
         checkPressure(storage, container, position);
     });
 }
 
 
-bool Storage::comparePosition(std::pair<ContainerPosition<int>, IContainer*>& pos1, std::pair<ContainerPosition<int>, IContainer*>& pos2){
+bool Storage::comparePosition(std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>& pos1, std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>& pos2){
     return pos1.first.LLDown.z < pos2.first.LLDown.z;
 }
 
 
-bool Storage::comparePositionReverse(std::pair<ContainerPosition<int>, IContainer*>& pos1, std::pair<ContainerPosition<int>, IContainer*>& pos2){
+bool Storage::comparePositionReverse(std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>& pos1, std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>& pos2){
     return pos1.first.LLDown.z > pos2.first.LLDown.z;
 }
 
@@ -80,8 +80,16 @@ Storage::Storage(const Storage& other)
         containers = other.containers->Clone(); // Используем интерфейс Clone для копирования
         auto i = other.containers->searchDepth();
         std::sort(i.begin(), i.end(), comparePosition);
+        for(auto it : i){
+            std::cout << it.second->getId() << std::endl;
+        }
         for(auto& it : i){
+            try{
             addContainer(it.second->Clone(), it.first.LLDown.x, it.first.LLDown.y, it.first.LLDown.z);
+            }catch(std::exception& e){
+                std::cout << "Error hahahaha: " << e.what() << std::endl;
+                std::cout << it.second->getId() << std::endl;
+            }
         }
         Checker checker = other.checker;
     }
@@ -100,7 +108,7 @@ void Storage::getSize(int l, int w, int h){
     for(auto& it : i){
         newStorage.addContainer(it.second->Clone(), it.first.LLDown.x, it.first.LLDown.y, it.first.LLDown.z);
     }
-    delete containers;
+    //delete containers;
     *this = newStorage;
 }
 
@@ -152,13 +160,13 @@ ContainerPosition<int> Storage::calculateContainerPosition(int x, int y, int z, 
 }
 
 
-std::vector<std::pair<ContainerPosition<int>,IContainer*>> Storage::searchUnderContainer(ContainerPosition<int>& position){
-    std::vector<std::pair<ContainerPosition<int>,IContainer*>> result;
-    int minX = Octree<int, IContainer*, ContainerPosition<int>>::getMinX(position);
-    int maxX = Octree<int, IContainer*, ContainerPosition<int>>::getMaxX(position);
-    int minY = Octree<int, IContainer*, ContainerPosition<int>>::getMinY(position);
-    int maxY = Octree<int, IContainer*, ContainerPosition<int>>::getMaxY(position);
-    int minZ = Octree<int, IContainer*, ContainerPosition<int>>::getMinZ(position);
+std::vector<std::pair<ContainerPosition<int>,std::shared_ptr<IContainer>>> Storage::searchUnderContainer(ContainerPosition<int>& position){
+    std::vector<std::pair<ContainerPosition<int>,std::shared_ptr<IContainer>>> result;
+    int minX = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinX(position);
+    int maxX = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxX(position);
+    int minY = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinY(position);
+    int maxY = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxY(position);
+    int minZ = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinZ(position);
     std::unique_lock<std::mutex> lock(mtx, std::defer_lock);
     lock.lock();
     auto current = containers->searchDepth();
@@ -166,9 +174,9 @@ std::vector<std::pair<ContainerPosition<int>,IContainer*>> Storage::searchUnderC
     for (const auto& container : current) {
         const ContainerPosition<int>& containerPos = container.first;
 
-        if (Octree<int, IContainer*, ContainerPosition<int>>::getMinX(containerPos) <= maxX && Octree<int, IContainer*, ContainerPosition<int>>::getMaxX(containerPos) >= minX &&
-            Octree<int, IContainer*, ContainerPosition<int>>::getMinY(containerPos) <= maxY && Octree<int, IContainer*, ContainerPosition<int>>::getMaxY(containerPos) >= minY &&
-            Octree<int, IContainer*, ContainerPosition<int>>::getMaxZ(containerPos) < minZ) {
+        if (Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinX(containerPos) <= maxX && Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxX(containerPos) >= minX &&
+            Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinY(containerPos) <= maxY && Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxY(containerPos) >= minY &&
+            Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxZ(containerPos) < minZ) {
                 result.push_back(container);
                 continue;
         }
@@ -178,13 +186,13 @@ std::vector<std::pair<ContainerPosition<int>,IContainer*>> Storage::searchUnderC
 }
 
 
-std::vector<std::pair<ContainerPosition<int>,IContainer*>> Storage::searchUpperContainer(ContainerPosition<int>& position){
-    std::vector<std::pair<ContainerPosition<int>,IContainer*>> result;
-    int minX = Octree<int, IContainer*, ContainerPosition<int>>::getMinX(position);
-    int maxX = Octree<int, IContainer*, ContainerPosition<int>>::getMaxX(position);
-    int minY = Octree<int, IContainer*, ContainerPosition<int>>::getMinY(position);
-    int maxY = Octree<int, IContainer*, ContainerPosition<int>>::getMaxY(position);
-    int maxZ = Octree<int, IContainer*, ContainerPosition<int>>::getMaxZ(position);
+std::vector<std::pair<ContainerPosition<int>,std::shared_ptr<IContainer>>> Storage::searchUpperContainer(ContainerPosition<int>& position){
+    std::vector<std::pair<ContainerPosition<int>,std::shared_ptr<IContainer>>> result;
+    int minX = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinX(position);
+    int maxX = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxX(position);
+    int minY = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinY(position);
+    int maxY = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxY(position);
+    int maxZ = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxZ(position);
     std::unique_lock<std::mutex> lock(mtx, std::defer_lock);
     lock.lock();
     auto current = containers->searchDepth();
@@ -192,9 +200,9 @@ std::vector<std::pair<ContainerPosition<int>,IContainer*>> Storage::searchUpperC
     for (const auto& container : current) {
         const ContainerPosition<int>& containerPos = container.first;
         
-        if (Octree<int, IContainer*, ContainerPosition<int>>::getMinX(containerPos) <= maxX && Octree<int, IContainer*, ContainerPosition<int>>::getMaxX(containerPos) >= minX &&
-            Octree<int, IContainer*, ContainerPosition<int>>::getMinY(containerPos) <= maxY && Octree<int, IContainer*, ContainerPosition<int>>::getMaxY(containerPos) >= minY &&
-            Octree<int, IContainer*, ContainerPosition<int>>::getMinZ(containerPos) > maxZ) {
+        if (Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinX(containerPos) <= maxX && Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxX(containerPos) >= minX &&
+            Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinY(containerPos) <= maxY && Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxY(containerPos) >= minY &&
+            Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinZ(containerPos) > maxZ) {
                 result.push_back(container);
                 continue;
         }
@@ -205,7 +213,7 @@ std::vector<std::pair<ContainerPosition<int>,IContainer*>> Storage::searchUpperC
 
 
 
-double Storage::calculatemass(std::vector<std::pair<ContainerPosition<int>, IContainer*>> con, size_t it){
+double Storage::calculatemass(std::vector<std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>> con, size_t it){
     double mass = 0;
     for(size_t i = it + 1; i < con.size(); i++){
         if((con[i].second)!= nullptr){
@@ -216,12 +224,12 @@ double Storage::calculatemass(std::vector<std::pair<ContainerPosition<int>, ICon
 }
 
 
-bool Storage::checkSupport(ContainerPosition<int>& position, std::vector<std::pair<ContainerPosition<int>,IContainer*>> con){
+bool Storage::checkSupport(ContainerPosition<int>& position, std::vector<std::pair<ContainerPosition<int>,std::shared_ptr<IContainer>>> con){
     bool firstSupport = false;
     bool secondSupport = false;
-    Point<int> first = Point<int>(position.LLDown.x, position.LLDown.y + (Octree<int, IContainer*, ContainerPosition<int>>::getMaxY(position) - Octree<int, IContainer*, ContainerPosition<int>>::getMinY(position)) / 2, position.LLDown.z - 1);
-    Point<int> second = Point<int>(position.LRDown.x, position.LRDown.y + (Octree<int, IContainer*, ContainerPosition<int>>::getMaxY(position) - Octree<int, IContainer*, ContainerPosition<int>>::getMinY(position)) / 2, position.LLDown.z - 1);
-    Point<int> middle = Point<int>(position.LLDown.x + (Octree<int, IContainer*, ContainerPosition<int>>::getMaxX(position) - Octree<int, IContainer*, ContainerPosition<int>>::getMinX(position)) / 2, position.LLDown.y + (Octree<int, IContainer*, ContainerPosition<int>>::getMaxY(position) - Octree<int, IContainer*, ContainerPosition<int>>::getMinY(position)) / 2, position.LLDown.z - 1);
+    Point<int> first = Point<int>(position.LLDown.x, position.LLDown.y + (Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxY(position) - Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinY(position)) / 2, position.LLDown.z - 1);
+    Point<int> second = Point<int>(position.LRDown.x, position.LRDown.y + (Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxY(position) - Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinY(position)) / 2, position.LLDown.z - 1);
+    Point<int> middle = Point<int>(position.LLDown.x + (Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxX(position) - Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinX(position)) / 2, position.LLDown.y + (Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxY(position) - Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinY(position)) / 2, position.LLDown.z - 1);
 
     for(auto container = con.rbegin(); container != con.rend(); ++container){
         if(firstSupport == true && secondSupport == true){
@@ -230,20 +238,20 @@ bool Storage::checkSupport(ContainerPosition<int>& position, std::vector<std::pa
         if((*container).first.LLUp.z + 1 != position.LLDown.z){
             return false;
         }
-        if(Octree<int, IContainer*, ContainerPosition<int>>::pointincontainer(first, (*container).first)){
+        if(Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::pointincontainer(first, (*container).first)){
             firstSupport = true;
         }
-        if(Octree<int, IContainer*, ContainerPosition<int>>::pointincontainer(second, (*container).first)){
+        if(Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::pointincontainer(second, (*container).first)){
             secondSupport = true;
         }
-        if(Octree<int, IContainer*, ContainerPosition<int>>::pointincontainer(middle, (*container).first)){
+        if(Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::pointincontainer(middle, (*container).first)){
             return true;
         }
     }
     return false;
 }
 
-void Storage::addContainer(IContainer* container, int X, int Y, int Z){
+void Storage::addContainer(std::shared_ptr<IContainer> container, int X, int Y, int Z){
     if(X < 0 || Y < 0 || Z < 0){
         throw std::invalid_argument("Coordinates should be positive");
     }
@@ -269,11 +277,11 @@ std::string Storage::getInfoAboutStorage() const{
 
 
 bool Storage::isNoTop(const ContainerPosition<int>& position){
-    int minX = Octree<int, IContainer*, ContainerPosition<int>>::getMinX(position);
-    int maxX = Octree<int, IContainer*, ContainerPosition<int>>::getMaxX(position);
-    int minY = Octree<int, IContainer*, ContainerPosition<int>>::getMinY(position);
-    int maxY = Octree<int, IContainer*, ContainerPosition<int>>::getMaxY(position);
-    int maxZ = Octree<int, IContainer*, ContainerPosition<int>>::getMaxZ(position);
+    int minX = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinX(position);
+    int maxX = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxX(position);
+    int minY = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinY(position);
+    int maxY = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxY(position);
+    int maxZ = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxZ(position);
     std::unique_lock<std::mutex> lock(mtx, std::defer_lock);
     lock.lock();
     auto copy = containers->searchDepth();
@@ -281,9 +289,9 @@ bool Storage::isNoTop(const ContainerPosition<int>& position){
     
     for(auto i : copy){
         const ContainerPosition<int>& containerPos = i.first;
-        if (Octree<int, IContainer*, ContainerPosition<int>>::getMinX(containerPos) <= maxX && Octree<int, IContainer*, ContainerPosition<int>>::getMaxX(containerPos) >= minX &&
-            Octree<int, IContainer*, ContainerPosition<int>>::getMinY(containerPos) <= maxY && Octree<int, IContainer*, ContainerPosition<int>>::getMaxY(containerPos) >= minY &&
-            Octree<int, IContainer*, ContainerPosition<int>>::getMinZ(containerPos) == maxZ + 1) {
+        if (Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinX(containerPos) <= maxX && Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxX(containerPos) >= minX &&
+            Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinY(containerPos) <= maxY && Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxY(containerPos) >= minY &&
+            Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinZ(containerPos) == maxZ + 1) {
                 return false;
         }
     }
@@ -301,7 +309,7 @@ void Storage::moveContainer(std::string id, int X, int Y, int Z){
     if(cache == nullptr){
         throw std::invalid_argument("Container does not exist");
     }
-    std::pair<ContainerPosition<int>, IContainer*> item;
+    std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>> item;
     for(auto& i : cache->con){//con
         if(i.second->getId() == id){
             item.first = i.first;
@@ -332,7 +340,7 @@ void Storage::rotateContainer(std::string id, int method) {
     if(cache == nullptr){
         throw std::invalid_argument("Container does not exist1" + id);
     }
-    std::pair<ContainerPosition<int>, IContainer*> item;
+    std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>> item;
     for(auto& i : cache->con){
         if(i.second->getId() == id){
             item.first = i.first;
@@ -341,7 +349,7 @@ void Storage::rotateContainer(std::string id, int method) {
             break;
         }
     }
-    IContainer* container = item.second;
+    std::shared_ptr<IContainer> container = item.second;
     if(container->isType() == "Fragile" || container->isType() == "Fragile and Refraged Container"){
         containers->insert(item.second, item.first, cache);
         item.second->setId(item.first.LLDown.x, item.first.LLDown.y, item.first.LLDown.z);
@@ -356,21 +364,21 @@ void Storage::rotateContainer(std::string id, int method) {
     int X = pos.LLDown.x;
     int Y = pos.LLDown.y;
     int Z = pos.LLDown.z;
-    IContainer *newContainer = container->Clone(0, method);
+    std::shared_ptr<IContainer> newContainer = container->Clone(0, method);
     try{
         addContainer(newContainer, X, Y, Z);
-        delete item.second;
+        item.second.reset();
     }catch(std::exception &e){
         std::cerr << "Error: " << e.what() << std::endl;
         containers->insert(item.second, item.first, cache);
         item.second->setId(item.first.LLDown.x, item.first.LLDown.y, item.first.LLDown.z);
-        delete newContainer;
+        newContainer.reset();
         throw std::invalid_argument("Can't rotate container ");
     }
 }
 
 
-void Storage::multitread(IContainer* container, int X, int Y, int Z){
+void Storage::multitread(std::shared_ptr<IContainer> container, int X, int Y, int Z){
     std::unique_lock<std::mutex> ul(mtx, std::defer_lock);
     ContainerPosition<int> pos = calculateContainerPosition(X, Y, Z, container->getLength(), container->getWidth(), container->getHeight());
     ul.lock();
@@ -393,7 +401,7 @@ void Storage::multitread(IContainer* container, int X, int Y, int Z){
     }
 }
 
-bool Storage::addContainerR(IContainer* container, int yStart, int yEnd){
+bool Storage::addContainerR(std::shared_ptr<IContainer> container, int yStart, int yEnd){
     std::unique_lock<std::mutex> ul(mtx, std::defer_lock);
     for(int y = yStart; y <= yEnd; y++){
         for(int x = 0; x <= length; x++){
@@ -412,7 +420,7 @@ bool Storage::addContainerR(IContainer* container, int yStart, int yEnd){
     return false;
 }
 
-std::string Storage::addContainer(IContainer* container){
+std::string Storage::addContainer(std::shared_ptr<IContainer> container){
     std::vector<std::thread>  threads;
     for (int y = 0; y <= width; y += 20) {
         int yEnd = std::min(y + 20, width);
@@ -436,24 +444,25 @@ void Storage::removeContainer(std::string id){
     if(cache2 == nullptr){
         throw std::invalid_argument("No container on storage with id " + id);
     }
-    std::vector<std::pair<ContainerPosition<int>, IContainer*>> con = searchUpperContainer(cache.first);
+    std::vector<std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>> con = searchUpperContainer(cache.first);
     if(con.empty()){
         //Простой случай, если на верху нет 
         containers->remove(id);
     }else{
         //Сложный случай, если на верху есть контейнеры
-        std::pair<ContainerPosition<int>, IContainer *> copy_delete = std::make_pair(cache.first, cache.second->Clone());
-        std::vector<std::pair<ContainerPosition<int>, IContainer*>> con_copy;
-        
+        std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>> copy_delete = std::make_pair(cache.first, cache.second->Clone());
+        std::list<std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>> con_copy;
+        std::list<std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>> lst;
+        lst.insert(lst.end(), con.begin(), con.end());
+        lst = searchAllContainersUpper(lst);
         
         //Удаляем контейнеры, делаем их копии, т.к. они в разных узлах дерева
 
 
-        for(auto& i : con){
+        for(auto& i : lst){
             if(i.second != nullptr){
                 con_copy.insert(con_copy.begin(), std::make_pair(i.first, i.second->Clone()));
-                //con_copy = con;
-                containers->remove(i.second->getId());
+                bool flag = containers->remove(i.second->getId());
             }
         }
 
@@ -467,14 +476,14 @@ void Storage::removeContainer(std::string id){
 
             //Возврат, если не получилось раскидать контейнеры
             if(newId == "_"){
-                delete last;
+                last.reset();
                 for(auto& return_containerId : newPlacement){
                     containers->remove(return_containerId);
                 }
-                addContainer(copy_delete.second, copy_delete.first.LLDown.x, copy_delete.first.LLDown.y, copy_delete.first.LLDown.z);
-                for(auto& ret : con_copy){
-                    addContainer(ret.second, ret.first.LLDown.x, ret.first.LLDown.y, ret.first.LLDown.z);
-                }
+                    addContainer(copy_delete.second, copy_delete.first.LLDown.x, copy_delete.first.LLDown.y, copy_delete.first.LLDown.z);
+                    for(auto& ret : con_copy){
+                        addContainer(ret.second, ret.first.LLDown.x, ret.first.LLDown.y, ret.first.LLDown.z);
+                    }
                 throw std::invalid_argument("No space found to move container with id " + id);
             }
             //Страховка         
@@ -487,9 +496,9 @@ void Storage::removeContainer(std::string id){
         }
         //Удаляем копии контейнеров
         for(auto& i : con_copy){
-            delete i.second;
+            i.second.reset();
         }
-        delete copy_delete.second;
+        copy_delete.second.reset();
     }
 }
 
@@ -511,9 +520,9 @@ std::string Storage::getInfo() const{
 }
 
 
-void Storage::howContai(IContainer* container, std::vector<size_t>& result, size_t method){
+void Storage::howContai(std::shared_ptr<IContainer> container, std::vector<size_t>& result, size_t method){
     size_t count = 0;
-    IContainer* currentContainer = container->Clone(0, method);
+    std::shared_ptr<IContainer> currentContainer = container->Clone(0, method);
     Storage st(*this);
     while (true) 
     {
@@ -526,11 +535,11 @@ void Storage::howContai(IContainer* container, std::vector<size_t>& result, size
             break;
         }
     }
-    delete currentContainer;
+    currentContainer.reset();
 }
 
 
- size_t Storage::howContainer(IContainer* container){
+ size_t Storage::howContainer(std::shared_ptr<IContainer> container){
     std::vector<size_t> result(6, 0);
     std::vector<std::thread> threads;
     for (size_t i = 0; i < 6; ++i) {
@@ -543,7 +552,7 @@ void Storage::howContai(IContainer* container, std::vector<size_t>& result, size
 }
 
 
-std::pair<ContainerPosition<int>, IContainer*> Storage::find(std::string id){
+std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>> Storage::find(std::string id){
     auto it = containers->findI(id);
     if(it.second == nullptr){
         throw std::runtime_error("Container not found");
@@ -569,8 +578,11 @@ std::vector<std::string> Storage::getListContainers() const{
 }
 
 
-void Storage::checkTemperature(Storage& storage, IContainer* container, ContainerPosition<int> pos){
-    IRefragedContainer* ref = dynamic_cast<IRefragedContainer*>(container);
+void Storage::checkTemperature(Storage& storage, std::shared_ptr<IContainer> container, ContainerPosition<int> pos){
+    auto ref = std::dynamic_pointer_cast<IRefragedContainer>(container);
+    if(ref == nullptr){
+        return;
+    }
     if(container == nullptr){
         throw std::invalid_argument("Container is not refraged");
     }
@@ -582,12 +594,12 @@ void Storage::checkTemperature(Storage& storage, IContainer* container, Containe
 }
 
 
-void Storage::checkPressure(Storage& storage, IContainer* container, ContainerPosition<int> pos){
+void Storage::checkPressure(Storage& storage, std::shared_ptr<IContainer> container, ContainerPosition<int> pos){
     if(container == nullptr){
         throw std::invalid_argument("Container is not fragile");
     }
     if(pos.LLDown.z != 0){
-        std::vector<std::pair<ContainerPosition<int>,IContainer*>> con = storage.searchUnderContainer(pos);
+        std::vector<std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>> con = storage.searchUnderContainer(pos);
         if(con.empty() || con[0].first.LLDown.z != 0){
             throw std::invalid_argument("Container can t fly 1");
         }
@@ -599,9 +611,28 @@ void Storage::checkPressure(Storage& storage, IContainer* container, ContainerPo
             if(con[i].second == nullptr){
                 continue;
             }
-            if(((*con[i].second).isType() == "Fragile" || (*con[i].second).isType() == "Fragile and Refraged Container") && calculatemass(con, i) + (*container).getMass() > (*(dynamic_cast<IFragileContainer*>(con[i].second))).getMaxPressure()){
+            auto fragileContainer = std::dynamic_pointer_cast<IFragileContainer>(con[i].second);
+            if(fragileContainer == nullptr){
+                continue;
+            }
+            if((fragileContainer->isType() == "Fragile" || fragileContainer->isType() == "Fragile and Refraged Container") && calculatemass(con, i) + (container)->getMass() > fragileContainer->getMaxPressure()){
                 throw std::invalid_argument("Container would be too heavy");
             }
         }
     }
+}
+
+
+std::list<std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>> Storage::searchAllContainersUpper(std::list<std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>> lst){
+    for(auto it = lst.begin(); it != lst.end(); it++){
+        auto i = searchUpperContainer(it->first);
+        if(!i.empty()){
+            for(auto it2 = i.begin(); it2 != i.end(); it2++){
+                if(std::find(lst.begin(), lst.end(), *it2) == lst.end()){
+                    lst.push_back(*it2);
+                }
+            }
+        }
+    }
+    return lst;
 }
