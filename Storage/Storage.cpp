@@ -80,8 +80,16 @@ Storage::Storage(const Storage& other)
         containers = other.containers->Clone(); // Используем интерфейс Clone для копирования
         auto i = other.containers->searchDepth();
         std::sort(i.begin(), i.end(), comparePosition);
+        for(auto it : i){
+            std::cout << it.second->getId() << std::endl;
+        }
         for(auto& it : i){
+            try{
             addContainer(it.second->Clone(), it.first.LLDown.x, it.first.LLDown.y, it.first.LLDown.z);
+            }catch(std::exception& e){
+                std::cout << "Error hahahaha: " << e.what() << std::endl;
+                std::cout << it.second->getId() << std::endl;
+            }
         }
         Checker checker = other.checker;
     }
@@ -443,16 +451,17 @@ void Storage::removeContainer(std::string id){
     }else{
         //Сложный случай, если на верху есть контейнеры
         std::pair<ContainerPosition<int>, IContainer *> copy_delete = std::make_pair(cache.first, cache.second->Clone());
-        std::vector<std::pair<ContainerPosition<int>, IContainer*>> con_copy;
-        
+        std::list<std::pair<ContainerPosition<int>, IContainer*>> con_copy;
+        std::list<std::pair<ContainerPosition<int>, IContainer*>> lst;
+        lst.insert(lst.end(), con.begin(), con.end());
+        lst = searchAllContainersUpper(lst);
         
         //Удаляем контейнеры, делаем их копии, т.к. они в разных узлах дерева
 
 
-        for(auto& i : con){
+        for(auto& i : lst){
             if(i.second != nullptr){
                 con_copy.insert(con_copy.begin(), std::make_pair(i.first, i.second->Clone()));
-                //con_copy = con;
                 containers->remove(i.second->getId());
             }
         }
@@ -461,7 +470,6 @@ void Storage::removeContainer(std::string id){
         //Пытаемся раскидать контейнеры по новым позициям
 
         std::vector<std::string> newPlacement;
-        std::sort(con_copy.begin(), con_copy.end(), comparePosition);
         for(auto& container : con_copy){
             auto last = container.second->Clone();
             std::string newId = addContainer(last);
@@ -608,4 +616,19 @@ void Storage::checkPressure(Storage& storage, IContainer* container, ContainerPo
             }
         }
     }
+}
+
+
+std::list<std::pair<ContainerPosition<int>,IContainer*>> Storage::searchAllContainersUpper(std::list<std::pair<ContainerPosition<int>,IContainer*>> lst){
+    for(auto it = lst.begin(); it != lst.end(); it++){
+        auto i = searchUpperContainer(it->first);
+        if(!i.empty()){
+            for(auto it2 = i.begin(); it2 != i.end(); it2++){
+                if(std::find(lst.begin(), lst.end(), *it2) == lst.end()){
+                    lst.push_back(*it2);
+                }
+            }
+        }
+    }
+    return lst;
 }

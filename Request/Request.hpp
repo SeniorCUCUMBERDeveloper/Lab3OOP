@@ -76,7 +76,9 @@ class Request{
         //     //     std::cout << "Operation " << i + 1 << ": " << op[i];
         //     // }
          }
+         Storage st(storage);
         }
+
 
 };
 

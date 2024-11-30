@@ -4,6 +4,7 @@
 #include "../Container/I/IContainer.hpp"
 #include <thread> 
 #include <vector>
+#include <list>
 #include <mutex> 
 #include <atomic>
 #include <shared_mutex>
@@ -77,6 +78,9 @@ class Storage{
            static bool checkSupport(ContainerPosition<int>& position, std::vector<std::pair<ContainerPosition<int>,IContainer*>> con);
            static void checkTemperature(Storage& storage, IContainer* container, ContainerPosition<int> position);
            static void checkPressure(Storage& storage, IContainer* container, ContainerPosition<int> position);
+
+           std::list<std::pair<ContainerPosition<int>,IContainer*>> searchAllContainersUpper(std::list<std::pair<ContainerPosition<int>,IContainer*>> dec);
+
           
 
 };
