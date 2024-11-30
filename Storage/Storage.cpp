@@ -472,21 +472,13 @@ void Storage::removeContainer(std::string id){
                 for(auto& return_containerId : newPlacement){
                     containers->remove(return_containerId);
                 }
-                try{
+                    Checker<int> c_copy = this->checker;
+                    this->checker = Checker<int>();
                     addContainer(copy_delete.second, copy_delete.first.LLDown.x, copy_delete.first.LLDown.y, copy_delete.first.LLDown.z);
                     for(auto& ret : con_copy){
                         addContainer(ret.second, ret.first.LLDown.x, ret.first.LLDown.y, ret.first.LLDown.z);
                     }
-                }catch(std::exception& e){//Худший случай
-                    std::cerr << "Critical error: " << e.what() << std::endl;
-                    bool flag = false;
-                    for(auto& ret : con_copy){
-                        flag = containers->remove(ret.second->getId());
-                        if(flag == false){
-                            delete ret.second;
-                        }
-                    }
-                }
+                    this->checker = c_copy;
                 throw std::invalid_argument("No space found to move container with id " + id);
             }
             //Страховка         
