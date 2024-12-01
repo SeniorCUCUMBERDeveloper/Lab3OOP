@@ -18,7 +18,7 @@ class Storage{
         int number;
         int length, width, height;
         double temperature;
-        std::shared_ptr<Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>> containers;
+        Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>> containers;
         Checker<int> checker;
 
         public:
@@ -32,6 +32,10 @@ class Storage{
             return height;
           }     
           Storage(){}
+          std::vector<std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>> getALLcontainers(){
+            auto i = containers.searchDepth();
+            return i;
+          }
           void addExternalCheckFunction(const std::function<void(Storage&, std::shared_ptr<IContainer>, ContainerPosition<int>)>& externalFunc);
           Storage(int number, int length, int width, int height, double temperature);
           Storage(const Storage& other);

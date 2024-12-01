@@ -4,6 +4,7 @@
 
 #include "../Container/Container.hpp"
 #include "../Storage/Storage.hpp"
+#include "../graphic.cpp"
 #include <random>
 #include <set>
 #include <iterator>
@@ -48,7 +49,7 @@ class Request{
                 //std::this_thread::sleep_for(std::chrono::milliseconds(500)); не надо здесь
             }
             bool flag = false;
-            for(int i = 0; i < 5; ++i){
+            for(int i = 0; i < 3; ++i){
                 try{
                 id = storage.getListContainers();
                         if(id.empty()){
@@ -76,6 +77,7 @@ class Request{
         //     // }
          }
          Storage st(storage);
+         draw(st);
          std::cout <<"Success\n";
         }
 

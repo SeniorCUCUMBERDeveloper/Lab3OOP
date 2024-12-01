@@ -143,6 +143,8 @@ class Octree{
         std::shared_ptr<Node> root;
         int depth_;
     public:
+
+        Octree(){}
         Octree(BoundingBox<T> bbox, int depth) {
         depth_ = depth;
         root = std::make_shared<Node>(bbox, 0);
@@ -154,11 +156,11 @@ class Octree{
         }
 
 
-        iterator begin() {
+        iterator begin() const{
             return iterator(root);
         }
 
-        iterator end() {
+        iterator end() const{
             return iterator(nullptr);
         }
 
@@ -231,8 +233,8 @@ class Octree{
     }
 }
 
-        std::shared_ptr<Octree> Clone(){
-            auto clone = std::make_shared<Octree>(this->root->box, this->depth_);
+        Octree Clone() const{
+            auto clone = Octree(this->root->box, this->depth_);
             return clone;
         }
 
@@ -252,7 +254,7 @@ class Octree{
         }
 
 
-        std::shared_ptr<Node> search(std::string id){
+        std::shared_ptr<Node> search(std::string id) const{
             Point<T> point = parsePoint(id);
             std::shared_ptr<Node> copyCache = nullptr;
             searchR(id, root, copyCache, point);
@@ -260,7 +262,7 @@ class Octree{
         }
 
 
-        std::pair<CPosType, N> findI(std::string id){
+        std::pair<CPosType, N> findI(std::string id) const{
             Point<T> point = parsePoint(id);
             std::pair<CPosType, N> it = std::make_pair(CPosType(), nullptr);
             findI(id, root, &it, point);
@@ -268,14 +270,14 @@ class Octree{
         }
 
 
-        std::vector<std::pair<CPosType, N>> searchDepth(){
+        std::vector<std::pair<CPosType, N>> searchDepth() const{
             std::vector<std::pair<CPosType, N>> copyCache(0);
             searchDepth(root, copyCache);
             return copyCache;
         }
 
 
-        std::shared_ptr<Node> SearchInsert(N container, CPosType pos){
+        std::shared_ptr<Node> SearchInsert(N container, CPosType pos) const{
             bool collision = false;
             std::shared_ptr<Node> copyCache = nullptr;
             std::vector<std::pair<CPosType, N>> copy(0);
@@ -382,7 +384,7 @@ class Octree{
         private:
 
 
-        void  searchUnderOct(std::shared_ptr<Node> node, std::vector<std::pair<CPosType, N>>& vec){
+        void  searchUnderOct(std::shared_ptr<Node> node, std::vector<std::pair<CPosType, N>>& vec) const{
             if(node == nullptr){
                 return;
             }
@@ -395,7 +397,7 @@ class Octree{
         }
 
 
-        void findI(std::string id, std::shared_ptr<Node> node, std::pair<CPosType, N>* it, Point<T> point){
+        void findI(std::string id, std::shared_ptr<Node> node, std::pair<CPosType, N>* it, Point<T> point) const{
             if(node == nullptr){
                 return;
             }
@@ -418,7 +420,7 @@ class Octree{
         }
 
 
-        void searchDepth(std::shared_ptr<Node> node, std::vector<std::pair<CPosType, N>>& copyCache){
+        void searchDepth(std::shared_ptr<Node> node, std::vector<std::pair<CPosType, N>>& copyCache) const{
             if(node == nullptr){
                 return;
             }
@@ -431,7 +433,7 @@ class Octree{
         }
 
 
-        bool SearchInsert(N container, CPosType pos, std::shared_ptr<Node> node, std::shared_ptr<Node>& copyCache, std::vector<std::pair<CPosType, N>>& copy, bool& collision){
+        bool SearchInsert(N container, CPosType pos, std::shared_ptr<Node> node, std::shared_ptr<Node>& copyCache, std::vector<std::pair<CPosType, N>>& copy, bool& collision) const{
             if(node == nullptr){
                 return false;
             }
@@ -467,7 +469,7 @@ class Octree{
         }
 
 
-            void searchR(std::string id, std::shared_ptr<Node> node, std::shared_ptr<Node>& copyCache, Point<T> point){
+            void searchR(std::string id, std::shared_ptr<Node> node, std::shared_ptr<Node>& copyCache, Point<T> point)const{
                 if(node == nullptr){
                     return;
                 }
@@ -523,7 +525,7 @@ class Octree{
             }
 
 
-            bool checkEmptyNode(std::shared_ptr<Node> node) {
+            bool checkEmptyNode(std::shared_ptr<Node> node) const{
             if (node == nullptr) return true; // Добавлена проверка на nullptr
             for (int i = 0; i < 8; ++i) {
                 if (node->children[i] != nullptr && !node->children[i]->con.empty()) {
@@ -623,12 +625,12 @@ class Octree{
                 }
             }
 
-            std::string number(const Point<T>& p) const{
+            static std::string number(const Point<T>& p) {
             return std::to_string(p.x) + "_" + std::to_string(p.y) + "_" + std::to_string(p.z);
         }
 
 
-        static Point<T> parsePoint(const std::string& str) {
+        static Point<T> parsePoint(const std::string& str){
             static_assert(PointConcept<Point<T>>, "Point должен удовлетворять PointConcept");
             Point<T> point;
             std::regex re(R"(([-+]?\d*\.?\d+)_([-+]?\d*\.?\d+)_([-+]?\d*\.?\d+))");
