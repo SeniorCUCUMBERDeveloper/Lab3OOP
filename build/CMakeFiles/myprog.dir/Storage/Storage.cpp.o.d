@@ -1,7 +1,7 @@
 CMakeFiles/myprog.dir/Storage/Storage.cpp.o: \
- /mnt/c/l3/Lab3OOP/Storage/Storage.cpp /usr/include/stdc-predef.h \
- /mnt/c/l3/Lab3OOP/Storage/Storage.hpp \
- /mnt/c/l3/Lab3OOP/Storage/../Container/I/IContainer.hpp \
+ /mnt/c/OOP/nw3/Lab3OOP/Storage/Storage.cpp /usr/include/stdc-predef.h \
+ /mnt/c/OOP/nw3/Lab3OOP/Storage/Storage.hpp \
+ /mnt/c/OOP/nw3/Lab3OOP/Storage/../Container/I/IContainer.hpp \
  /usr/include/c++/13/tuple /usr/include/c++/13/bits/stl_pair.h \
  /usr/include/c++/13/type_traits \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
@@ -161,11 +161,20 @@ CMakeFiles/myprog.dir/Storage/Storage.cpp.o: \
  /usr/include/c++/13/bits/locale_facets.tcc \
  /usr/include/c++/13/bits/basic_ios.tcc \
  /usr/include/c++/13/bits/ostream.tcc /usr/include/c++/13/istream \
- /usr/include/c++/13/bits/istream.tcc /usr/include/c++/13/thread \
- /usr/include/c++/13/stop_token /usr/include/c++/13/atomic \
- /usr/include/c++/13/bits/atomic_base.h \
+ /usr/include/c++/13/bits/istream.tcc /usr/include/c++/13/memory \
+ /usr/include/c++/13/bits/stl_tempbuf.h \
+ /usr/include/c++/13/bits/stl_raw_storage_iter.h \
+ /usr/include/c++/13/bits/align.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+ /usr/include/c++/13/bits/unique_ptr.h \
+ /usr/include/c++/13/bits/shared_ptr.h \
+ /usr/include/c++/13/bits/shared_ptr_base.h \
+ /usr/include/c++/13/bits/allocated_ptr.h \
+ /usr/include/c++/13/ext/aligned_buffer.h \
+ /usr/include/c++/13/ext/concurrence.h \
+ /usr/include/c++/13/bits/shared_ptr_atomic.h \
+ /usr/include/c++/13/bits/atomic_base.h \
  /usr/include/c++/13/bits/atomic_lockfree_defines.h \
  /usr/include/c++/13/bits/atomic_wait.h /usr/include/c++/13/cstdint \
  /usr/include/c++/13/climits \
@@ -189,8 +198,13 @@ CMakeFiles/myprog.dir/Storage/Storage.cpp.o: \
  /usr/lib/linux/uapi/x86/asm/unistd_64.h \
  /usr/include/x86_64-linux-gnu/bits/syscall.h \
  /usr/include/c++/13/bits/std_mutex.h \
- /usr/include/c++/13/bits/std_thread.h \
- /usr/include/c++/13/bits/unique_ptr.h /usr/include/c++/13/semaphore \
+ /usr/include/c++/13/backward/auto_ptr.h \
+ /usr/include/c++/13/bits/ranges_uninitialized.h \
+ /usr/include/c++/13/bits/ranges_algobase.h \
+ /usr/include/c++/13/pstl/glue_memory_defs.h \
+ /usr/include/c++/13/pstl/execution_defs.h /usr/include/c++/13/thread \
+ /usr/include/c++/13/stop_token /usr/include/c++/13/atomic \
+ /usr/include/c++/13/bits/std_thread.h /usr/include/c++/13/semaphore \
  /usr/include/c++/13/bits/semaphore_base.h \
  /usr/include/c++/13/bits/chrono.h /usr/include/c++/13/ratio \
  /usr/include/c++/13/limits /usr/include/c++/13/ctime \
@@ -198,37 +212,36 @@ CMakeFiles/myprog.dir/Storage/Storage.cpp.o: \
  /usr/include/c++/13/bits/atomic_timed_wait.h \
  /usr/include/c++/13/bits/this_thread_sleep.h \
  /usr/include/x86_64-linux-gnu/sys/time.h /usr/include/semaphore.h \
- /usr/include/x86_64-linux-gnu/bits/semaphore.h /usr/include/c++/13/mutex \
- /usr/include/c++/13/bits/unique_lock.h /usr/include/c++/13/shared_mutex \
- /mnt/c/l3/Lab3OOP/Storage/../Octree/Octree.hpp \
+ /usr/include/x86_64-linux-gnu/bits/semaphore.h /usr/include/c++/13/list \
+ /usr/include/c++/13/bits/stl_list.h /usr/include/c++/13/bits/list.tcc \
+ /usr/include/c++/13/mutex /usr/include/c++/13/bits/unique_lock.h \
+ /usr/include/c++/13/shared_mutex \
+ /mnt/c/OOP/nw3/Lab3OOP/Storage/../Octree/Octree.hpp \
  /usr/include/c++/13/algorithm /usr/include/c++/13/bits/stl_algo.h \
  /usr/include/c++/13/bits/algorithmfwd.h \
  /usr/include/c++/13/bits/stl_heap.h \
  /usr/include/c++/13/bits/uniform_int_dist.h \
- /usr/include/c++/13/bits/stl_tempbuf.h \
  /usr/include/c++/13/bits/ranges_algo.h \
- /usr/include/c++/13/bits/ranges_algobase.h \
  /usr/include/c++/13/pstl/glue_algorithm_defs.h \
- /usr/include/c++/13/pstl/execution_defs.h \
- /mnt/c/l3/Lab3OOP/Storage/../Octree/ContainerPosition.hpp \
- /mnt/c/l3/Lab3OOP/Storage/../Octree/Point.hpp /usr/include/c++/13/stack \
- /usr/include/c++/13/deque /usr/include/c++/13/bits/stl_deque.h \
- /usr/include/c++/13/bits/deque.tcc /usr/include/c++/13/bits/stl_stack.h \
- /mnt/c/l3/Lab3OOP/Storage/../Checker/Checker.hpp \
+ /mnt/c/OOP/nw3/Lab3OOP/Storage/../Octree/ContainerPosition.hpp \
+ /mnt/c/OOP/nw3/Lab3OOP/Storage/../Octree/Point.hpp \
+ /usr/include/c++/13/stack /usr/include/c++/13/deque \
+ /usr/include/c++/13/bits/stl_deque.h /usr/include/c++/13/bits/deque.tcc \
+ /usr/include/c++/13/bits/stl_stack.h \
+ /mnt/c/OOP/nw3/Lab3OOP/Storage/../Checker/Checker.hpp \
  /usr/include/c++/13/functional /usr/include/c++/13/bits/std_function.h \
  /usr/include/c++/13/unordered_map \
  /usr/include/c++/13/bits/unordered_map.h \
  /usr/include/c++/13/bits/hashtable.h \
  /usr/include/c++/13/bits/hashtable_policy.h \
- /usr/include/c++/13/ext/aligned_buffer.h \
  /usr/include/c++/13/bits/enable_special_members.h \
  /usr/include/c++/13/bits/node_handle.h \
  /usr/include/c++/13/bits/erase_if.h /usr/include/c++/13/array \
- /mnt/c/l3/Lab3OOP/Storage/../Checker/../Container/Container.hpp \
- /mnt/c/l3/Lab3OOP/Storage/../Checker/../Container/./I/IContainer.hpp \
- /mnt/c/l3/Lab3OOP/Storage/../Container/I/IFragile.hpp \
- /mnt/c/l3/Lab3OOP/Storage/../Container/I/IContainer.hpp \
- /mnt/c/l3/Lab3OOP/Storage/../Container/I/IRefragedContainer.hpp \
+ /mnt/c/OOP/nw3/Lab3OOP/Storage/../Checker/../Container/Container.hpp \
+ /mnt/c/OOP/nw3/Lab3OOP/Storage/../Checker/../Container/./I/IContainer.hpp \
+ /mnt/c/OOP/nw3/Lab3OOP/Storage/../Container/I/IFragile.hpp \
+ /mnt/c/OOP/nw3/Lab3OOP/Storage/../Container/I/IContainer.hpp \
+ /mnt/c/OOP/nw3/Lab3OOP/Storage/../Container/I/IRefragedContainer.hpp \
  /usr/include/c++/13/numeric /usr/include/c++/13/bits/stl_numeric.h \
  /usr/include/c++/13/pstl/glue_numeric_defs.h /usr/include/c++/13/cmath \
  /usr/include/math.h /usr/include/x86_64-linux-gnu/bits/math-vector.h \

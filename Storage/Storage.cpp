@@ -35,7 +35,7 @@ Storage::Storage(int number, int length, int width, int height, double temperatu
     this->width = width;
     this->height = height;
     this->temperature = temperature;
-    BoundingBox<int> bound(Point<int>(0, 0, 0), Point<int>(length, width, height));
+    BoundingBox<int> bound(Point<int>(-1, -1, -1), Point<int>(length, width, height));
     this->containers = std::make_shared<Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>>(bound, calculateDepth());
     this->checker.addCheckFunction([this](Storage& storage, std::shared_ptr<IContainer> container, ContainerPosition<int> position) {
         checkTemperature(storage, container, position);
@@ -252,7 +252,7 @@ bool Storage::checkSupport(ContainerPosition<int>& position, std::vector<std::pa
 }
 
 void Storage::addContainer(std::shared_ptr<IContainer> container, int X, int Y, int Z){
-    if(X < 0 || Y < 0 || Z < 0){
+    if(X < 1 || Y < 1 || Z < 1){
         throw std::invalid_argument("Coordinates should be positive");
     }
     ContainerPosition<int> pos = calculateContainerPosition(X, Y, Z, container->getLength(), container->getWidth(), container->getHeight());
@@ -302,7 +302,7 @@ bool Storage::isNoTop(const ContainerPosition<int>& position){
 
 //перемещения
 void Storage::moveContainer(std::string id, int X, int Y, int Z){
-    if(X < 0 || Y < 0 || Z < 0){
+    if(X < 1 || Y < 1 || Z < 1){
         throw std::invalid_argument("Invalid coordinate");
     }
     auto cache = containers->search(id);
@@ -404,8 +404,8 @@ void Storage::multitread(std::shared_ptr<IContainer> container, int X, int Y, in
 bool Storage::addContainerR(std::shared_ptr<IContainer> container, int yStart, int yEnd){
     std::unique_lock<std::mutex> ul(mtx, std::defer_lock);
     for(int y = yStart; y <= yEnd; y++){
-        for(int x = 0; x <= length; x++){
-            for(int z = 0; z <= height; z++){
+        for(int x = 1; x <= length; x++){
+            for(int z = 1; z <= height; z++){
                 try{
                     if(containerAdded.load()){
                         return true;
@@ -422,7 +422,7 @@ bool Storage::addContainerR(std::shared_ptr<IContainer> container, int yStart, i
 
 std::string Storage::addContainer(std::shared_ptr<IContainer> container){
     std::vector<std::thread>  threads;
-    for (int y = 0; y <= width; y += 20) {
+    for (int y = 1; y <= width; y += 20) {
         int yEnd = std::min(y + 20, width);
         threads.emplace_back(&Storage::addContainerR, this, container, y, yEnd);
     }
@@ -598,9 +598,9 @@ void Storage::checkPressure(Storage& storage, std::shared_ptr<IContainer> contai
     if(container == nullptr){
         throw std::invalid_argument("Container is not fragile");
     }
-    if(pos.LLDown.z != 0){
+    if(pos.LLDown.z != 1){
         std::vector<std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>> con = storage.searchUnderContainer(pos);
-        if(con.empty() || con[0].first.LLDown.z != 0){
+        if(con.empty() || con[0].first.LLDown.z != 1){
             throw std::invalid_argument("Container can t fly 1");
         }
         if(!checkSupport(pos, con)){

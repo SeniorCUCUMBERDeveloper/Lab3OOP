@@ -61,7 +61,7 @@ struct BoundingBox{
     BoundingBox(const Point<T>& m, const Point<T>& ma) : min(m), max(ma) {}
 
     bool contains(Point<T>& p) const {
-        return min.x <= p.x && p.x <= max.x && min.y <= p.y && p.y <= max.y && min.z <= p.z && p.z <= max.z;
+        return min.x < p.x && p.x < max.x && min.y < p.y && p.y < max.y && min.z < p.z && p.z < max.z;
     }
 
     bool intersects(BoundingBox& other) const {

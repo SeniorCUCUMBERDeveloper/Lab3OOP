@@ -8,9 +8,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/mnt/c/l3/Lab3OOP/Storage/Storage.cpp" "CMakeFiles/myprog.dir/Storage/Storage.cpp.o" "gcc" "CMakeFiles/myprog.dir/Storage/Storage.cpp.o.d"
-  "/mnt/c/l3/Lab3OOP/Terminal/Terminal.cpp" "CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o" "gcc" "CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o.d"
-  "/mnt/c/l3/Lab3OOP/test.cpp" "CMakeFiles/myprog.dir/test.cpp.o" "gcc" "CMakeFiles/myprog.dir/test.cpp.o.d"
+  "/mnt/c/OOP/nw3/Lab3OOP/Storage/Storage.cpp" "CMakeFiles/myprog.dir/Storage/Storage.cpp.o" "gcc" "CMakeFiles/myprog.dir/Storage/Storage.cpp.o.d"
+  "/mnt/c/OOP/nw3/Lab3OOP/Terminal/Terminal.cpp" "CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o" "gcc" "CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o.d"
+  "/mnt/c/OOP/nw3/Lab3OOP/test.cpp" "CMakeFiles/myprog.dir/test.cpp.o" "gcc" "CMakeFiles/myprog.dir/test.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

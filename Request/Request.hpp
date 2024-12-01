@@ -48,7 +48,7 @@ class Request{
                 //std::this_thread::sleep_for(std::chrono::milliseconds(500)); не надо здесь
             }
             bool flag = false;
-            for(int i = 0; i < 25; ++i){
+            for(int i = 0; i < 30; ++i){
                 try{
                 id = storage.getListContainers();
                         if(id.empty()){
