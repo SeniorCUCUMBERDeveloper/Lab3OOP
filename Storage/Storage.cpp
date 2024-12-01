@@ -36,7 +36,7 @@ Storage::Storage(int number, int length, int width, int height, double temperatu
     this->height = height;
     this->temperature = temperature;
     BoundingBox<int> bound(Point<int>(-1, -1, -1), Point<int>(length, width, height));
-    this->containers = std::make_shared<Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>>(bound, calculateDepth());
+    this->containers = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>(bound, calculateDepth());
     this->checker.addCheckFunction([this](Storage& storage, std::shared_ptr<IContainer> container, ContainerPosition<int> position) {
         checkTemperature(storage, container, position);
     });
@@ -63,8 +63,8 @@ Storage& Storage::operator=(const Storage& other) {
             width = other.width;
             height = other.height;
             temperature = other.temperature;
-            containers = other.containers->Clone();
-            auto i = other.containers->searchDepth();
+            containers = (other).containers.Clone();
+            auto i = other.containers.searchDepth();
             std::sort(i.begin(), i.end(), comparePosition);
             for(auto& it : i){
                 addContainer(it.second->Clone(), it.first.LLDown.x, it.first.LLDown.y, it.first.LLDown.z);
@@ -77,8 +77,8 @@ Storage& Storage::operator=(const Storage& other) {
 
 Storage::Storage(const Storage& other)
         : number(other.number), length(other.length), width(other.width), height(other.height), temperature(other.temperature) {
-        containers = other.containers->Clone(); // Используем интерфейс Clone для копирования
-        auto i = other.containers->searchDepth();
+        containers = other.containers.Clone(); // Используем интерфейс Clone для копирования
+        auto i = other.containers.searchDepth();
         std::sort(i.begin(), i.end(), comparePosition);
         for(auto it : i){
             std::cout << it.second->getId() << std::endl;
@@ -100,7 +100,7 @@ void Storage::getSize(int l, int w, int h){
         throw std::runtime_error("Storage l|w|h must be greater than or equal to length|width|height");
     }
     Storage newStorage(this->number, l, w, h, this->temperature);
-    auto i = this->containers->searchDepth();
+    auto i = this->containers.searchDepth();
     std::sort(i.begin(), i.end(), comparePosition);
     for(auto& it : i){
         std::cout << it.second->getId() << std::endl;
@@ -169,7 +169,7 @@ std::vector<std::pair<ContainerPosition<int>,std::shared_ptr<IContainer>>> Stora
     int minZ = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMinZ(position);
     std::unique_lock<std::mutex> lock(mtx, std::defer_lock);
     lock.lock();
-    auto current = containers->searchDepth();
+    auto current = containers.searchDepth();
     lock.unlock();
     for (const auto& container : current) {
         const ContainerPosition<int>& containerPos = container.first;
@@ -195,7 +195,7 @@ std::vector<std::pair<ContainerPosition<int>,std::shared_ptr<IContainer>>> Stora
     int maxZ = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxZ(position);
     std::unique_lock<std::mutex> lock(mtx, std::defer_lock);
     lock.lock();
-    auto current = containers->searchDepth();
+    auto current = containers.searchDepth();
     lock.unlock();
     for (const auto& container : current) {
         const ContainerPosition<int>& containerPos = container.first;
@@ -256,12 +256,12 @@ void Storage::addContainer(std::shared_ptr<IContainer> container, int X, int Y, 
         throw std::invalid_argument("Coordinates should be positive");
     }
     ContainerPosition<int> pos = calculateContainerPosition(X, Y, Z, container->getLength(), container->getWidth(), container->getHeight());
-    auto cache = containers->SearchInsert(container, pos);
+    auto cache = containers.SearchInsert(container, pos);
     if(cache == nullptr){
         throw std::invalid_argument("Valid place for container doesn t exist");
     }
     checker.applyChecks(*this ,container, pos);
-    (*containers).insert(container, pos, cache);
+    (containers).insert(container, pos, cache);
     container->setId(X, Y, Z);
 }
 
@@ -284,7 +284,7 @@ bool Storage::isNoTop(const ContainerPosition<int>& position){
     int maxZ = Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>>::getMaxZ(position);
     std::unique_lock<std::mutex> lock(mtx, std::defer_lock);
     lock.lock();
-    auto copy = containers->searchDepth();
+    auto copy = containers.searchDepth();
     lock.unlock();
     
     for(auto i : copy){
@@ -305,7 +305,7 @@ void Storage::moveContainer(std::string id, int X, int Y, int Z){
     if(X < 1 || Y < 1 || Z < 1){
         throw std::invalid_argument("Invalid coordinate");
     }
-    auto cache = containers->search(id);
+    auto cache = containers.search(id);
     if(cache == nullptr){
         throw std::invalid_argument("Container does not exist");
     }
@@ -319,7 +319,7 @@ void Storage::moveContainer(std::string id, int X, int Y, int Z){
         }
     }
     if(!isNoTop(item.first)){
-        containers->insert(item.second, item.first, cache);
+        containers.insert(item.second, item.first, cache);
         item.second->setId(item.first.LLDown.x, item.first.LLDown.y, item.first.LLDown.z); 
         throw std::invalid_argument("Not a top containerMove");
     }
@@ -327,7 +327,7 @@ void Storage::moveContainer(std::string id, int X, int Y, int Z){
         addContainer(item.second, X, Y, Z);
     }catch(std::exception &e){
         std::cerr << "Error: " << e.what() << std::endl;
-        containers->insert(item.second, item.first, cache);
+        containers.insert(item.second, item.first, cache);
         item.second->setId(item.first.LLDown.x, item.first.LLDown.y, item.first.LLDown.z);
         throw std::invalid_argument("Can't move container "); 
     }
@@ -336,7 +336,7 @@ void Storage::moveContainer(std::string id, int X, int Y, int Z){
 
 //Повороты 
 void Storage::rotateContainer(std::string id, int method) {
-    auto cache = containers->search(id);
+    auto cache = containers.search(id);
     if(cache == nullptr){
         throw std::invalid_argument("Container does not exist1" + id);
     }
@@ -351,13 +351,13 @@ void Storage::rotateContainer(std::string id, int method) {
     }
     std::shared_ptr<IContainer> container = item.second;
     if(container->isType() == "Fragile" || container->isType() == "Fragile and Refraged Container"){
-        containers->insert(item.second, item.first, cache);
+        containers.insert(item.second, item.first, cache);
         item.second->setId(item.first.LLDown.x, item.first.LLDown.y, item.first.LLDown.z);
         throw std::invalid_argument("Fragile container cannot be rotated");
     }
     ContainerPosition<int> pos = item.first;
     if(!isNoTop(pos)){
-        containers->insert(item.second, item.first, cache);
+        containers.insert(item.second, item.first, cache);
         item.second->setId(item.first.LLDown.x, item.first.LLDown.y, item.first.LLDown.z);
         throw std::invalid_argument("No top container");
     }
@@ -370,7 +370,7 @@ void Storage::rotateContainer(std::string id, int method) {
         item.second.reset();
     }catch(std::exception &e){
         std::cerr << "Error: " << e.what() << std::endl;
-        containers->insert(item.second, item.first, cache);
+        containers.insert(item.second, item.first, cache);
         item.second->setId(item.first.LLDown.x, item.first.LLDown.y, item.first.LLDown.z);
         newContainer.reset();
         throw std::invalid_argument("Can't rotate container ");
@@ -382,7 +382,7 @@ void Storage::multitread(std::shared_ptr<IContainer> container, int X, int Y, in
     std::unique_lock<std::mutex> ul(mtx, std::defer_lock);
     ContainerPosition<int> pos = calculateContainerPosition(X, Y, Z, container->getLength(), container->getWidth(), container->getHeight());
     ul.lock();
-    auto cache = containers->SearchInsert(container, pos); //Иначе будет data race shared_mutex юзать нет смысла много записи 
+    auto cache = containers.SearchInsert(container, pos); //Иначе будет data race shared_mutex юзать нет смысла много записи 
     ul.unlock();
     if(cache == nullptr){
         throw std::invalid_argument("Valid place for container doesn t exist");
@@ -391,7 +391,7 @@ void Storage::multitread(std::shared_ptr<IContainer> container, int X, int Y, in
     ul.lock();
     if(!containerAdded.load()){
         containerAdded.store(true);
-        containers->insert(container, pos, cache);
+        containers.insert(container, pos, cache);
         container->setId(X, Y, Z);
         return;
     }
@@ -439,15 +439,15 @@ std::string Storage::addContainer(std::shared_ptr<IContainer> container){
 
 
 void Storage::removeContainer(std::string id){
-    auto cache2 = containers->search(id);
-    auto cache = containers->findI(id);
+    auto cache2 = containers.search(id);
+    auto cache = containers.findI(id);
     if(cache2 == nullptr){
         throw std::invalid_argument("No container on storage with id " + id);
     }
     std::vector<std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>> con = searchUpperContainer(cache.first);
     if(con.empty()){
         //Простой случай, если на верху нет 
-        containers->remove(id);
+        containers.remove(id);
     }else{
         //Сложный случай, если на верху есть контейнеры
         std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>> copy_delete = std::make_pair(cache.first, cache.second->Clone());
@@ -462,11 +462,11 @@ void Storage::removeContainer(std::string id){
         for(auto& i : lst){
             if(i.second != nullptr){
                 con_copy.insert(con_copy.begin(), std::make_pair(i.first, i.second->Clone()));
-                bool flag = containers->remove(i.second->getId());
+                bool flag = containers.remove(i.second->getId());
             }
         }
 
-        containers->remove(id);
+        containers.remove(id);
         //Пытаемся раскидать контейнеры по новым позициям
 
         std::vector<std::string> newPlacement;
@@ -478,7 +478,7 @@ void Storage::removeContainer(std::string id){
             if(newId == "_"){
                 last.reset();
                 for(auto& return_containerId : newPlacement){
-                    containers->remove(return_containerId);
+                    containers.remove(return_containerId);
                 }
                     addContainer(copy_delete.second, copy_delete.first.LLDown.x, copy_delete.first.LLDown.y, copy_delete.first.LLDown.z);
                     for(auto& ret : con_copy){
@@ -505,7 +505,7 @@ void Storage::removeContainer(std::string id){
 
 std::string Storage::getInfo() const{
     std::string result;
-    auto container = containers->searchDepth();
+    auto container = containers.searchDepth();
     if(container.empty()){
         return "No containers on storage.";
     }
@@ -553,7 +553,7 @@ void Storage::howContai(std::shared_ptr<IContainer> container, std::vector<size_
 
 
 std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>> Storage::find(std::string id){
-    auto it = containers->findI(id);
+    auto it = containers.findI(id);
     if(it.second == nullptr){
         throw std::runtime_error("Container not found");
     }
@@ -563,7 +563,7 @@ std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>> Storage::find(std
 
 std::vector<std::string> Storage::getListContainers() const{
     std::vector<std::string> con;
-    for(auto it = containers->begin(); it != containers->end(); ++it){
+    for(auto it = containers.begin(); it != containers.end(); ++it){
         if (*it == nullptr) {
             std::cout << "Invalid container found.\n";
             continue;
