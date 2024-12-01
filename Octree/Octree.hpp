@@ -10,6 +10,7 @@
 #include <stack>
 #include <memory>
 #include <type_traits>
+#include <regex>
 
 
 template<typename T>
@@ -240,7 +241,8 @@ class Octree{
         bool remove(std::string id){
             bool collision = false;
             std::shared_ptr<Node> copy = nullptr;
-            removeR(id, root, collision, copy);
+            Point<T> point = parsePoint(id);
+            removeR(id, root, collision, copy, point);
             if(collision == false){
                 return false;
             }
@@ -251,15 +253,17 @@ class Octree{
 
 
         std::shared_ptr<Node> search(std::string id){
+            Point<T> point = parsePoint(id);
             std::shared_ptr<Node> copyCache = nullptr;
-            searchR(id, root, copyCache);
+            searchR(id, root, copyCache, point);
             return copyCache;
         }
 
 
         std::pair<CPosType, N> findI(std::string id){
+            Point<T> point = parsePoint(id);
             std::pair<CPosType, N> it = std::make_pair(CPosType(), nullptr);
-            findI(id, root, &it);
+            findI(id, root, &it, point);
             return it;
         }
 
@@ -391,8 +395,11 @@ class Octree{
         }
 
 
-        void findI(std::string id, std::shared_ptr<Node> node, std::pair<CPosType, N>* it){
+        void findI(std::string id, std::shared_ptr<Node> node, std::pair<CPosType, N>* it, Point<T> point){
             if(node == nullptr){
+                return;
+            }
+            if(!node->box.contains(point)){
                 return;
             }
             if(node->con.empty() == false){
@@ -405,7 +412,7 @@ class Octree{
             }
             if(node->isLeaf() == false){
                 for(int i = 0; i < 8; ++i){
-                    findI(id, node->children[i], it);
+                    findI(id, node->children[i], it, point);
                 }
             }
         }
@@ -460,8 +467,11 @@ class Octree{
         }
 
 
-            void searchR(std::string id, std::shared_ptr<Node> node, std::shared_ptr<Node>& copyCache){
+            void searchR(std::string id, std::shared_ptr<Node> node, std::shared_ptr<Node>& copyCache, Point<T> point){
                 if(node == nullptr){
+                    return;
+                }
+                if(!node->box.contains(point)){
                     return;
                 }
                 if(node->con.empty() == false){
@@ -474,17 +484,20 @@ class Octree{
             }
             if(node->isLeaf() == false){
                 for(int i = 0; i < 8; ++i){
-                    searchR(id, node->children[i], copyCache);
+                    searchR(id, node->children[i], copyCache, point);
                 }
             }
         }
 
 
-            void removeR(std::string id, std::shared_ptr<Node> node, bool& collision, std::shared_ptr<Node>& copyCache){
+            void removeR(std::string id, std::shared_ptr<Node> node, bool& collision, std::shared_ptr<Node>& copyCache, Point<T> point){
                 if(node == nullptr){
                     return;
                 }
                 if(collision == true || node == nullptr){
+                    return;
+                }
+                if(!node->box.contains(point)){
                     return;
                 }
                 if(node->con.empty() == false){
@@ -503,7 +516,7 @@ class Octree{
                 }
                 if(node->isLeaf() == false){
                     for(int i = 0; i < 8; ++i){
-                        removeR(id, node->children[i], collision, copyCache);
+                        removeR(id, node->children[i], collision, copyCache, point);
                     }
                 }
 
@@ -612,6 +625,23 @@ class Octree{
 
             std::string number(const Point<T>& p) const{
             return std::to_string(p.x) + "_" + std::to_string(p.y) + "_" + std::to_string(p.z);
+        }
+
+
+        static Point<T> parsePoint(const std::string& str) {
+            static_assert(PointConcept<Point<T>>, "Point должен удовлетворять PointConcept");
+            Point<T> point;
+            std::regex re(R"(([-+]?\d*\.?\d+)_([-+]?\d*\.?\d+)_([-+]?\d*\.?\d+))");
+            std::smatch match;
+            if (std::regex_match(str, match, re)) {
+                point.x = static_cast<T>(std::stod(match[1].str()));
+                point.y = static_cast<T>(std::stod(match[2].str()));
+                point.z = static_cast<T>(std::stod(match[3].str()));
+            } else {
+                throw std::invalid_argument("Invalid format for Point"); // 
+            }
+
+            return point;
         }
                 
 };

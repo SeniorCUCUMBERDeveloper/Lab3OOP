@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2024-12-01 03:28:42</td>
+            <td class="headerValue">2024-12-01 12:52:25</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
@@ -100,16 +100,16 @@
 <span id="L38"><span class="lineNum">      38</span> <span class="tlaGNC">          26 :     BoundingBox&lt;int&gt; bound(Point&lt;int&gt;(-1, -1, -1), Point&lt;int&gt;(length, width, height));</span></span>
 <span id="L39"><span class="lineNum">      39</span> <span class="tlaGNC">          26 :     this-&gt;containers = std::make_shared&lt;Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;&gt;(bound, calculateDepth());</span></span>
 <span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">          26 :     this-&gt;checker.addCheckFunction([this](Storage&amp; storage, std::shared_ptr&lt;IContainer&gt; container, ContainerPosition&lt;int&gt; position) {</span></span>
-<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC">         174 :         checkTemperature(storage, container, position);</span></span>
-<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC">         172 :     });</span></span>
+<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC">         159 :         checkTemperature(storage, container, position);</span></span>
+<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC">         157 :     });</span></span>
 <span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">          26 :     this-&gt;checker.addCheckFunction([this](Storage&amp; storage, std::shared_ptr&lt;IContainer&gt; container, ContainerPosition&lt;int&gt; position) {</span></span>
-<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">         172 :         checkPressure(storage, container, position);</span></span>
-<span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">         145 :     });</span></span>
+<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">         157 :         checkPressure(storage, container, position);</span></span>
+<span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">         146 :     });</span></span>
 <span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">          26 : }</span></span>
 <span id="L47"><span class="lineNum">      47</span>              : </span>
 <span id="L48"><span class="lineNum">      48</span>              : </span>
-<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">         350 : bool Storage::comparePosition(std::pair&lt;ContainerPosition&lt;int&gt;, std::shared_ptr&lt;IContainer&gt;&gt;&amp; pos1, std::pair&lt;ContainerPosition&lt;int&gt;, std::shared_ptr&lt;IContainer&gt;&gt;&amp; pos2){</span></span>
-<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">         350 :     return pos1.first.LLDown.z &lt; pos2.first.LLDown.z;</span></span>
+<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">         324 : bool Storage::comparePosition(std::pair&lt;ContainerPosition&lt;int&gt;, std::shared_ptr&lt;IContainer&gt;&gt;&amp; pos1, std::pair&lt;ContainerPosition&lt;int&gt;, std::shared_ptr&lt;IContainer&gt;&gt;&amp; pos2){</span></span>
+<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">         324 :     return pos1.first.LLDown.z &lt; pos2.first.LLDown.z;</span></span>
 <span id="L51"><span class="lineNum">      51</span>              : }</span>
 <span id="L52"><span class="lineNum">      52</span>              : </span>
 <span id="L53"><span class="lineNum">      53</span>              : </span>
@@ -177,75 +177,75 @@
 <span id="L115"><span class="lineNum">     115</span>              : </span>
 <span id="L116"><span class="lineNum">     116</span>              : //Вставка</span>
 <span id="L117"><span class="lineNum">     117</span>              : </span>
-<span id="L118"><span class="lineNum">     118</span> <span class="tlaGNC">        3346 : ContainerPosition&lt;int&gt; Storage::calculateContainerPosition(int x, int y, int z, int l, int w, int h) {</span></span>
-<span id="L119"><span class="lineNum">     119</span> <span class="tlaGNC">        3346 :     ContainerPosition&lt;int&gt; pos;</span></span>
+<span id="L118"><span class="lineNum">     118</span> <span class="tlaGNC">        3319 : ContainerPosition&lt;int&gt; Storage::calculateContainerPosition(int x, int y, int z, int l, int w, int h) {</span></span>
+<span id="L119"><span class="lineNum">     119</span> <span class="tlaGNC">        3319 :     ContainerPosition&lt;int&gt; pos;</span></span>
 <span id="L120"><span class="lineNum">     120</span>              :     //LLDown</span>
-<span id="L121"><span class="lineNum">     121</span> <span class="tlaGNC">        3339 :     pos.LLDown.x = x;</span></span>
-<span id="L122"><span class="lineNum">     122</span> <span class="tlaGNC">        3339 :     pos.LLDown.y = y;</span></span>
-<span id="L123"><span class="lineNum">     123</span> <span class="tlaGNC">        3339 :     pos.LLDown.z = z;</span></span>
+<span id="L121"><span class="lineNum">     121</span> <span class="tlaGNC">        3303 :     pos.LLDown.x = x;</span></span>
+<span id="L122"><span class="lineNum">     122</span> <span class="tlaGNC">        3303 :     pos.LLDown.y = y;</span></span>
+<span id="L123"><span class="lineNum">     123</span> <span class="tlaGNC">        3303 :     pos.LLDown.z = z;</span></span>
 <span id="L124"><span class="lineNum">     124</span>              : </span>
 <span id="L125"><span class="lineNum">     125</span>              :     //LLUp</span>
-<span id="L126"><span class="lineNum">     126</span> <span class="tlaGNC">        3339 :     pos.LLUp.x = x;</span></span>
-<span id="L127"><span class="lineNum">     127</span> <span class="tlaGNC">        3339 :     pos.LLUp.y = y;</span></span>
-<span id="L128"><span class="lineNum">     128</span> <span class="tlaGNC">        3339 :     pos.LLUp.z = z + h;</span></span>
+<span id="L126"><span class="lineNum">     126</span> <span class="tlaGNC">        3303 :     pos.LLUp.x = x;</span></span>
+<span id="L127"><span class="lineNum">     127</span> <span class="tlaGNC">        3303 :     pos.LLUp.y = y;</span></span>
+<span id="L128"><span class="lineNum">     128</span> <span class="tlaGNC">        3303 :     pos.LLUp.z = z + h;</span></span>
 <span id="L129"><span class="lineNum">     129</span>              : </span>
 <span id="L130"><span class="lineNum">     130</span>              :     //LRDown</span>
-<span id="L131"><span class="lineNum">     131</span> <span class="tlaGNC">        3339 :     pos.LRDown.x = x + l;</span></span>
-<span id="L132"><span class="lineNum">     132</span> <span class="tlaGNC">        3339 :     pos.LRDown.y = y;</span></span>
-<span id="L133"><span class="lineNum">     133</span> <span class="tlaGNC">        3339 :     pos.LRDown.z = z;</span></span>
+<span id="L131"><span class="lineNum">     131</span> <span class="tlaGNC">        3303 :     pos.LRDown.x = x + l;</span></span>
+<span id="L132"><span class="lineNum">     132</span> <span class="tlaGNC">        3303 :     pos.LRDown.y = y;</span></span>
+<span id="L133"><span class="lineNum">     133</span> <span class="tlaGNC">        3303 :     pos.LRDown.z = z;</span></span>
 <span id="L134"><span class="lineNum">     134</span>              : </span>
 <span id="L135"><span class="lineNum">     135</span>              :     //LRUp</span>
-<span id="L136"><span class="lineNum">     136</span> <span class="tlaGNC">        3339 :     pos.LRUp.x = x + l;</span></span>
-<span id="L137"><span class="lineNum">     137</span> <span class="tlaGNC">        3339 :     pos.LRUp.y = y;</span></span>
-<span id="L138"><span class="lineNum">     138</span> <span class="tlaGNC">        3339 :     pos.LRUp.z = z + h;</span></span>
+<span id="L136"><span class="lineNum">     136</span> <span class="tlaGNC">        3303 :     pos.LRUp.x = x + l;</span></span>
+<span id="L137"><span class="lineNum">     137</span> <span class="tlaGNC">        3303 :     pos.LRUp.y = y;</span></span>
+<span id="L138"><span class="lineNum">     138</span> <span class="tlaGNC">        3303 :     pos.LRUp.z = z + h;</span></span>
 <span id="L139"><span class="lineNum">     139</span>              : </span>
 <span id="L140"><span class="lineNum">     140</span>              :     //RRDown</span>
-<span id="L141"><span class="lineNum">     141</span> <span class="tlaGNC">        3339 :     pos.RRDown.x = x + l;</span></span>
-<span id="L142"><span class="lineNum">     142</span> <span class="tlaGNC">        3339 :     pos.RRDown.y = y + w;</span></span>
-<span id="L143"><span class="lineNum">     143</span> <span class="tlaGNC">        3339 :     pos.RRDown.z = z;</span></span>
+<span id="L141"><span class="lineNum">     141</span> <span class="tlaGNC">        3303 :     pos.RRDown.x = x + l;</span></span>
+<span id="L142"><span class="lineNum">     142</span> <span class="tlaGNC">        3303 :     pos.RRDown.y = y + w;</span></span>
+<span id="L143"><span class="lineNum">     143</span> <span class="tlaGNC">        3303 :     pos.RRDown.z = z;</span></span>
 <span id="L144"><span class="lineNum">     144</span>              : </span>
 <span id="L145"><span class="lineNum">     145</span>              :     //RRUp</span>
-<span id="L146"><span class="lineNum">     146</span> <span class="tlaGNC">        3339 :     pos.RRUp.x = x + l;</span></span>
-<span id="L147"><span class="lineNum">     147</span> <span class="tlaGNC">        3339 :     pos.RRUp.y = y + w;</span></span>
-<span id="L148"><span class="lineNum">     148</span> <span class="tlaGNC">        3339 :     pos.RRUp.z = z + h;</span></span>
+<span id="L146"><span class="lineNum">     146</span> <span class="tlaGNC">        3303 :     pos.RRUp.x = x + l;</span></span>
+<span id="L147"><span class="lineNum">     147</span> <span class="tlaGNC">        3303 :     pos.RRUp.y = y + w;</span></span>
+<span id="L148"><span class="lineNum">     148</span> <span class="tlaGNC">        3303 :     pos.RRUp.z = z + h;</span></span>
 <span id="L149"><span class="lineNum">     149</span>              : </span>
 <span id="L150"><span class="lineNum">     150</span>              :     //RLDown</span>
-<span id="L151"><span class="lineNum">     151</span> <span class="tlaGNC">        3339 :     pos.RLDown.x = x;</span></span>
-<span id="L152"><span class="lineNum">     152</span> <span class="tlaGNC">        3339 :     pos.RLDown.y = y + w;</span></span>
-<span id="L153"><span class="lineNum">     153</span> <span class="tlaGNC">        3339 :     pos.RLDown.z = z;</span></span>
+<span id="L151"><span class="lineNum">     151</span> <span class="tlaGNC">        3303 :     pos.RLDown.x = x;</span></span>
+<span id="L152"><span class="lineNum">     152</span> <span class="tlaGNC">        3303 :     pos.RLDown.y = y + w;</span></span>
+<span id="L153"><span class="lineNum">     153</span> <span class="tlaGNC">        3303 :     pos.RLDown.z = z;</span></span>
 <span id="L154"><span class="lineNum">     154</span>              : </span>
 <span id="L155"><span class="lineNum">     155</span>              :     //RLUp</span>
-<span id="L156"><span class="lineNum">     156</span> <span class="tlaGNC">        3339 :     pos.RLUp.x = x;</span></span>
-<span id="L157"><span class="lineNum">     157</span> <span class="tlaGNC">        3339 :     pos.RLUp.y = y + w;</span></span>
-<span id="L158"><span class="lineNum">     158</span> <span class="tlaGNC">        3339 :     pos.RLUp.z = z + h;</span></span>
-<span id="L159"><span class="lineNum">     159</span> <span class="tlaGNC">        3339 :     return pos;</span></span>
+<span id="L156"><span class="lineNum">     156</span> <span class="tlaGNC">        3303 :     pos.RLUp.x = x;</span></span>
+<span id="L157"><span class="lineNum">     157</span> <span class="tlaGNC">        3303 :     pos.RLUp.y = y + w;</span></span>
+<span id="L158"><span class="lineNum">     158</span> <span class="tlaGNC">        3303 :     pos.RLUp.z = z + h;</span></span>
+<span id="L159"><span class="lineNum">     159</span> <span class="tlaGNC">        3303 :     return pos;</span></span>
 <span id="L160"><span class="lineNum">     160</span>              : }</span>
 <span id="L161"><span class="lineNum">     161</span>              : </span>
 <span id="L162"><span class="lineNum">     162</span>              : </span>
-<span id="L163"><span class="lineNum">     163</span> <span class="tlaGNC">          99 : std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;,std::shared_ptr&lt;IContainer&gt;&gt;&gt; Storage::searchUnderContainer(ContainerPosition&lt;int&gt;&amp; position){</span></span>
-<span id="L164"><span class="lineNum">     164</span> <span class="tlaGNC">          99 :     std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;,std::shared_ptr&lt;IContainer&gt;&gt;&gt; result;</span></span>
-<span id="L165"><span class="lineNum">     165</span> <span class="tlaGNC">          99 :     int minX = Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinX(position);</span></span>
-<span id="L166"><span class="lineNum">     166</span> <span class="tlaGNC">          99 :     int maxX = Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxX(position);</span></span>
-<span id="L167"><span class="lineNum">     167</span> <span class="tlaGNC">          99 :     int minY = Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinY(position);</span></span>
-<span id="L168"><span class="lineNum">     168</span> <span class="tlaGNC">          99 :     int maxY = Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxY(position);</span></span>
-<span id="L169"><span class="lineNum">     169</span> <span class="tlaGNC">          99 :     int minZ = Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinZ(position);</span></span>
-<span id="L170"><span class="lineNum">     170</span> <span class="tlaGNC">          99 :     std::unique_lock&lt;std::mutex&gt; lock(mtx, std::defer_lock);</span></span>
-<span id="L171"><span class="lineNum">     171</span> <span class="tlaGNC">          99 :     lock.lock();</span></span>
-<span id="L172"><span class="lineNum">     172</span> <span class="tlaGNC">          99 :     auto current = containers-&gt;searchDepth();</span></span>
-<span id="L173"><span class="lineNum">     173</span> <span class="tlaGNC">          99 :     lock.unlock();</span></span>
-<span id="L174"><span class="lineNum">     174</span> <span class="tlaGNC">        1036 :     for (const auto&amp; container : current) {</span></span>
-<span id="L175"><span class="lineNum">     175</span> <span class="tlaGNC">         937 :         const ContainerPosition&lt;int&gt;&amp; containerPos = container.first;</span></span>
+<span id="L163"><span class="lineNum">     163</span> <span class="tlaGNC">          85 : std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;,std::shared_ptr&lt;IContainer&gt;&gt;&gt; Storage::searchUnderContainer(ContainerPosition&lt;int&gt;&amp; position){</span></span>
+<span id="L164"><span class="lineNum">     164</span> <span class="tlaGNC">          85 :     std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;,std::shared_ptr&lt;IContainer&gt;&gt;&gt; result;</span></span>
+<span id="L165"><span class="lineNum">     165</span> <span class="tlaGNC">          85 :     int minX = Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinX(position);</span></span>
+<span id="L166"><span class="lineNum">     166</span> <span class="tlaGNC">          85 :     int maxX = Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxX(position);</span></span>
+<span id="L167"><span class="lineNum">     167</span> <span class="tlaGNC">          85 :     int minY = Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinY(position);</span></span>
+<span id="L168"><span class="lineNum">     168</span> <span class="tlaGNC">          85 :     int maxY = Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxY(position);</span></span>
+<span id="L169"><span class="lineNum">     169</span> <span class="tlaGNC">          85 :     int minZ = Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinZ(position);</span></span>
+<span id="L170"><span class="lineNum">     170</span> <span class="tlaGNC">          85 :     std::unique_lock&lt;std::mutex&gt; lock(mtx, std::defer_lock);</span></span>
+<span id="L171"><span class="lineNum">     171</span> <span class="tlaGNC">          85 :     lock.lock();</span></span>
+<span id="L172"><span class="lineNum">     172</span> <span class="tlaGNC">          85 :     auto current = containers-&gt;searchDepth();</span></span>
+<span id="L173"><span class="lineNum">     173</span> <span class="tlaGNC">          85 :     lock.unlock();</span></span>
+<span id="L174"><span class="lineNum">     174</span> <span class="tlaGNC">         782 :     for (const auto&amp; container : current) {</span></span>
+<span id="L175"><span class="lineNum">     175</span> <span class="tlaGNC">         697 :         const ContainerPosition&lt;int&gt;&amp; containerPos = container.first;</span></span>
 <span id="L176"><span class="lineNum">     176</span>              : </span>
-<span id="L177"><span class="lineNum">     177</span> <span class="tlaGNC">        1657 :         if (Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinX(containerPos) &lt;= maxX &amp;&amp; Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxX(containerPos) &gt;= minX &amp;&amp;</span></span>
-<span id="L178"><span class="lineNum">     178</span> <span class="tlaGNC">        1885 :             Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinY(containerPos) &lt;= maxY &amp;&amp; Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxY(containerPos) &gt;= minY &amp;&amp;</span></span>
-<span id="L179"><span class="lineNum">     179</span> <span class="tlaGNC">         228 :             Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxZ(containerPos) &lt; minZ) {</span></span>
-<span id="L180"><span class="lineNum">     180</span> <span class="tlaGNC">         228 :                 result.push_back(container);</span></span>
-<span id="L181"><span class="lineNum">     181</span> <span class="tlaGNC">         228 :                 continue;</span></span>
+<span id="L177"><span class="lineNum">     177</span> <span class="tlaGNC">        1185 :         if (Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinX(containerPos) &lt;= maxX &amp;&amp; Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxX(containerPos) &gt;= minX &amp;&amp;</span></span>
+<span id="L178"><span class="lineNum">     178</span> <span class="tlaGNC">        1389 :             Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinY(containerPos) &lt;= maxY &amp;&amp; Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxY(containerPos) &gt;= minY &amp;&amp;</span></span>
+<span id="L179"><span class="lineNum">     179</span> <span class="tlaGNC">         204 :             Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxZ(containerPos) &lt; minZ) {</span></span>
+<span id="L180"><span class="lineNum">     180</span> <span class="tlaGNC">         202 :                 result.push_back(container);</span></span>
+<span id="L181"><span class="lineNum">     181</span> <span class="tlaGNC">         202 :                 continue;</span></span>
 <span id="L182"><span class="lineNum">     182</span>              :         }</span>
 <span id="L183"><span class="lineNum">     183</span>              :     }</span>
-<span id="L184"><span class="lineNum">     184</span> <span class="tlaGNC">          99 :     std::sort(result.begin(), result.end(), comparePosition);</span></span>
-<span id="L185"><span class="lineNum">     185</span> <span class="tlaGNC">         198 :     return result;</span></span>
-<span id="L186"><span class="lineNum">     186</span> <span class="tlaGNC">          99 : }</span></span>
+<span id="L184"><span class="lineNum">     184</span> <span class="tlaGNC">          85 :     std::sort(result.begin(), result.end(), comparePosition);</span></span>
+<span id="L185"><span class="lineNum">     185</span> <span class="tlaGNC">         170 :     return result;</span></span>
+<span id="L186"><span class="lineNum">     186</span> <span class="tlaGNC">          85 : }</span></span>
 <span id="L187"><span class="lineNum">     187</span>              : </span>
 <span id="L188"><span class="lineNum">     188</span>              : </span>
 <span id="L189"><span class="lineNum">     189</span> <span class="tlaGNC">          28 : std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;,std::shared_ptr&lt;IContainer&gt;&gt;&gt; Storage::searchUpperContainer(ContainerPosition&lt;int&gt;&amp; position){</span></span>
@@ -275,42 +275,42 @@
 <span id="L213"><span class="lineNum">     213</span>              : </span>
 <span id="L214"><span class="lineNum">     214</span>              : </span>
 <span id="L215"><span class="lineNum">     215</span>              : </span>
-<span id="L216"><span class="lineNum">     216</span> <span class="tlaGNC">          25 : double Storage::calculatemass(std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;, std::shared_ptr&lt;IContainer&gt;&gt;&gt; con, size_t it){</span></span>
-<span id="L217"><span class="lineNum">     217</span> <span class="tlaGNC">          25 :     double mass = 0;</span></span>
-<span id="L218"><span class="lineNum">     218</span> <span class="tlaGNC">          44 :     for(size_t i = it + 1; i &lt; con.size(); i++){</span></span>
-<span id="L219"><span class="lineNum">     219</span> <span class="tlaGNC">          19 :         if((con[i].second)!= nullptr){</span></span>
-<span id="L220"><span class="lineNum">     220</span> <span class="tlaGNC">          19 :             mass += (*con[i].second).getMass();</span></span>
+<span id="L216"><span class="lineNum">     216</span> <span class="tlaGNC">          21 : double Storage::calculatemass(std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;, std::shared_ptr&lt;IContainer&gt;&gt;&gt; con, size_t it){</span></span>
+<span id="L217"><span class="lineNum">     217</span> <span class="tlaGNC">          21 :     double mass = 0;</span></span>
+<span id="L218"><span class="lineNum">     218</span> <span class="tlaGNC">          37 :     for(size_t i = it + 1; i &lt; con.size(); i++){</span></span>
+<span id="L219"><span class="lineNum">     219</span> <span class="tlaGNC">          16 :         if((con[i].second)!= nullptr){</span></span>
+<span id="L220"><span class="lineNum">     220</span> <span class="tlaGNC">          16 :             mass += (*con[i].second).getMass();</span></span>
 <span id="L221"><span class="lineNum">     221</span>              :         }</span>
 <span id="L222"><span class="lineNum">     222</span>              :     }</span>
-<span id="L223"><span class="lineNum">     223</span> <span class="tlaGNC">          25 :     return mass;</span></span>
+<span id="L223"><span class="lineNum">     223</span> <span class="tlaGNC">          21 :     return mass;</span></span>
 <span id="L224"><span class="lineNum">     224</span>              : }</span>
 <span id="L225"><span class="lineNum">     225</span>              : </span>
 <span id="L226"><span class="lineNum">     226</span>              : </span>
-<span id="L227"><span class="lineNum">     227</span> <span class="tlaGNC">          98 : bool Storage::checkSupport(ContainerPosition&lt;int&gt;&amp; position, std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;,std::shared_ptr&lt;IContainer&gt;&gt;&gt; con){</span></span>
-<span id="L228"><span class="lineNum">     228</span> <span class="tlaGNC">          98 :     bool firstSupport = false;</span></span>
-<span id="L229"><span class="lineNum">     229</span> <span class="tlaGNC">          98 :     bool secondSupport = false;</span></span>
-<span id="L230"><span class="lineNum">     230</span> <span class="tlaGNC">          98 :     Point&lt;int&gt; first = Point&lt;int&gt;(position.LLDown.x, position.LLDown.y + (Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxY(position) - Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinY(position)) / 2, position.LLDown.z - 1);</span></span>
-<span id="L231"><span class="lineNum">     231</span> <span class="tlaGNC">          98 :     Point&lt;int&gt; second = Point&lt;int&gt;(position.LRDown.x, position.LRDown.y + (Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxY(position) - Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinY(position)) / 2, position.LLDown.z - 1);</span></span>
-<span id="L232"><span class="lineNum">     232</span> <span class="tlaGNC">          98 :     Point&lt;int&gt; middle = Point&lt;int&gt;(position.LLDown.x + (Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxX(position) - Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinX(position)) / 2, position.LLDown.y + (Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxY(position) - Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinY(position)) / 2, position.LLDown.z - 1);</span></span>
+<span id="L227"><span class="lineNum">     227</span> <span class="tlaGNC">          84 : bool Storage::checkSupport(ContainerPosition&lt;int&gt;&amp; position, std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;,std::shared_ptr&lt;IContainer&gt;&gt;&gt; con){</span></span>
+<span id="L228"><span class="lineNum">     228</span> <span class="tlaGNC">          84 :     bool firstSupport = false;</span></span>
+<span id="L229"><span class="lineNum">     229</span> <span class="tlaGNC">          84 :     bool secondSupport = false;</span></span>
+<span id="L230"><span class="lineNum">     230</span> <span class="tlaGNC">          84 :     Point&lt;int&gt; first = Point&lt;int&gt;(position.LLDown.x, position.LLDown.y + (Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxY(position) - Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinY(position)) / 2, position.LLDown.z - 1);</span></span>
+<span id="L231"><span class="lineNum">     231</span> <span class="tlaGNC">          84 :     Point&lt;int&gt; second = Point&lt;int&gt;(position.LRDown.x, position.LRDown.y + (Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxY(position) - Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinY(position)) / 2, position.LLDown.z - 1);</span></span>
+<span id="L232"><span class="lineNum">     232</span> <span class="tlaGNC">          84 :     Point&lt;int&gt; middle = Point&lt;int&gt;(position.LLDown.x + (Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxX(position) - Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinX(position)) / 2, position.LLDown.y + (Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMaxY(position) - Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::getMinY(position)) / 2, position.LLDown.z - 1);</span></span>
 <span id="L233"><span class="lineNum">     233</span>              : </span>
-<span id="L234"><span class="lineNum">     234</span> <span class="tlaGNC">         112 :     for(auto container = con.rbegin(); container != con.rend(); ++container){</span></span>
-<span id="L235"><span class="lineNum">     235</span> <span class="tlaGNC">         103 :         if(firstSupport == true &amp;&amp; secondSupport == true){</span></span>
-<span id="L236"><span class="lineNum">     236</span> <span class="tlaGNC">          89 :             return true;</span></span>
+<span id="L234"><span class="lineNum">     234</span> <span class="tlaGNC">          92 :     for(auto container = con.rbegin(); container != con.rend(); ++container){</span></span>
+<span id="L235"><span class="lineNum">     235</span> <span class="tlaGNC">          87 :         if(firstSupport == true &amp;&amp; secondSupport == true){</span></span>
+<span id="L236"><span class="lineNum">     236</span> <span class="tlaGNC">          79 :             return true;</span></span>
 <span id="L237"><span class="lineNum">     237</span>              :         }</span>
-<span id="L238"><span class="lineNum">     238</span> <span class="tlaGNC">         103 :         if((*container).first.LLUp.z + 1 != position.LLDown.z){</span></span>
-<span id="L239"><span class="lineNum">     239</span> <span class="tlaGNC">          16 :             return false;</span></span>
+<span id="L238"><span class="lineNum">     238</span> <span class="tlaGNC">          87 :         if((*container).first.LLUp.z + 1 != position.LLDown.z){</span></span>
+<span id="L239"><span class="lineNum">     239</span> <span class="tlaGNC">           4 :             return false;</span></span>
 <span id="L240"><span class="lineNum">     240</span>              :         }</span>
-<span id="L241"><span class="lineNum">     241</span> <span class="tlaGNC">          87 :         if(Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::pointincontainer(first, (*container).first)){</span></span>
-<span id="L242"><span class="lineNum">     242</span> <span class="tlaGNC">          70 :             firstSupport = true;</span></span>
+<span id="L241"><span class="lineNum">     241</span> <span class="tlaGNC">          83 :         if(Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::pointincontainer(first, (*container).first)){</span></span>
+<span id="L242"><span class="lineNum">     242</span> <span class="tlaGNC">          68 :             firstSupport = true;</span></span>
 <span id="L243"><span class="lineNum">     243</span>              :         }</span>
-<span id="L244"><span class="lineNum">     244</span> <span class="tlaGNC">          87 :         if(Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::pointincontainer(second, (*container).first)){</span></span>
-<span id="L245"><span class="lineNum">     245</span> <span class="tlaGNC">          52 :             secondSupport = true;</span></span>
+<span id="L244"><span class="lineNum">     244</span> <span class="tlaGNC">          83 :         if(Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::pointincontainer(second, (*container).first)){</span></span>
+<span id="L245"><span class="lineNum">     245</span> <span class="tlaGNC">          56 :             secondSupport = true;</span></span>
 <span id="L246"><span class="lineNum">     246</span>              :         }</span>
-<span id="L247"><span class="lineNum">     247</span> <span class="tlaGNC">          87 :         if(Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::pointincontainer(middle, (*container).first)){</span></span>
-<span id="L248"><span class="lineNum">     248</span> <span class="tlaGNC">          73 :             return true;</span></span>
+<span id="L247"><span class="lineNum">     247</span> <span class="tlaGNC">          83 :         if(Octree&lt;int, std::shared_ptr&lt;IContainer&gt;, ContainerPosition&lt;int&gt;&gt;::pointincontainer(middle, (*container).first)){</span></span>
+<span id="L248"><span class="lineNum">     248</span> <span class="tlaGNC">          75 :             return true;</span></span>
 <span id="L249"><span class="lineNum">     249</span>              :         }</span>
 <span id="L250"><span class="lineNum">     250</span>              :     }</span>
-<span id="L251"><span class="lineNum">     251</span> <span class="tlaGNC">           9 :     return false;</span></span>
+<span id="L251"><span class="lineNum">     251</span> <span class="tlaGNC">           5 :     return false;</span></span>
 <span id="L252"><span class="lineNum">     252</span>              : }</span>
 <span id="L253"><span class="lineNum">     253</span>              : </span>
 <span id="L254"><span class="lineNum">     254</span> <span class="tlaGNC">         134 : void Storage::addContainer(std::shared_ptr&lt;IContainer&gt; container, int X, int Y, int Z){</span></span>
@@ -440,47 +440,47 @@
 <span id="L378"><span class="lineNum">     378</span> <span class="tlaGNC">          12 : }</span></span>
 <span id="L379"><span class="lineNum">     379</span>              : </span>
 <span id="L380"><span class="lineNum">     380</span>              : </span>
-<span id="L381"><span class="lineNum">     381</span> <span class="tlaGNC">        3240 : void Storage::multitread(std::shared_ptr&lt;IContainer&gt; container, int X, int Y, int Z){</span></span>
-<span id="L382"><span class="lineNum">     382</span> <span class="tlaGNC">        3240 :     std::unique_lock&lt;std::mutex&gt; ul(mtx, std::defer_lock);</span></span>
-<span id="L383"><span class="lineNum">     383</span> <span class="tlaGNC">        3235 :     ContainerPosition&lt;int&gt; pos = calculateContainerPosition(X, Y, Z, container-&gt;getLength(), container-&gt;getWidth(), container-&gt;getHeight());</span></span>
-<span id="L384"><span class="lineNum">     384</span> <span class="tlaGNC">        3214 :     ul.lock();</span></span>
-<span id="L385"><span class="lineNum">     385</span> <span class="tlaGNC">        3245 :     auto cache = containers-&gt;SearchInsert(container, pos); //Иначе будет data race shared_mutex юзать нет смысла много записи </span></span>
-<span id="L386"><span class="lineNum">     386</span> <span class="tlaGNC">        3236 :     ul.unlock();</span></span>
-<span id="L387"><span class="lineNum">     387</span> <span class="tlaGNC">        3221 :     if(cache == nullptr){</span></span>
-<span id="L388"><span class="lineNum">     388</span> <span class="tlaGNC">        3124 :         throw std::invalid_argument(&quot;Valid place for container doesn t exist&quot;);</span></span>
+<span id="L381"><span class="lineNum">     381</span> <span class="tlaGNC">        3237 : void Storage::multitread(std::shared_ptr&lt;IContainer&gt; container, int X, int Y, int Z){</span></span>
+<span id="L382"><span class="lineNum">     382</span> <span class="tlaGNC">        3237 :     std::unique_lock&lt;std::mutex&gt; ul(mtx, std::defer_lock);</span></span>
+<span id="L383"><span class="lineNum">     383</span> <span class="tlaGNC">        3225 :     ContainerPosition&lt;int&gt; pos = calculateContainerPosition(X, Y, Z, container-&gt;getLength(), container-&gt;getWidth(), container-&gt;getHeight());</span></span>
+<span id="L384"><span class="lineNum">     384</span> <span class="tlaGNC">        3187 :     ul.lock();</span></span>
+<span id="L385"><span class="lineNum">     385</span> <span class="tlaGNC">        3236 :     auto cache = containers-&gt;SearchInsert(container, pos); //Иначе будет data race shared_mutex юзать нет смысла много записи </span></span>
+<span id="L386"><span class="lineNum">     386</span> <span class="tlaGNC">        3235 :     ul.unlock();</span></span>
+<span id="L387"><span class="lineNum">     387</span> <span class="tlaGNC">        3219 :     if(cache == nullptr){</span></span>
+<span id="L388"><span class="lineNum">     388</span> <span class="tlaGNC">        3136 :         throw std::invalid_argument(&quot;Valid place for container doesn t exist&quot;);</span></span>
 <span id="L389"><span class="lineNum">     389</span>              :     }</span>
-<span id="L390"><span class="lineNum">     390</span> <span class="tlaGNC">         119 :     checker.applyChecks(*this, container, pos);</span></span>
-<span id="L391"><span class="lineNum">     391</span> <span class="tlaGNC">          75 :     ul.lock();</span></span>
-<span id="L392"><span class="lineNum">     392</span> <span class="tlaGNC">          75 :     if(!containerAdded.load()){</span></span>
+<span id="L390"><span class="lineNum">     390</span> <span class="tlaGNC">          88 :     checker.applyChecks(*this, container, pos);</span></span>
+<span id="L391"><span class="lineNum">     391</span> <span class="tlaGNC">          76 :     ul.lock();</span></span>
+<span id="L392"><span class="lineNum">     392</span> <span class="tlaGNC">          76 :     if(!containerAdded.load()){</span></span>
 <span id="L393"><span class="lineNum">     393</span> <span class="tlaGNC">          61 :         containerAdded.store(true);</span></span>
 <span id="L394"><span class="lineNum">     394</span> <span class="tlaGNC">          61 :         containers-&gt;insert(container, pos, cache);</span></span>
 <span id="L395"><span class="lineNum">     395</span> <span class="tlaGNC">          61 :         container-&gt;setId(X, Y, Z);</span></span>
 <span id="L396"><span class="lineNum">     396</span> <span class="tlaGNC">          61 :         return;</span></span>
 <span id="L397"><span class="lineNum">     397</span>              :     }</span>
-<span id="L398"><span class="lineNum">     398</span> <span class="tlaGNC">          14 :     ul.unlock();</span></span>
-<span id="L399"><span class="lineNum">     399</span> <span class="tlaGNC">          14 :     if(containerAdded.load()){</span></span>
-<span id="L400"><span class="lineNum">     400</span> <span class="tlaGNC">          14 :         throw std::invalid_argument(&quot;Container already added&quot;);</span></span>
+<span id="L398"><span class="lineNum">     398</span> <span class="tlaGNC">          15 :     ul.unlock();</span></span>
+<span id="L399"><span class="lineNum">     399</span> <span class="tlaGNC">          15 :     if(containerAdded.load()){</span></span>
+<span id="L400"><span class="lineNum">     400</span> <span class="tlaGNC">          15 :         throw std::invalid_argument(&quot;Container already added&quot;);</span></span>
 <span id="L401"><span class="lineNum">     401</span>              :     }</span>
-<span id="L402"><span class="lineNum">     402</span> <span class="tlaGNC">        6494 : }</span></span>
+<span id="L402"><span class="lineNum">     402</span> <span class="tlaGNC">        6433 : }</span></span>
 <span id="L403"><span class="lineNum">     403</span>              : </span>
 <span id="L404"><span class="lineNum">     404</span> <span class="tlaGNC">         123 : bool Storage::addContainerR(std::shared_ptr&lt;IContainer&gt; container, int yStart, int yEnd){</span></span>
 <span id="L405"><span class="lineNum">     405</span> <span class="tlaGNC">         123 :     std::unique_lock&lt;std::mutex&gt; ul(mtx, std::defer_lock);</span></span>
-<span id="L406"><span class="lineNum">     406</span> <span class="tlaGNC">         205 :     for(int y = yStart; y &lt;= yEnd; y++){</span></span>
-<span id="L407"><span class="lineNum">     407</span> <span class="tlaGNC">        1179 :         for(int x = 1; x &lt;= length; x++){</span></span>
-<span id="L408"><span class="lineNum">     408</span> <span class="tlaGNC">        4282 :             for(int z = 1; z &lt;= height; z++){</span></span>
+<span id="L406"><span class="lineNum">     406</span> <span class="tlaGNC">         207 :     for(int y = yStart; y &lt;= yEnd; y++){</span></span>
+<span id="L407"><span class="lineNum">     407</span> <span class="tlaGNC">        1181 :         for(int x = 1; x &lt;= length; x++){</span></span>
+<span id="L408"><span class="lineNum">     408</span> <span class="tlaGNC">        4284 :             for(int z = 1; z &lt;= height; z++){</span></span>
 <span id="L409"><span class="lineNum">     409</span>              :                 try{</span>
 <span id="L410"><span class="lineNum">     410</span> <span class="tlaGNC">        3301 :                     if(containerAdded.load()){</span></span>
 <span id="L411"><span class="lineNum">     411</span> <span class="tlaGNC">          56 :                         return true;</span></span>
 <span id="L412"><span class="lineNum">     412</span>              :                     }</span>
-<span id="L413"><span class="lineNum">     413</span> <span class="tlaGNC">        6421 :                     multitread(container, x, y, z);</span></span>
+<span id="L413"><span class="lineNum">     413</span> <span class="tlaGNC">        6422 :                     multitread(container, x, y, z);</span></span>
 <span id="L414"><span class="lineNum">     414</span> <span class="tlaGNC">          61 :                     return true;</span></span>
-<span id="L415"><span class="lineNum">     415</span> <span class="tlaGNC">        3184 :                 }catch(std::invalid_argument &amp;e){</span></span>
-<span id="L416"><span class="lineNum">     416</span> <span class="tlaGNC">        3184 :                 }</span></span>
+<span id="L415"><span class="lineNum">     415</span> <span class="tlaGNC">        3185 :                 }catch(std::invalid_argument &amp;e){</span></span>
+<span id="L416"><span class="lineNum">     416</span> <span class="tlaGNC">        3188 :                 }</span></span>
 <span id="L417"><span class="lineNum">     417</span>              :             }</span>
 <span id="L418"><span class="lineNum">     418</span>              :         }</span>
 <span id="L419"><span class="lineNum">     419</span>              :     }</span>
-<span id="L420"><span class="lineNum">     420</span> <span class="tlaGNC">           7 :     return false;</span></span>
-<span id="L421"><span class="lineNum">     421</span> <span class="tlaGNC">         124 : }</span></span>
+<span id="L420"><span class="lineNum">     420</span> <span class="tlaGNC">           9 :     return false;</span></span>
+<span id="L421"><span class="lineNum">     421</span> <span class="tlaGNC">         126 : }</span></span>
 <span id="L422"><span class="lineNum">     422</span>              : </span>
 <span id="L423"><span class="lineNum">     423</span> <span class="tlaGNC">          68 : std::string Storage::addContainer(std::shared_ptr&lt;IContainer&gt; container){</span></span>
 <span id="L424"><span class="lineNum">     424</span> <span class="tlaGNC">          68 :     std::vector&lt;std::thread&gt;  threads;</span></span>
@@ -591,7 +591,7 @@
 <span id="L529"><span class="lineNum">     529</span> <span class="tlaGNC">          48 :         if (st.addContainer(currentContainer) != &quot;_&quot;) {</span></span>
 <span id="L530"><span class="lineNum">     530</span> <span class="tlaGNC">          42 :             result[method]++;</span></span>
 <span id="L531"><span class="lineNum">     531</span> <span class="tlaGNC">          42 :             currentContainer = currentContainer-&gt;Clone(result[method], method);</span></span>
-<span id="L532"><span class="lineNum">     532</span> <span class="tlaGNC">          42 :             std::cout &lt;&lt; &quot;Added &quot; &lt;&lt; method &lt;&lt; &quot; &quot; &lt;&lt; result[method] &lt;&lt; std::endl;</span></span>
+<span id="L532"><span class="lineNum">     532</span> <span class="tlaGNC">          41 :             std::cout &lt;&lt; &quot;Added &quot; &lt;&lt; method &lt;&lt; &quot; &quot; &lt;&lt; result[method] &lt;&lt; std::endl;</span></span>
 <span id="L533"><span class="lineNum">     533</span>              :         } else {</span>
 <span id="L534"><span class="lineNum">     534</span> <span class="tlaGNC">           6 :             std::cout &lt;&lt; &quot;Cannot add more containers for method &quot; &lt;&lt; method &lt;&lt; &quot;, total added: &quot; &lt;&lt; result[method] &lt;&lt; &quot;\n&quot;;</span></span>
 <span id="L535"><span class="lineNum">     535</span> <span class="tlaGNC">           6 :             break;</span></span>
@@ -640,10 +640,10 @@
 <span id="L578"><span class="lineNum">     578</span> <span class="tlaUNC tlaBgUNC">           0 : }</span></span>
 <span id="L579"><span class="lineNum">     579</span>              : </span>
 <span id="L580"><span class="lineNum">     580</span>              : </span>
-<span id="L581"><span class="lineNum">     581</span> <span class="tlaGNC tlaBgGNC">         174 : void Storage::checkTemperature(Storage&amp; storage, std::shared_ptr&lt;IContainer&gt; container, ContainerPosition&lt;int&gt; pos){</span></span>
-<span id="L582"><span class="lineNum">     582</span> <span class="tlaGNC">         174 :     auto ref = std::dynamic_pointer_cast&lt;IRefragedContainer&gt;(container);</span></span>
-<span id="L583"><span class="lineNum">     583</span> <span class="tlaGNC">         174 :     if(ref == nullptr){</span></span>
-<span id="L584"><span class="lineNum">     584</span> <span class="tlaGNC">         172 :         return;</span></span>
+<span id="L581"><span class="lineNum">     581</span> <span class="tlaGNC tlaBgGNC">         159 : void Storage::checkTemperature(Storage&amp; storage, std::shared_ptr&lt;IContainer&gt; container, ContainerPosition&lt;int&gt; pos){</span></span>
+<span id="L582"><span class="lineNum">     582</span> <span class="tlaGNC">         159 :     auto ref = std::dynamic_pointer_cast&lt;IRefragedContainer&gt;(container);</span></span>
+<span id="L583"><span class="lineNum">     583</span> <span class="tlaGNC">         159 :     if(ref == nullptr){</span></span>
+<span id="L584"><span class="lineNum">     584</span> <span class="tlaGNC">         157 :         return;</span></span>
 <span id="L585"><span class="lineNum">     585</span>              :     }</span>
 <span id="L586"><span class="lineNum">     586</span> <span class="tlaGNC">           2 :     if(container == nullptr){</span></span>
 <span id="L587"><span class="lineNum">     587</span> <span class="tlaUNC tlaBgUNC">           0 :         throw std::invalid_argument(&quot;Container is not refraged&quot;);</span></span>
@@ -653,36 +653,36 @@
 <span id="L591"><span class="lineNum">     591</span>              :     {</span>
 <span id="L592"><span class="lineNum">     592</span> <span class="tlaGNC">           2 :         throw std::invalid_argument(&quot;Container is too hot&quot;);</span></span>
 <span id="L593"><span class="lineNum">     593</span>              :     }</span>
-<span id="L594"><span class="lineNum">     594</span> <span class="tlaGNC">         174 : }</span></span>
+<span id="L594"><span class="lineNum">     594</span> <span class="tlaGNC">         159 : }</span></span>
 <span id="L595"><span class="lineNum">     595</span>              : </span>
 <span id="L596"><span class="lineNum">     596</span>              : </span>
-<span id="L597"><span class="lineNum">     597</span> <span class="tlaGNC">         172 : void Storage::checkPressure(Storage&amp; storage, std::shared_ptr&lt;IContainer&gt; container, ContainerPosition&lt;int&gt; pos){</span></span>
-<span id="L598"><span class="lineNum">     598</span> <span class="tlaGNC">         172 :     if(container == nullptr){</span></span>
+<span id="L597"><span class="lineNum">     597</span> <span class="tlaGNC">         157 : void Storage::checkPressure(Storage&amp; storage, std::shared_ptr&lt;IContainer&gt; container, ContainerPosition&lt;int&gt; pos){</span></span>
+<span id="L598"><span class="lineNum">     598</span> <span class="tlaGNC">         157 :     if(container == nullptr){</span></span>
 <span id="L599"><span class="lineNum">     599</span> <span class="tlaUNC tlaBgUNC">           0 :         throw std::invalid_argument(&quot;Container is not fragile&quot;);</span></span>
 <span id="L600"><span class="lineNum">     600</span>              :     }</span>
-<span id="L601"><span class="lineNum">     601</span> <span class="tlaGNC tlaBgGNC">         172 :     if(pos.LLDown.z != 1){</span></span>
-<span id="L602"><span class="lineNum">     602</span> <span class="tlaGNC">          99 :         std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;, std::shared_ptr&lt;IContainer&gt;&gt;&gt; con = storage.searchUnderContainer(pos);</span></span>
-<span id="L603"><span class="lineNum">     603</span> <span class="tlaGNC">          99 :         if(con.empty() || con[0].first.LLDown.z != 1){</span></span>
+<span id="L601"><span class="lineNum">     601</span> <span class="tlaGNC tlaBgGNC">         157 :     if(pos.LLDown.z != 1){</span></span>
+<span id="L602"><span class="lineNum">     602</span> <span class="tlaGNC">          85 :         std::vector&lt;std::pair&lt;ContainerPosition&lt;int&gt;, std::shared_ptr&lt;IContainer&gt;&gt;&gt; con = storage.searchUnderContainer(pos);</span></span>
+<span id="L603"><span class="lineNum">     603</span> <span class="tlaGNC">          85 :         if(con.empty() || con[0].first.LLDown.z != 1){</span></span>
 <span id="L604"><span class="lineNum">     604</span> <span class="tlaGNC">           1 :             throw std::invalid_argument(&quot;Container can t fly 1&quot;);</span></span>
 <span id="L605"><span class="lineNum">     605</span>              :         }</span>
-<span id="L606"><span class="lineNum">     606</span> <span class="tlaGNC">          98 :         if(!checkSupport(pos, con)){</span></span>
-<span id="L607"><span class="lineNum">     607</span> <span class="tlaGNC">          25 :             throw std::invalid_argument(&quot;Support doesn t exist&quot;);</span></span>
+<span id="L606"><span class="lineNum">     606</span> <span class="tlaGNC">          84 :         if(!checkSupport(pos, con)){</span></span>
+<span id="L607"><span class="lineNum">     607</span> <span class="tlaGNC">           9 :             throw std::invalid_argument(&quot;Support doesn t exist&quot;);</span></span>
 <span id="L608"><span class="lineNum">     608</span>              :         }</span>
-<span id="L609"><span class="lineNum">     609</span> <span class="tlaGNC">         257 :         for(size_t i = 0; i &lt; con.size(); i++){</span></span>
-<span id="L610"><span class="lineNum">     610</span> <span class="tlaGNC">         185 :             ContainerPosition&lt;int&gt; check = con[i].first;</span></span>
-<span id="L611"><span class="lineNum">     611</span> <span class="tlaGNC">         185 :             if(con[i].second == nullptr){</span></span>
-<span id="L612"><span class="lineNum">     612</span> <span class="tlaGNC">         160 :                 continue;</span></span>
+<span id="L609"><span class="lineNum">     609</span> <span class="tlaGNC">         265 :         for(size_t i = 0; i &lt; con.size(); i++){</span></span>
+<span id="L610"><span class="lineNum">     610</span> <span class="tlaGNC">         191 :             ContainerPosition&lt;int&gt; check = con[i].first;</span></span>
+<span id="L611"><span class="lineNum">     611</span> <span class="tlaGNC">         191 :             if(con[i].second == nullptr){</span></span>
+<span id="L612"><span class="lineNum">     612</span> <span class="tlaGNC">         170 :                 continue;</span></span>
 <span id="L613"><span class="lineNum">     613</span>              :             }</span>
-<span id="L614"><span class="lineNum">     614</span> <span class="tlaGNC">         185 :             auto fragileContainer = std::dynamic_pointer_cast&lt;IFragileContainer&gt;(con[i].second);</span></span>
-<span id="L615"><span class="lineNum">     615</span> <span class="tlaGNC">         185 :             if(fragileContainer == nullptr){</span></span>
-<span id="L616"><span class="lineNum">     616</span> <span class="tlaGNC">         160 :                 continue;</span></span>
+<span id="L614"><span class="lineNum">     614</span> <span class="tlaGNC">         191 :             auto fragileContainer = std::dynamic_pointer_cast&lt;IFragileContainer&gt;(con[i].second);</span></span>
+<span id="L615"><span class="lineNum">     615</span> <span class="tlaGNC">         191 :             if(fragileContainer == nullptr){</span></span>
+<span id="L616"><span class="lineNum">     616</span> <span class="tlaGNC">         170 :                 continue;</span></span>
 <span id="L617"><span class="lineNum">     617</span>              :             }</span>
-<span id="L618"><span class="lineNum">     618</span> <span class="tlaGNC">          25 :             if((fragileContainer-&gt;isType() == &quot;Fragile&quot; || fragileContainer-&gt;isType() == &quot;Fragile and Refraged Container&quot;) &amp;&amp; calculatemass(con, i) + (container)-&gt;getMass() &gt; fragileContainer-&gt;getMaxPressure()){</span></span>
+<span id="L618"><span class="lineNum">     618</span> <span class="tlaGNC">          21 :             if((fragileContainer-&gt;isType() == &quot;Fragile&quot; || fragileContainer-&gt;isType() == &quot;Fragile and Refraged Container&quot;) &amp;&amp; calculatemass(con, i) + (container)-&gt;getMass() &gt; fragileContainer-&gt;getMaxPressure()){</span></span>
 <span id="L619"><span class="lineNum">     619</span> <span class="tlaGNC">           1 :                 throw std::invalid_argument(&quot;Container would be too heavy&quot;);</span></span>
 <span id="L620"><span class="lineNum">     620</span>              :             }</span>
-<span id="L621"><span class="lineNum">     621</span> <span class="tlaGNC">         185 :         }</span></span>
-<span id="L622"><span class="lineNum">     622</span> <span class="tlaGNC">          99 :     }</span></span>
-<span id="L623"><span class="lineNum">     623</span> <span class="tlaGNC">         145 : }</span></span>
+<span id="L621"><span class="lineNum">     621</span> <span class="tlaGNC">         191 :         }</span></span>
+<span id="L622"><span class="lineNum">     622</span> <span class="tlaGNC">          85 :     }</span></span>
+<span id="L623"><span class="lineNum">     623</span> <span class="tlaGNC">         146 : }</span></span>
 <span id="L624"><span class="lineNum">     624</span>              : </span>
 <span id="L625"><span class="lineNum">     625</span>              : </span>
 <span id="L626"><span class="lineNum">     626</span> <span class="tlaGNC">           6 : std::list&lt;std::pair&lt;ContainerPosition&lt;int&gt;, std::shared_ptr&lt;IContainer&gt;&gt;&gt; Storage::searchAllContainersUpper(std::list&lt;std::pair&lt;ContainerPosition&lt;int&gt;, std::shared_ptr&lt;IContainer&gt;&gt;&gt; lst){</span></span>

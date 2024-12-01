@@ -311,7 +311,18 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/OOP/nw3/Lab3OOP/test.cpp \
  /mnt/c/OOP/nw3/Lab3OOP/./Terminal/../Storage/../Octree/Point.hpp \
  /usr/include/c++/13/stack /usr/include/c++/13/deque \
  /usr/include/c++/13/bits/stl_deque.h /usr/include/c++/13/bits/deque.tcc \
- /usr/include/c++/13/bits/stl_stack.h \
+ /usr/include/c++/13/bits/stl_stack.h /usr/include/c++/13/regex \
+ /usr/include/c++/13/bitset /usr/include/c++/13/bits/regex_constants.h \
+ /usr/include/c++/13/bits/regex_error.h \
+ /usr/include/c++/13/bits/regex_automaton.h \
+ /usr/include/c++/13/bits/regex_automaton.tcc \
+ /usr/include/c++/13/bits/regex_scanner.h \
+ /usr/include/c++/13/bits/regex_scanner.tcc \
+ /usr/include/c++/13/bits/regex_compiler.h \
+ /usr/include/c++/13/bits/regex_compiler.tcc \
+ /usr/include/c++/13/bits/regex.h /usr/include/c++/13/bits/regex.tcc \
+ /usr/include/c++/13/bits/regex_executor.h \
+ /usr/include/c++/13/bits/regex_executor.tcc \
  /mnt/c/OOP/nw3/Lab3OOP/./Terminal/../Storage/../Checker/Checker.hpp \
  /mnt/c/OOP/nw3/Lab3OOP/./Terminal/../Storage/../Checker/../Container/Container.hpp \
  /mnt/c/OOP/nw3/Lab3OOP/./Terminal/../Storage/../Checker/../Container/./I/IContainer.hpp \
