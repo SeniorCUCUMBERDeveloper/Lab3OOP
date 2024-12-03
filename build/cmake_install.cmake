@@ -1,4 +1,4 @@
-# Install script for directory: /mnt/c/l3/Lab3OOP
+# Install script for directory: /mnt/c/Lab3OOP-main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/mnt/c/l3/Lab3OOP/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/mnt/c/Lab3OOP-main/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

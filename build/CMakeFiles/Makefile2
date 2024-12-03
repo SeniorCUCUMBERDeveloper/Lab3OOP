@@ -54,10 +54,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/c/l3/Lab3OOP
+CMAKE_SOURCE_DIR = /mnt/c/Lab3OOP-main
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/c/l3/Lab3OOP/build
+CMAKE_BINARY_DIR = /mnt/c/Lab3OOP-main/build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -81,14 +81,14 @@ clean: CMakeFiles/myprog.dir/clean
 CMakeFiles/myprog.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/myprog.dir/build.make CMakeFiles/myprog.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/myprog.dir/build.make CMakeFiles/myprog.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/mnt/c/l3/Lab3OOP/build/CMakeFiles --progress-num=1,2,3,4 "Built target myprog"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/mnt/c/Lab3OOP-main/build/CMakeFiles --progress-num=1,2,3,4 "Built target myprog"
 .PHONY : CMakeFiles/myprog.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/myprog.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/l3/Lab3OOP/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Lab3OOP-main/build/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/myprog.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/l3/Lab3OOP/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Lab3OOP-main/build/CMakeFiles 0
 .PHONY : CMakeFiles/myprog.dir/rule
 
 # Convenience name for target.
