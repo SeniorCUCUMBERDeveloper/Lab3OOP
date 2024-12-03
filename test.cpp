@@ -158,7 +158,7 @@ TEST(StorageTest, Remove){
     storage.addContainer(container, 1, 1 , 14);//8
     std::cout << storage.getInfo() << std::endl;
     std::cout<< std::endl;
-    EXPECT_THROW(storage.removeContainer("90_1056_14"), std::invalid_argument);
+    EXPECT_THROW(storage.removeContainer("90_1056_14"), std::runtime_error);
     storage.removeContainer("1_1_14");
     std::vector<std::string> result = storage.getListContainers();
     EXPECT_EQ(result.size(), 7);
@@ -272,6 +272,9 @@ TEST(StorageTest, RemoveHard){
     std::cout << st.getInfo() << std::endl;
     std::vector<std::string> result = st.getListContainers();
     EXPECT_EQ(result.size(), 18);
+    for(auto i = result.begin(); i != result.end(); ++i){
+        std::cout << *i <<std::endl;
+    }
     Storage st1 =  Storage(1, 100, 100, 32, 23.4);
     container1 = std::make_shared<Container>("_", "Cargo B", 70, 80, 27, 23.5, 2.5);
     container2 = std::make_shared<Container>("_", "Cargo B", 1, 1, 1, 23.5, 2.5);
@@ -310,6 +313,9 @@ TEST(StorageTest, RemoveHard){
     std::cout << st2.getInfo() << std::endl;
     std::vector<std::string> result2 = st2.getListContainers();
     EXPECT_EQ(result2.size(), 6);
+    for(auto i = result2.begin(); i != result2.end(); ++i){
+        std::cout << *i <<std::endl;
+    }
 }
 
 
@@ -355,6 +361,9 @@ TEST(OctreeTest, TestIterator){
     st.addContainer(container17, 1, 21, 15);
     EXPECT_NO_THROW(st.removeContainer("1_21_3"));
     auto vec = st.getListContainers();
+    for(auto i = vec.begin(); i != vec.end(); ++i){
+        std::cout << *i <<std::endl;
+    }
     EXPECT_EQ(vec.size(), 18);
     EXPECT_THROW(st.find("0_120_2"), std::runtime_error);
     EXPECT_NO_THROW(st.find("3_1_1"));
@@ -434,6 +443,12 @@ TEST(FindTerminalTest, NotFound){
     terminal.add(1, storage);
     EXPECT_THROW(terminal.find(2), std::invalid_argument);
 }
+
+
+// TEST(OCTREE, ReverseforwardTest){
+//     Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>> tree;
+//     tree.insert()
+// }
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);

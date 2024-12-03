@@ -1,4 +1,4 @@
-CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/Lab3OOP-main/test.cpp \
+CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/Lab3OOP-delitel/test.cpp \
  /usr/include/stdc-predef.h /usr/include/gtest/gtest.h \
  /usr/include/c++/14/cstddef \
  /usr/include/x86_64-linux-gnu/c++/14/bits/c++config.h \
@@ -295,21 +295,21 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/Lab3OOP-main/test.cpp \
  /usr/include/gtest/gtest-test-part.h \
  /usr/include/gtest/gtest-typed-test.h \
  /usr/include/gtest/gtest_pred_impl.h /usr/include/gtest/gtest_prod.h \
- /mnt/c/Lab3OOP-main/./Terminal/Terminal.hpp \
- /mnt/c/Lab3OOP-main/./Terminal/../Storage/Storage.hpp \
- /mnt/c/Lab3OOP-main/./Terminal/../Storage/../Container/I/IContainer.hpp \
+ /mnt/c/Lab3OOP-delitel/./Terminal/Terminal.hpp \
+ /mnt/c/Lab3OOP-delitel/./Terminal/../Storage/Storage.hpp \
+ /mnt/c/Lab3OOP-delitel/./Terminal/../Storage/../Container/I/IContainer.hpp \
  /usr/include/c++/14/thread /usr/include/c++/14/list \
  /usr/include/c++/14/bits/stl_list.h /usr/include/c++/14/bits/list.tcc \
  /usr/include/c++/14/shared_mutex \
- /mnt/c/Lab3OOP-main/./Terminal/../Storage/../Octree/Octree.hpp \
+ /mnt/c/Lab3OOP-delitel/./Terminal/../Storage/../Octree/Octree.hpp \
  /usr/include/c++/14/algorithm /usr/include/c++/14/bits/stl_algo.h \
  /usr/include/c++/14/bits/algorithmfwd.h \
  /usr/include/c++/14/bits/stl_heap.h \
  /usr/include/c++/14/bits/uniform_int_dist.h \
  /usr/include/c++/14/bits/ranges_algo.h \
  /usr/include/c++/14/pstl/glue_algorithm_defs.h \
- /mnt/c/Lab3OOP-main/./Terminal/../Storage/../Octree/ContainerPosition.hpp \
- /mnt/c/Lab3OOP-main/./Terminal/../Storage/../Octree/Point.hpp \
+ /mnt/c/Lab3OOP-delitel/./Terminal/../Storage/../Octree/ContainerPosition.hpp \
+ /mnt/c/Lab3OOP-delitel/./Terminal/../Storage/../Octree/Point.hpp \
  /usr/include/c++/14/stack /usr/include/c++/14/deque \
  /usr/include/c++/14/bits/stl_deque.h /usr/include/c++/14/bits/deque.tcc \
  /usr/include/c++/14/bits/stl_stack.h /usr/include/c++/14/regex \
@@ -324,16 +324,16 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/Lab3OOP-main/test.cpp \
  /usr/include/c++/14/bits/regex.h /usr/include/c++/14/bits/regex.tcc \
  /usr/include/c++/14/bits/regex_executor.h \
  /usr/include/c++/14/bits/regex_executor.tcc \
- /mnt/c/Lab3OOP-main/./Terminal/../Storage/../Checker/Checker.hpp \
- /mnt/c/Lab3OOP-main/./Terminal/../Storage/../Checker/../Container/Container.hpp \
- /mnt/c/Lab3OOP-main/./Terminal/../Storage/../Checker/../Container/./I/IContainer.hpp \
- /mnt/c/Lab3OOP-main/./Storage/Storage.hpp \
- /mnt/c/Lab3OOP-main/./Container/Container.hpp \
- /mnt/c/Lab3OOP-main/./Container/FragileContainer.hpp \
- /mnt/c/Lab3OOP-main/./Container/./I/IFragile.hpp \
- /mnt/c/Lab3OOP-main/./Container/./I/IContainer.hpp \
- /mnt/c/Lab3OOP-main/./Container/RefragedContainer.hpp \
- /mnt/c/Lab3OOP-main/./Container/./I/IRefragedContainer.hpp \
- /mnt/c/Lab3OOP-main/./Container/Frag_and_Ref.hpp \
- /mnt/c/Lab3OOP-main/./Container/FragileContainer.hpp \
- /mnt/c/Lab3OOP-main/./Container/RefragedContainer.hpp
+ /mnt/c/Lab3OOP-delitel/./Terminal/../Storage/../Checker/Checker.hpp \
+ /mnt/c/Lab3OOP-delitel/./Terminal/../Storage/../Checker/../Container/Container.hpp \
+ /mnt/c/Lab3OOP-delitel/./Terminal/../Storage/../Checker/../Container/./I/IContainer.hpp \
+ /mnt/c/Lab3OOP-delitel/./Storage/Storage.hpp \
+ /mnt/c/Lab3OOP-delitel/./Container/Container.hpp \
+ /mnt/c/Lab3OOP-delitel/./Container/FragileContainer.hpp \
+ /mnt/c/Lab3OOP-delitel/./Container/./I/IFragile.hpp \
+ /mnt/c/Lab3OOP-delitel/./Container/./I/IContainer.hpp \
+ /mnt/c/Lab3OOP-delitel/./Container/RefragedContainer.hpp \
+ /mnt/c/Lab3OOP-delitel/./Container/./I/IRefragedContainer.hpp \
+ /mnt/c/Lab3OOP-delitel/./Container/Frag_and_Ref.hpp \
+ /mnt/c/Lab3OOP-delitel/./Container/FragileContainer.hpp \
+ /mnt/c/Lab3OOP-delitel/./Container/RefragedContainer.hpp

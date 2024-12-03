@@ -13,12 +13,19 @@
 #include <regex>
 #define MAX_ITEMS 4
 
+
 template<typename T>
 concept NumericConcept = std::is_arithmetic_v<T> || std::convertible_to<T, double>;
 
 
+template<typename T>
+concept StringId = std::same_as<T, std::string>;
+
+
 template <typename T>
-concept SmartPointerConcept = std::is_base_of<std::shared_ptr<typename T::element_type>, T>::value || std::is_base_of<std::unique_ptr<typename T::element_type>, T>::value;
+concept ValidKeyFormat = requires(T str) {
+    { std::regex_match(str, std::regex(R"((\d+|\d+\.\d+)_(\d+|\d+\.\d+)_(\d+|\d+\.\d+))")) };
+};
 
 
 template<typename T>
@@ -48,12 +55,9 @@ concept ContainerPositionConcept = requires(T c) {
 };
 
 
-template <typename N>
-concept ContainerConcept = SmartPointerConcept<N>;
-
-
 template<typename T>
 concept BoundingBoxConcept = PointConcept<Point<T>>;
+
 
 template <typename T>
 requires BoundingBoxConcept<T>
@@ -76,8 +80,8 @@ struct BoundingBox{
 
 
 
-template <typename T, typename N, typename CPosType>
-requires ContainerConcept<N> && ContainerPositionConcept<CPosType> && BoundingBoxConcept<T>
+template <typename T, typename N, typename CPosType, typename S>
+requires ContainerPositionConcept<CPosType> && BoundingBoxConcept<T> && StringId<S>
 class Octree{
     public:
         struct Node{
@@ -98,48 +102,69 @@ class Octree{
         };
 
 
-        class iterator {
-            private:
-                std::stack<std::shared_ptr<Node>> nodeStack;
+    class BidirectionalIterator {
+        private:
+            std::stack<std::shared_ptr<Node>> forwardStack;
+            std::stack<std::shared_ptr<Node>> backupStack;
 
-            public:
-                using value_type = std::shared_ptr<Node>;
-                using pointer = value_type*;
-                using reference = value_type&;
-                using difference_type = std::ptrdiff_t;
-                using iterator_category = std::forward_iterator_tag;
+        public:
+            using value_type = std::shared_ptr<Node>;
+            using pointer = value_type*;
+            using reference = value_type&;
+            using difference_type = std::ptrdiff_t;
+            using iterator_category = std::bidirectional_iterator_tag;
 
-            public:
-
-                explicit iterator(std::shared_ptr<Node>  root) {
-                    if (root != nullptr) {
-                        nodeStack.push(root);
-                    }
+            explicit BidirectionalIterator(std::shared_ptr<Node> root) {
+                if (root != nullptr) {
+                    forwardStack.push(root);
                 }
+            }
 
-                reference operator*() {
-                    return nodeStack.top();
+            
+            reference operator*() {
+                if (forwardStack.empty()) {
+                    throw std::out_of_range("Stack of iterator's is empty");
                 }
+                return forwardStack.top();
+            }
 
-
-                iterator& operator++() {
-                    if (nodeStack.empty()) return *this;
-                    std::shared_ptr<Node> current = nodeStack.top();
-                    nodeStack.pop();
-                    for (int i = 7; i >= 0; --i) {
-                        if (current->children[i]) {
-                            nodeStack.push(current->children[i]);
-                        }
-                    }
+            
+            BidirectionalIterator& operator++() {
+                if (forwardStack.empty()){ 
                     return *this;
                 }
-
-                
-                bool operator!=(const iterator& other) const {
-                    return nodeStack != other.nodeStack;
+                auto currentNode = forwardStack.top();
+                forwardStack.pop();
+                backupStack.push(currentNode);
+                for (int i = 7; i >= 0; --i) {
+                    if (currentNode->children[i]) {
+                        forwardStack.push(currentNode->children[i]);
+                    }
                 }
-        };
+                return *this; 
+            }
 
+            
+            BidirectionalIterator& operator--() {
+                if (backupStack.empty()) return *this;
+                auto prevNode = backupStack.top();
+                backupStack.pop();
+                forwardStack.push(prevNode);
+                return *this;
+            }
+
+            bool operator!=(const BidirectionalIterator& other) const {
+                return forwardStack != other.forwardStack || backupStack != other.backupStack;
+            }
+
+            bool hasNext() const {
+                return !forwardStack.empty();
+            }
+
+            bool hasPrev() const {
+                return !backupStack.empty();
+            }
+    };
     private:
         std::shared_ptr<Node> root;
         T MIN_SIZE = 1;
@@ -147,8 +172,8 @@ class Octree{
 
         Octree(){}
         Octree(BoundingBox<T> bbox) {
-        root = std::make_shared<Node>(bbox);
-    }
+            root = std::make_shared<Node>(bbox);
+        }
 
 
         std::shared_ptr<Node>  getRoot(){
@@ -156,12 +181,8 @@ class Octree{
         }
 
 
-        iterator begin() const{
-            return iterator(root);
-        }
-
-        iterator end() const{
-            return iterator(nullptr);
+       BidirectionalIterator createIterator() const{
+            return BidirectionalIterator(root);
         }
 
 
@@ -178,84 +199,13 @@ class Octree{
         }
 
 
-       void split(std::shared_ptr<Node> node) {
-        if (!node) return;
-        if (node->children[0] != nullptr) return;
-
-        Point<T> min = node->box.min;
-        Point<T> max = node->box.max;
-
-        T midX = (min.x + max.x) / 2;
-        T midY = (min.y + max.y) / 2;
-        T midZ = (min.z + max.z) / 2;
-
-        BoundingBox<T> box0 = BoundingBox<T>(min, Point<T>(midX, midY, midZ));
-        BoundingBox<T> box1 = BoundingBox<T>(Point<T>(midX, min.y, min.z), Point<T>(max.x, midY, midZ));
-        BoundingBox<T> box2 = BoundingBox<T>(Point<T>(min.x, midY, min.z), Point<T>(midX, max.y, midZ));
-        BoundingBox<T> box3 = BoundingBox<T>(Point<T>(midX, midY, min.z), Point<T>(max.x, max.y, midZ));
-        BoundingBox<T> box4 = BoundingBox<T>(Point<T>(min.x, min.y, midZ), Point<T>(midX, midY, max.z));
-        BoundingBox<T> box5 = BoundingBox<T>(Point<T>(midX, min.y, midZ), Point<T>(max.x, midY, max.z));
-        BoundingBox<T> box6 = BoundingBox<T>(Point<T>(min.x, midY, midZ), Point<T>(midX, max.y, max.z));
-        BoundingBox<T> box7 = BoundingBox<T>(Point<T>(midX, midY, midZ), max);
-
-        if(!box0.isValid(MIN_SIZE) || !box1.isValid(MIN_SIZE)
-         || !box2.isValid(MIN_SIZE) || !box3.isValid(MIN_SIZE)
-          ||!box4.isValid(MIN_SIZE) || !box5.isValid(MIN_SIZE)
-           ||!box6.isValid(MIN_SIZE) || !box7.isValid(MIN_SIZE)){
-            return;
-           }
-
-        node->children[0] = std::make_shared<Node>(box0); // 0: мин
-        node->children[1] = std::make_shared<Node>(box1); // 1: x+
-        node->children[2] = std::make_shared<Node>(box2); // 2: y+
-        node->children[3] = std::make_shared<Node>(box3); // 3: xy+
-        node->children[4] = std::make_shared<Node>(box4); // 4: z+
-        node->children[5] = std::make_shared<Node>(box5); // 5: x+z+
-        node->children[6] = std::make_shared<Node>(box6); // 6: y+z+
-        node->children[7] = std::make_shared<Node>(box7); // 7: xyz+
-        node->children[0]->parent = node;
-        node->children[1]->parent = node;
-        node->children[2]->parent = node;
-        node->children[3]->parent = node;
-        node->children[4]->parent = node;
-        node->children[5]->parent = node;
-        node->children[6]->parent = node;
-        node->children[7]->parent = node;
-        
-        for (auto it = node->con.begin(); it != node->con.end(); ) {
-            bool moved = false;
-
-            for (int i = 0; i < 8; ++i) {
-                if (node->children[i]->box.contains(it->first.LLDown) && 
-                    node->children[i]->box.contains(it->first.LLUp) &&
-                    node->children[i]->box.contains(it->first.LRDown) &&
-                    node->children[i]->box.contains(it->first.LRUp) &&
-                    node->children[i]->box.contains(it->first.RLDown) &&
-                    node->children[i]->box.contains(it->first.RLUp) &&
-                    node->children[i]->box.contains(it->first.RRDown) &&
-                    node->children[i]->box.contains(it->first.RRUp)) {
-                    node->children[i]->con.push_back(*it);
-                    moved = true;
-                    break;
-                }
-            }
-
-            if (moved) {
-                it = node->con.erase(it);
-            } else {
-                ++it;
-            }
+        Octree Clone() const{
+            auto clone = Octree(this->root->box);
+            return clone;
         }
-    }
-
-    Octree Clone() const{
-        auto clone = Octree(this->root->box);
-        return clone;
-    }
 
 
-
-        bool remove(std::string id){
+        bool remove(std::string id) requires ValidKeyFormat<S>{
             bool collision = false;
             std::shared_ptr<Node> copy = nullptr;
             Point<T> point = parsePoint(id);
@@ -269,20 +219,13 @@ class Octree{
         }
 
 
-        std::shared_ptr<Node> search(std::string id) const{
+        std::shared_ptr<Node> search(std::string id) const requires ValidKeyFormat<S>{
             Point<T> point = parsePoint(id);
             std::shared_ptr<Node> copyCache = nullptr;
             searchR(id, root, copyCache, point);
             return copyCache;
         }
 
-
-        std::pair<CPosType, N> findI(std::string id) const{
-            Point<T> point = parsePoint(id);
-            std::pair<CPosType, N> it = std::make_pair(CPosType(), nullptr);
-            findI(id, root, &it, point);
-            return it;
-        }
 
 
         std::vector<std::pair<CPosType, N>> searchDepth() const{
@@ -298,11 +241,6 @@ class Octree{
             std::vector<std::pair<CPosType, N>> copy(0);
             SearchInsert(container, pos, root, copyCache, copy, collision);
             return copyCache;
-        }
-
-
-        void print() const {
-            printNode(root, 0);
         }
 
 
@@ -399,6 +337,83 @@ class Octree{
         private:
 
 
+
+        void split(std::shared_ptr<Node> node) {
+            if (!node){
+                return;
+            }
+            if (node->children[0] != nullptr){
+                return;
+            }
+
+            Point<T> min = node->box.min;
+            Point<T> max = node->box.max;
+
+            T midX = (min.x + max.x) / 2;
+            T midY = (min.y + max.y) / 2;
+            T midZ = (min.z + max.z) / 2;
+
+            BoundingBox<T> box0 = BoundingBox<T>(min, Point<T>(midX, midY, midZ));
+            BoundingBox<T> box1 = BoundingBox<T>(Point<T>(midX, min.y, min.z), Point<T>(max.x, midY, midZ));
+            BoundingBox<T> box2 = BoundingBox<T>(Point<T>(min.x, midY, min.z), Point<T>(midX, max.y, midZ));
+            BoundingBox<T> box3 = BoundingBox<T>(Point<T>(midX, midY, min.z), Point<T>(max.x, max.y, midZ));
+            BoundingBox<T> box4 = BoundingBox<T>(Point<T>(min.x, min.y, midZ), Point<T>(midX, midY, max.z));
+            BoundingBox<T> box5 = BoundingBox<T>(Point<T>(midX, min.y, midZ), Point<T>(max.x, midY, max.z));
+            BoundingBox<T> box6 = BoundingBox<T>(Point<T>(min.x, midY, midZ), Point<T>(midX, max.y, max.z));
+            BoundingBox<T> box7 = BoundingBox<T>(Point<T>(midX, midY, midZ), max);
+
+            if(!box0.isValid(MIN_SIZE) || !box1.isValid(MIN_SIZE)
+            || !box2.isValid(MIN_SIZE) || !box3.isValid(MIN_SIZE)
+            ||!box4.isValid(MIN_SIZE) || !box5.isValid(MIN_SIZE)
+            ||!box6.isValid(MIN_SIZE) || !box7.isValid(MIN_SIZE)){
+                return;
+            }
+
+            node->children[0] = std::make_shared<Node>(box0); // 0: мин
+            node->children[1] = std::make_shared<Node>(box1); // 1: x+
+            node->children[2] = std::make_shared<Node>(box2); // 2: y+
+            node->children[3] = std::make_shared<Node>(box3); // 3: xy+
+            node->children[4] = std::make_shared<Node>(box4); // 4: z+
+            node->children[5] = std::make_shared<Node>(box5); // 5: x+z+
+            node->children[6] = std::make_shared<Node>(box6); // 6: y+z+
+            node->children[7] = std::make_shared<Node>(box7); // 7: xyz+
+            node->children[0]->parent = node;
+            node->children[1]->parent = node;
+            node->children[2]->parent = node;
+            node->children[3]->parent = node;
+            node->children[4]->parent = node;
+            node->children[5]->parent = node;
+            node->children[6]->parent = node;
+            node->children[7]->parent = node;
+            
+            for (auto it = node->con.begin(); it != node->con.end(); ) {
+                bool moved = false;
+
+                for (int i = 0; i < 8; ++i) {
+                    if (node->children[i]->box.contains(it->first.LLDown) && 
+                        node->children[i]->box.contains(it->first.LLUp) &&
+                        node->children[i]->box.contains(it->first.LRDown) &&
+                        node->children[i]->box.contains(it->first.LRUp) &&
+                        node->children[i]->box.contains(it->first.RLDown) &&
+                        node->children[i]->box.contains(it->first.RLUp) &&
+                        node->children[i]->box.contains(it->first.RRDown) &&
+                        node->children[i]->box.contains(it->first.RRUp)) {
+                        node->children[i]->con.push_back(*it);
+                        moved = true;
+                        break;
+                    }
+                }
+
+                if (moved) {
+                    it = node->con.erase(it);
+                } else {
+                    ++it;
+                }
+            }
+        }
+
+
+
         void  searchUnderOct(std::shared_ptr<Node> node, std::vector<std::pair<CPosType, N>>& vec) const{
             if(node == nullptr){
                 return;
@@ -408,29 +423,6 @@ class Octree{
             }
             for(int i = 0; i < 8; ++i){
                 searchUnderOct(node->children[i], vec);
-            }
-        }
-
-
-        void findI(std::string id, std::shared_ptr<Node> node, std::pair<CPosType, N>* it, Point<T> point) const{
-            if(node == nullptr){
-                return;
-            }
-            if(!node->box.contains(point)){
-                return;
-            }
-            if(node->con.empty() == false){
-                for(auto& i : node->con){
-                    if(i.first.LLDown.x != -1 && i.second != nullptr && number(i.first.LLDown) == id){
-                        *it = i;
-                        return;
-                    }
-                }
-            }
-            if(node->isLeaf() == false){
-                for(int i = 0; i < 8; ++i){
-                    findI(id, node->children[i], it, point);
-                }
             }
         }
 
@@ -492,19 +484,19 @@ class Octree{
                     return;
                 }
                 if(node->con.empty() == false){
-                for(auto& i : node->con){
-                    if(i.first.LLDown.x != -1 && i.second != nullptr && number(i.first.LLDown) == id){
-                        copyCache = node;
-                        return;
+                    for(auto& i : node->con){
+                        if(i.first.LLDown.x != -1  && number(i.first.LLDown) == id){
+                            copyCache = node;
+                            return;
+                        }
+                    }
+                }
+                if(node->isLeaf() == false){
+                    for(int i = 0; i < 8; ++i){
+                        searchR(id, node->children[i], copyCache, point);
                     }
                 }
             }
-            if(node->isLeaf() == false){
-                for(int i = 0; i < 8; ++i){
-                    searchR(id, node->children[i], copyCache, point);
-                }
-            }
-        }
 
 
             void removeR(std::string id, std::shared_ptr<Node> node, bool& collision, std::shared_ptr<Node>& copyCache, Point<T> point){
@@ -519,7 +511,7 @@ class Octree{
                 }
                 if(node->con.empty() == false){
                     for(auto& i : node->con){
-                        if(i.first.LLDown.x != -1 && i.second != nullptr && number(i.first.LLDown) == id){
+                        if(i.first.LLDown.x != -1  && number(i.first.LLDown) == id){
                             if(i.second != nullptr){
                                 i.second.reset();
                                 node->con.erase(std::remove(node->con.begin(), node->con.end(), i), node->con.end());
@@ -628,37 +620,24 @@ class Octree{
             }
 
 
-            void printNode(std::shared_ptr<Node> node, int depth) const {
-                if (!node) return;
-
-                std::cout << std::string(depth, '-') << "Node at depth " << depth 
-                        << ": " << node->box.min.x << ", " << node->box.min.y << ", " << node->box.min.z 
-                        << " to " << node->box.max.x << ", " << node->box.max.y << ", " << node->box.max.z << "\n";
-                for (auto& child : node->children) {
-                    printNode(child, depth + 1);
-                }
+            static std::string number(const Point<T>& p) {
+                return std::to_string(p.x) + "_" + std::to_string(p.y) + "_" + std::to_string(p.z);
             }
 
-            static std::string number(const Point<T>& p) {
-            return std::to_string(p.x) + "_" + std::to_string(p.y) + "_" + std::to_string(p.z);
-        }
 
-
-        static Point<T> parsePoint(const std::string& str){
-            static_assert(PointConcept<Point<T>>, "Point должен удовлетворять PointConcept");
-            Point<T> point;
-            std::regex re(R"(([-+]?\d*\.?\d+)_([-+]?\d*\.?\d+)_([-+]?\d*\.?\d+))");
-            std::smatch match;
-            if (std::regex_match(str, match, re)) {
+            static Point<T> parsePoint(const S& str){
+                static_assert(PointConcept<Point<T>>, "Point должен удовлетворять PointConcept");
+                static_assert(StringId<S>, "Строка должна удовлетворять StringId");
+                static_assert(ValidKeyFormat<S>, "Строка должна удовлетворять ValidKeyFormat");
+                Point<T> point;
+                std::regex pattern(R"((\d+|\d+\.\d+)_(\d+|\d+\.\d+)_(\d+|\d+\.\d+))");
+                std::smatch match;
+                std::regex_match(str, match, pattern);
                 point.x = static_cast<T>(std::stod(match[1].str()));
                 point.y = static_cast<T>(std::stod(match[2].str()));
                 point.z = static_cast<T>(std::stod(match[3].str()));
-            } else {
-                throw std::invalid_argument("Invalid format for Point"); // 
+                return point;
             }
-
-            return point;
-        }
                 
 };
 

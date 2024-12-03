@@ -1,7 +1,7 @@
 CMakeFiles/myprog.dir/Storage/Storage.cpp.o: \
- /mnt/c/Lab3OOP-main/Storage/Storage.cpp /usr/include/stdc-predef.h \
- /mnt/c/Lab3OOP-main/Storage/Storage.hpp \
- /mnt/c/Lab3OOP-main/Storage/../Container/I/IContainer.hpp \
+ /mnt/c/Lab3OOP-delitel/Storage/Storage.cpp /usr/include/stdc-predef.h \
+ /mnt/c/Lab3OOP-delitel/Storage/Storage.hpp \
+ /mnt/c/Lab3OOP-delitel/Storage/../Container/I/IContainer.hpp \
  /usr/include/c++/14/tuple /usr/include/c++/14/bits/stl_pair.h \
  /usr/include/c++/14/type_traits \
  /usr/include/x86_64-linux-gnu/c++/14/bits/c++config.h \
@@ -218,15 +218,15 @@ CMakeFiles/myprog.dir/Storage/Storage.cpp.o: \
  /usr/include/c++/14/bits/stl_list.h /usr/include/c++/14/bits/list.tcc \
  /usr/include/c++/14/mutex /usr/include/c++/14/bits/unique_lock.h \
  /usr/include/c++/14/shared_mutex \
- /mnt/c/Lab3OOP-main/Storage/../Octree/Octree.hpp \
+ /mnt/c/Lab3OOP-delitel/Storage/../Octree/Octree.hpp \
  /usr/include/c++/14/algorithm /usr/include/c++/14/bits/stl_algo.h \
  /usr/include/c++/14/bits/algorithmfwd.h \
  /usr/include/c++/14/bits/stl_heap.h \
  /usr/include/c++/14/bits/uniform_int_dist.h \
  /usr/include/c++/14/bits/ranges_algo.h \
  /usr/include/c++/14/pstl/glue_algorithm_defs.h \
- /mnt/c/Lab3OOP-main/Storage/../Octree/ContainerPosition.hpp \
- /mnt/c/Lab3OOP-main/Storage/../Octree/Point.hpp \
+ /mnt/c/Lab3OOP-delitel/Storage/../Octree/ContainerPosition.hpp \
+ /mnt/c/Lab3OOP-delitel/Storage/../Octree/Point.hpp \
  /usr/include/c++/14/stack /usr/include/c++/14/deque \
  /usr/include/c++/14/bits/stl_deque.h /usr/include/c++/14/bits/deque.tcc \
  /usr/include/c++/14/bits/stl_stack.h /usr/include/c++/14/regex \
@@ -253,18 +253,18 @@ CMakeFiles/myprog.dir/Storage/Storage.cpp.o: \
  /usr/include/c++/14/bits/regex.h /usr/include/c++/14/bits/regex.tcc \
  /usr/include/c++/14/bits/regex_executor.h \
  /usr/include/c++/14/bits/regex_executor.tcc \
- /mnt/c/Lab3OOP-main/Storage/../Checker/Checker.hpp \
+ /mnt/c/Lab3OOP-delitel/Storage/../Checker/Checker.hpp \
  /usr/include/c++/14/functional /usr/include/c++/14/unordered_map \
  /usr/include/c++/14/bits/unordered_map.h \
  /usr/include/c++/14/bits/hashtable.h \
  /usr/include/c++/14/bits/hashtable_policy.h \
  /usr/include/c++/14/bits/enable_special_members.h \
  /usr/include/c++/14/bits/erase_if.h /usr/include/c++/14/array \
- /mnt/c/Lab3OOP-main/Storage/../Checker/../Container/Container.hpp \
- /mnt/c/Lab3OOP-main/Storage/../Checker/../Container/./I/IContainer.hpp \
- /mnt/c/Lab3OOP-main/Storage/../Container/I/IFragile.hpp \
- /mnt/c/Lab3OOP-main/Storage/../Container/I/IContainer.hpp \
- /mnt/c/Lab3OOP-main/Storage/../Container/I/IRefragedContainer.hpp \
+ /mnt/c/Lab3OOP-delitel/Storage/../Checker/../Container/Container.hpp \
+ /mnt/c/Lab3OOP-delitel/Storage/../Checker/../Container/./I/IContainer.hpp \
+ /mnt/c/Lab3OOP-delitel/Storage/../Container/I/IFragile.hpp \
+ /mnt/c/Lab3OOP-delitel/Storage/../Container/I/IContainer.hpp \
+ /mnt/c/Lab3OOP-delitel/Storage/../Container/I/IRefragedContainer.hpp \
  /usr/include/c++/14/numeric /usr/include/c++/14/bits/stl_numeric.h \
  /usr/include/c++/14/pstl/glue_numeric_defs.h /usr/include/c++/14/cmath \
  /usr/include/math.h /usr/include/x86_64-linux-gnu/bits/math-vector.h \

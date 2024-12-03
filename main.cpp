@@ -21,7 +21,7 @@ int main(){
    Terminal terminal;
    
    // Создаем новый склад
-   Storage* st = new Storage(1, 32, 32, 16, 23.4);
+   Storage* st = new Storage(1, 320, 320, 160, 23.4);
      terminal.add(1, st);
      Storage* s = terminal.find(1);
      //st->addExternalCheckFunction(checkTemperature);

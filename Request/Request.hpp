@@ -25,9 +25,9 @@ class Request{
             std::uniform_int_distribution<int> RotateMethodDist(0, 5);
             std::uniform_int_distribution<int> indexDist(0, 100);
             std::vector<std::string> id;
-            for(size_t i = 0; i < 300; ++i){
+            for(size_t i = 0; i < 30; ++i){
                 try{
-                    int action = actionDist(gen);
+                    int action = 0;
                     if(action == 0){
                         std::shared_ptr<IContainer> c = std::make_shared<Container>("0", "Andre", DimensionsDist(gen), DimensionsDist(gen), 1, (double)(DimensionsDist(gen)), (double)(DimensionsDist(gen)));
                         std::string flag = storage.addContainer(c);
@@ -48,7 +48,7 @@ class Request{
                 //std::this_thread::sleep_for(std::chrono::milliseconds(500)); не надо здесь
             }
             bool flag = false;
-            for(int i = 0; i < 75; ++i){
+            for(int i = 0; i < 5; ++i){
                 try{
                 id = storage.getListContainers();
                         if(id.empty()){

@@ -18,7 +18,7 @@ class Storage{
         int number;
         int length, width, height;
         double temperature;
-        Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>> containers;
+        Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>, std::string> containers;
         Checker<int> checker;
 
         public:

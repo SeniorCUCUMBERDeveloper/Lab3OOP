@@ -1,3 +1,3 @@
-/mnt/c/Lab3OOP-main/build/CMakeFiles/myprog.dir
-/mnt/c/Lab3OOP-main/build/CMakeFiles/edit_cache.dir
-/mnt/c/Lab3OOP-main/build/CMakeFiles/rebuild_cache.dir
+/mnt/c/Lab3OOP-delitel/build/CMakeFiles/myprog.dir
+/mnt/c/Lab3OOP-delitel/build/CMakeFiles/edit_cache.dir
+/mnt/c/Lab3OOP-delitel/build/CMakeFiles/rebuild_cache.dir

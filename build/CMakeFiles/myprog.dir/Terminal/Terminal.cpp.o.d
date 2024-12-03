@@ -1,6 +1,6 @@
 CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: \
- /mnt/c/Lab3OOP-main/Terminal/Terminal.cpp /usr/include/stdc-predef.h \
- /mnt/c/Lab3OOP-main/Terminal/Terminal.hpp /usr/include/c++/14/map \
+ /mnt/c/Lab3OOP-delitel/Terminal/Terminal.cpp /usr/include/stdc-predef.h \
+ /mnt/c/Lab3OOP-delitel/Terminal/Terminal.hpp /usr/include/c++/14/map \
  /usr/include/c++/14/bits/requires_hosted.h \
  /usr/include/x86_64-linux-gnu/c++/14/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/14/bits/os_defines.h \
@@ -162,8 +162,8 @@ CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: \
  /usr/include/c++/14/bits/basic_ios.tcc \
  /usr/include/c++/14/bits/ostream.tcc /usr/include/c++/14/istream \
  /usr/include/c++/14/bits/istream.tcc \
- /mnt/c/Lab3OOP-main/Terminal/../Storage/Storage.hpp \
- /mnt/c/Lab3OOP-main/Terminal/../Storage/../Container/I/IContainer.hpp \
+ /mnt/c/Lab3OOP-delitel/Terminal/../Storage/Storage.hpp \
+ /mnt/c/Lab3OOP-delitel/Terminal/../Storage/../Container/I/IContainer.hpp \
  /usr/include/c++/14/vector /usr/include/c++/14/bits/stl_uninitialized.h \
  /usr/include/c++/14/bits/stl_vector.h \
  /usr/include/c++/14/bits/stl_bvector.h \
@@ -222,15 +222,15 @@ CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: \
  /usr/include/c++/14/bits/stl_list.h /usr/include/c++/14/bits/list.tcc \
  /usr/include/c++/14/mutex /usr/include/c++/14/bits/unique_lock.h \
  /usr/include/c++/14/shared_mutex \
- /mnt/c/Lab3OOP-main/Terminal/../Storage/../Octree/Octree.hpp \
+ /mnt/c/Lab3OOP-delitel/Terminal/../Storage/../Octree/Octree.hpp \
  /usr/include/c++/14/algorithm /usr/include/c++/14/bits/stl_algo.h \
  /usr/include/c++/14/bits/algorithmfwd.h \
  /usr/include/c++/14/bits/stl_heap.h \
  /usr/include/c++/14/bits/uniform_int_dist.h \
  /usr/include/c++/14/bits/ranges_algo.h \
  /usr/include/c++/14/pstl/glue_algorithm_defs.h \
- /mnt/c/Lab3OOP-main/Terminal/../Storage/../Octree/ContainerPosition.hpp \
- /mnt/c/Lab3OOP-main/Terminal/../Storage/../Octree/Point.hpp \
+ /mnt/c/Lab3OOP-delitel/Terminal/../Storage/../Octree/ContainerPosition.hpp \
+ /mnt/c/Lab3OOP-delitel/Terminal/../Storage/../Octree/Point.hpp \
  /usr/include/c++/14/stack /usr/include/c++/14/deque \
  /usr/include/c++/14/bits/stl_deque.h /usr/include/c++/14/bits/deque.tcc \
  /usr/include/c++/14/bits/stl_stack.h /usr/include/c++/14/regex \
@@ -254,12 +254,12 @@ CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: \
  /usr/include/c++/14/bits/regex.h /usr/include/c++/14/bits/regex.tcc \
  /usr/include/c++/14/bits/regex_executor.h \
  /usr/include/c++/14/bits/regex_executor.tcc \
- /mnt/c/Lab3OOP-main/Terminal/../Storage/../Checker/Checker.hpp \
+ /mnt/c/Lab3OOP-delitel/Terminal/../Storage/../Checker/Checker.hpp \
  /usr/include/c++/14/functional /usr/include/c++/14/unordered_map \
  /usr/include/c++/14/bits/unordered_map.h \
  /usr/include/c++/14/bits/hashtable.h \
  /usr/include/c++/14/bits/hashtable_policy.h \
  /usr/include/c++/14/bits/enable_special_members.h \
  /usr/include/c++/14/array \
- /mnt/c/Lab3OOP-main/Terminal/../Storage/../Checker/../Container/Container.hpp \
- /mnt/c/Lab3OOP-main/Terminal/../Storage/../Checker/../Container/./I/IContainer.hpp
+ /mnt/c/Lab3OOP-delitel/Terminal/../Storage/../Checker/../Container/Container.hpp \
+ /mnt/c/Lab3OOP-delitel/Terminal/../Storage/../Checker/../Container/./I/IContainer.hpp
