@@ -6,48 +6,93 @@
 #include "./Container/RefragedContainer.hpp"
 #include "./Request/Request.hpp"
 
+
+void checkTemperature(Storage& storage, IContainer* container, ContainerPosition<int> pos){
+    IRefragedContainer* ref = dynamic_cast<IRefragedContainer*>(container);
+    if(((*container).isType() == "Refraged" || (*container).isType() == "Fragile and Refraged Container") &&
+    storage.getTemperature() > (*ref).getMaxTemperature())
+    {
+        throw std::invalid_argument("Container is too hot");
+    }
+}
+
+
 int main(){
    Terminal terminal;
    
    // Создаем новый склад
    Storage* st = new Storage(1, 32, 32, 16, 23.4);
      terminal.add(1, st);
-  //  Request request(st, 15);
-  //  std::thread requestThread(&Request::RequestQ, &request);
-  //  requestThread.join();
+     Storage* s = terminal.find(1);
+     //st->addExternalCheckFunction(checkTemperature);
+   Request request(*s, 50);
+   std::thread requestThread(&Request::RequestQ, &request);
+    requestThread.join();
+    //  std::shared_ptr<IContainer> c = std::make_shared<Container>("0", "Andre", 9, 4, 1, 23, 4);
+    //  st->addContainer(c, 8, 0, 0);
+    //  c = std::make_shared<Container>("0", "Andre", 2, 8, 1, 23, 4);
+    //  //st->addContainer(c, 29, 0, 0);
+    //  c = std::make_shared<Container>("0", "Andre", 8, 7, 1, 23, 4);
+    //  st->addContainer(c, 24, 8, 0);
+    //  c = std::make_shared<Container>("0", "Andre", 10, 10, 1, 23, 4);
+    //  st->addContainer(c, 0, 20, 0);
+  //   std::cout << s->getListContainers().size()  << std::endl;
    // //st->getInfoAboutStorage();
-   IContainer* container = new FragileContainer("_", "Cargo A", 2, 5, 2, 21.2, 2.1, 300.0);
-   IContainer* container2 = new Container("_", "Cargo A", 2, 5, 1, 21.2, 2.1);
-   IContainer* container3 = new Container("_", "Cargo A", 2, 5, 1, 21.2, 11.1);
-   IContainer* container4 = new Container("_", "Cargo A", 1, 7, 1, 21.2, 2.1);
-   IContainer* container5 = new Container("_", "Cargo A", 2, 1, 1, 21.2, 2.1);
-     IContainer* container6 = new FragileContainer("_", "Cargo A", 7, 8, 1, 21.2, 2.1, 2.2);
-     IContainer* container7 = new FragileContainer("_", "Cargo A", 7, 8, 3, 21.2, 2.1, 2.2);
-   st->addContainer(container, 0, 0, 0);
-  st->addContainer(container2, 0, 0, 8);
-  // st->addContainer(container3);
-  // st->addContainer(container4);
-  // st->addContainer(container5);
-  // st->addContainer(container6);
-  // st->addContainer(container7);
-  st->check();
-   std::cout << st->getInfo() << std::endl;
+  // IContainer* container = new FragileContainer("_", "Cargo A", 3, 1, 1, 21.2, 2.1, 300000.0);
+  // IContainer* container2 = new Container("_", "Cargo A", 9, 4, 1, 21.2, 2.3);
+  // IContainer* container3 = new Container("x", "Cargo A", 6, 2, 1, 21.2, 11.1);
+  // IContainer* container4 = new Container("_", "Cargo A", 7, 9, 1, 21.2, 2.1);
+  // IContainer* container5 = new Container("_", "Cargo A", 1, 7, 1, 21.2, 2.1);
+  //  IContainer* container6 = new FragileContainer("_", "Cargo A", 6, 2, 1, 21.2, 2.1, 2200.2);
+  //  IContainer* container7 = new FragileContainer("_", "Cargo A", 7, 2, 3, 21.2, 2.1, 1200.2);
+  //  IContainer* container8 = new FragileContainer("_", "Cargoc", 8, 2, 4, 21.2, 3, 2000.3);
+  //  st->addContainer(container);
+  //  st->addContainer(container2);
+  //  st->addContainer(container3);
+  //  st->addContainer(container4);
+  //  st->addContainer(container5);
+  //  st->addContainer(container6);
+  //  st->addContainer(container7);
+  //  st->addContainer(container8);
+  //  delete container;
+  //  delete container2;
+  //  delete container3;
+  //  delete container4;
+  //  delete container5;
+  //  delete container6;
+  //  delete container7;
+  //  delete container8;
+// std::cout << st->getInfo() << std::endl;
+//   //st->removeContainer("0_0_0");
+//   //st->check();
+//   st->removeContainer("0_0_3");
+//   std::cout << st->getInfo() << std::endl;
+//    st->getSize(100, 100, 16);
+//   std::cout << st->getInfoAboutStorage() << std::endl;
+//   std::cout << st->getInfo() << std::endl;
+  // Storage ser(*st);
+  // std::cout << ser.getInfo() << std::endl;
+  //st->addContainer(container7);
+  //st->check();
+   //std::cout << st->getInfo() << std::endl;
     // IContainer* container3 = new Container("_", "Cargo A", 2, 5, 1, 21.2, 11.1);
     //st->addContainer(container3);
   //   std::cout << st->getInfo() << std::endl;
      //st->addContainer(container2);
   //   std::cout << st->getInfo() << std::endl;
-//  IContainer* container4 = new Container("_", "Cargo A", 1, 7, 1, 21.2, 2.1);
-//    IContainer* container5 = new Container("_", "Cargo A", 2, 1, 1, 21.2, 2.1);
-//      IContainer* container6 = new FragileContainer("_", "Cargo A", 7, 8, 1, 21.2, 2.1, 2.2);
-//      IContainer* container7 = new FragileContainer("_", "Cargo A", 7, 8, 3, 21.2, 2.1, 2.2);
+//  IContainer* container4 = new Container("_", "Cargo A", 10, 7, 1, 21.2, 2.1);
+//    IContainer* container5 = new Container("_", "Cargo A", 3, 5, 1, 21.2, 2.1);
+//      IContainer* container6 = new FragileContainer("_", "Cargo A", 3, 6, 1, 21.2, 2.1, 2.2);
+//      IContainer* container7 = new FragileContainer("_", "Cargo A", 8, 1, 1, 21.2, 2.1, 2.2);
 // //   /* std::string f =*/ st->addContainer(container, 0, 0, 0); // (0,0,3) над первым контейнером
      // st->addContainer(container, 0, 0, 0); // (1,0,3) над вторым контейнером
    //   st->moveContainer("0_0_0", 7, 8, 2);
    //   std::cout << st->getInfo() << std::endl;
 //    // st->addContainer(container2, 4, 0, 3); 
-    // st->addContainer(container);
-    // st->addContainer(container2);
+    // st->addContainer(container4, 8, 0, 0);
+    // st->addContainer(container5, 0, 0, 0);
+    //  st->addContainer(container6, 4, 0, 0);
+    // st->addContainer(container7, 0, 0, 2);
     // std::string f = st->addContainer(container5);
     // st->removeContainer(f);
 
@@ -90,7 +135,7 @@ int main(){
    //  st->printPosFULL("0_0_8");
    //  std::cout << st->getInfo() << std::endl;
    //  st->removeContainer("0_0_0");
-   //  std::cout << st->getInfo() << std::endl;
+    // std::cout << st->getInfo() << std::endl;
     // size_t number = st->howContainer(container7);
     // delete container7;
     // std::cout << "Number of Fragile Containers: " << number << std::endl;

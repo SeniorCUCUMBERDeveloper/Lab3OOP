@@ -13,8 +13,9 @@ class Terminal{
     public:
         void add(int id, Storage* storage);
         void remove(int id);
-        void getsizeIStorage(int id, int length, int width, int height);
+        void setsizeStorage(int id, int length, int width, int height);
         void getallInfo(std::ostream& output);
+        Storage* find(int id);
         ~Terminal();
 };
 

@@ -8,10 +8,24 @@
 #include "ContainerPosition.hpp"
 #include <tuple>
 #include <stack>
+#include <memory>
+#include <type_traits>
+#include <regex>
+#define MAX_ITEMS 4
 
 
 template<typename T>
 concept NumericConcept = std::is_arithmetic_v<T> || std::convertible_to<T, double>;
+
+
+template<typename T>
+concept StringId = std::same_as<T, std::string>;
+
+
+template <typename T>
+concept ValidKeyFormat = requires(T str) {
+    { std::regex_match(str, std::regex(R"((\d+|\d+\.\d+)_(\d+|\d+\.\d+)_(\d+|\d+\.\d+))")) };
+};
 
 
 template<typename T>
@@ -41,12 +55,9 @@ concept ContainerPositionConcept = requires(T c) {
 };
 
 
-template <typename N>
-concept ContainerConcept = std::is_pointer_v<N>;
-
-
 template<typename T>
 concept BoundingBoxConcept = PointConcept<Point<T>>;
+
 
 template <typename T>
 requires BoundingBoxConcept<T>
@@ -55,39 +66,33 @@ struct BoundingBox{
     BoundingBox(const Point<T>& m, const Point<T>& ma) : min(m), max(ma) {}
 
     bool contains(Point<T>& p) const {
-        return min.x <= p.x && p.x <= max.x && min.y <= p.y && p.y <= max.y && min.z <= p.z && p.z <= max.z;
+        return min.x < p.x && p.x < max.x && min.y < p.y && p.y < max.y && min.z < p.z && p.z < max.z;
     }
 
-    bool intersects(BoundingBox& other) const {
-        return (max.x >= other.min.x && min.x <= other.max.x) &&
-                (max.y >= other.min.y && min.y <= other.max.y) &&
-                (max.z >= other.min.z && min.z <= other.max.z);
+    bool isValid(const T minSize) const {
+        T width = max.x - min.x;
+        T height = max.y - min.y;
+        T depth = max.z - min.z;
+        return width > minSize && height > minSize && depth > minSize;
     }
+
 };
 
 
 
-template <typename T, typename N, typename CPosType>
-requires ContainerConcept<N> && ContainerPositionConcept<CPosType> && BoundingBoxConcept<T>
+template <typename T, typename N, typename CPosType, typename S>
+requires ContainerPositionConcept<CPosType> && BoundingBoxConcept<T> && StringId<S>
 class Octree{
     public:
         struct Node{
             std::vector<std::pair<CPosType, N>> con;
-            Node* children[8] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+            std::array<std::shared_ptr<Node>, 8> children;
             BoundingBox<T> box;
-            Node* parent = nullptr;
-            Node(BoundingBox<T>& box) : box(box) {}
-            ~Node() {
-                for (auto c : con) {
-                    delete c.second; // Освобождение памяти для контейнеров
-                }
-                for (Node* child : children) {
-                    delete child; // Рекурсивное освобождение памяти для дочерних узлов
-                }
-            }
+            std::weak_ptr<Node> parent;
+            Node(BoundingBox<T> box) : box(box) {}
 
             bool isLeaf() const {
-                return children[0] == nullptr;
+               return std::all_of(children.begin(), children.end(), [](const std::shared_ptr<Node>& child) { return child == nullptr; });
             }
 
             std::vector<std::pair<CPosType, N>> getCon(){
@@ -97,96 +102,270 @@ class Octree{
         };
 
 
-        class iterator {
-            private:
-                std::stack<Node*> nodeStack;
+    class BidirectionalIterator {
+        private:
+            std::stack<std::shared_ptr<Node>> forwardStack;
+            std::stack<std::shared_ptr<Node>> backupStack;
 
-            public:
-                using value_type = Node*;
-                using pointer = value_type*;
-                using reference = value_type&;
-                using difference_type = std::ptrdiff_t;
-                using iterator_category = std::forward_iterator_tag;
+        public:
+            using value_type = std::shared_ptr<Node>;
+            using pointer = value_type*;
+            using reference = value_type&;
+            using difference_type = std::ptrdiff_t;
+            using iterator_category = std::bidirectional_iterator_tag;
 
-            public:
-
-                explicit iterator(Node* root) {
-                    if (root != nullptr) {
-                        nodeStack.push(root);
-                    }
+            explicit BidirectionalIterator(std::shared_ptr<Node> root) {
+                if (root != nullptr) {
+                    forwardStack.push(root);
                 }
+            }
 
-                reference operator*() {
-                    return nodeStack.top();
+            
+            reference operator*() {
+                if (forwardStack.empty()) {
+                    throw std::out_of_range("Stack of iterator's is empty");
                 }
+                return forwardStack.top();
+            }
 
-
-                iterator& operator++() {
-                    if (nodeStack.empty()) return *this;
-                    Node* current = nodeStack.top();
-                    nodeStack.pop();
-                    for (int i = 7; i >= 0; --i) {
-                        if (current->children[i]) {
-                            nodeStack.push(current->children[i]);
-                        }
-                    }
+            
+            BidirectionalIterator& operator++() {
+                if (forwardStack.empty()){ 
                     return *this;
                 }
-
-                
-                bool operator!=(const iterator& other) const {
-                    return nodeStack != other.nodeStack;
+                auto currentNode = forwardStack.top();
+                forwardStack.pop();
+                backupStack.push(currentNode);
+                for (int i = 7; i >= 0; --i) {
+                    if (currentNode->children[i]) {
+                        forwardStack.push(currentNode->children[i]);
+                    }
                 }
-        };
+                return *this; 
+            }
 
+            
+            BidirectionalIterator& operator--() {
+                if (backupStack.empty()) return *this;
+                auto prevNode = backupStack.top();
+                backupStack.pop();
+                forwardStack.push(prevNode);
+                return *this;
+            }
+
+            bool operator!=(const BidirectionalIterator& other) const {
+                return forwardStack != other.forwardStack || backupStack != other.backupStack;
+            }
+
+            bool hasNext() const {
+                return !forwardStack.empty();
+            }
+
+            bool hasPrev() const {
+                return !backupStack.empty();
+            }
+    };
     private:
-        Node* root = nullptr;
-        int depth_;
+        std::shared_ptr<Node> root;
+        T MIN_SIZE = 1;
     public:
-        Octree(BoundingBox<T>& bbox, int depth) {
-        depth_ = depth;
-        root = new Node(bbox);
-        createTree(root, depth);
-    }
 
-
-        ~Octree() {
-            delete root;
+        Octree(){}
+        Octree(BoundingBox<T> bbox) {
+            root = std::make_shared<Node>(bbox);
         }
 
 
-        Node* getRoot(){
+        std::shared_ptr<Node>  getRoot(){
             return root;
         }
 
 
-        iterator begin() {
-            return iterator(root);
-        }
-
-        iterator end() {
-            return iterator(nullptr);
+       BidirectionalIterator createIterator() const{
+            return BidirectionalIterator(root);
         }
 
 
-        bool insert(N container, CPosType& position, Node* target){
+        bool insert(N container, CPosType& position, std::shared_ptr<Node> target){
             if(target == nullptr){
                 return false;
             }
             target->con.push_back(std::make_pair(position, container));
+            if (target->con.empty() == false && target->con.size() > MAX_ITEMS && target->isLeaf()){
+                std::cout << "Split\n";
+                split(target);
+            }
             return true;
         }
 
 
-        Octree* Clone(){
-            Octree* clone = new Octree(this->root->box, this->depth_);
+        bool checkCollisions(N container, CPosType pos) const {
+        BidirectionalIterator it = createIterator();
+        if(!root->box.contains(pos.LLDown) || !root->box.contains(pos.LLUp) ||
+        !root->box.contains(pos.LRUp) ||  !root->box.contains(pos.LRDown) ||
+        !root->box.contains(pos.RLDown) || !root->box.contains(pos.RLUp) ||
+        !root->box.contains(pos.RRUp) || !root->box.contains(pos.RRDown)){
+            return true;
+        }
+        while (it.hasNext()) {
+            // std::cout << "iterating" << std::endl;
+            auto currentNode = *it;
+            if (checkCollision(container, pos, currentNode->con)) {
+                return true;
+            }
+            ++it;
+        }
+        return false;
+    }
+
+
+        Octree Clone() const{
+            auto clone = Octree(this->root->box);
             return clone;
         }
 
 
-        void createTree(Node* node, int depth) {
-            if (depth <= 0) return;
-            
+        bool remove(std::string id) requires ValidKeyFormat<S>{
+            bool collision = false;
+            std::shared_ptr<Node> copy = nullptr;
+            Point<T> point = parsePoint(id);
+            removeR(id, root, collision, copy, point);
+            if(collision == false){
+                return false;
+            }
+            collision = false;
+            Update(copy);
+            return true;
+        }
+
+
+        std::shared_ptr<Node> search(std::string id) const requires ValidKeyFormat<S>{
+            Point<T> point = parsePoint(id);
+            std::shared_ptr<Node> copyCache = nullptr;
+            searchR(id, root, copyCache, point);
+            return copyCache;
+        }
+
+
+
+        std::vector<std::pair<CPosType, N>> searchDepth() const{
+            std::vector<std::pair<CPosType, N>> copyCache(0);
+            searchDepth(root, copyCache);
+            return copyCache;
+        }
+
+
+        std::shared_ptr<Node> SearchInsert(N container, CPosType pos) const{
+            bool collision = false;
+            std::shared_ptr<Node> copyCache = nullptr;
+            std::vector<std::pair<CPosType, N>> copy(0);
+            SearchInsert(container, pos, root, copyCache, copy, collision);
+            return copyCache;
+        }
+
+
+        static T getMinX(CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::min({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
+        }
+
+
+        static T getMaxX(CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::max({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
+        }
+
+
+        static T getMinY(CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::min({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
+        }
+
+
+        static T getMaxY(CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::max({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
+        }
+
+
+        static T getMinZ(CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::min({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
+        }
+
+
+        static T getMaxZ(CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::max({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
+        }
+
+
+        static T getMinX(const CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::min({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
+        }
+
+        static T getMaxX(const CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::max({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
+        }
+
+
+        static T getMinY(const CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::min({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
+        }
+
+
+        static T getMaxY(const CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::max({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
+        }
+
+
+
+        static T getMinZ(const CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::min({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
+        }
+
+
+        static T getMaxZ(const CPosType& position){
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            return std::max({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
+        }
+
+
+        bool push(N container, CPosType& position){
+            std::shared_ptr<Node> target = SearchInsert(container, position);
+            return insert(container, position, target);
+        }
+
+        static bool pointincontainer(Point<T>& p, CPosType& position){
+            static_assert(PointConcept<Point<T>>, "T должен удовлетворять PointConcept");
+            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+            T minX = getMinX(position);
+            T maxX = getMaxX(position);
+            T minY = getMinY(position);
+            T maxY = getMaxY(position);
+            T minZ = getMinZ(position);
+            T maxZ = getMaxZ(position);
+            return (p.x >= minX && p.x <= maxX && p.y >= minY && p.y <= maxY && p.z >= minZ && p.z <= maxZ);
+        }
+
+
+        private:
+
+
+
+        void split(std::shared_ptr<Node> node) {
+            if (!node){
+                return;
+            }
+            if (node->children[0] != nullptr){
+                return;
+            }
+
             Point<T> min = node->box.min;
             Point<T> max = node->box.max;
 
@@ -194,203 +373,68 @@ class Octree{
             T midY = (min.y + max.y) / 2;
             T midZ = (min.z + max.z) / 2;
 
-            Point<T> first = min;
-            Point<T> second = Point<T>(midX, midY, midZ);
-            BoundingBox<T> box = BoundingBox<T>(first, second);
-            node->children[0] = new Node(box); // 0: min
+            BoundingBox<T> box0 = BoundingBox<T>(min, Point<T>(midX, midY, midZ));
+            BoundingBox<T> box1 = BoundingBox<T>(Point<T>(midX, min.y, min.z), Point<T>(max.x, midY, midZ));
+            BoundingBox<T> box2 = BoundingBox<T>(Point<T>(min.x, midY, min.z), Point<T>(midX, max.y, midZ));
+            BoundingBox<T> box3 = BoundingBox<T>(Point<T>(midX, midY, min.z), Point<T>(max.x, max.y, midZ));
+            BoundingBox<T> box4 = BoundingBox<T>(Point<T>(min.x, min.y, midZ), Point<T>(midX, midY, max.z));
+            BoundingBox<T> box5 = BoundingBox<T>(Point<T>(midX, min.y, midZ), Point<T>(max.x, midY, max.z));
+            BoundingBox<T> box6 = BoundingBox<T>(Point<T>(min.x, midY, midZ), Point<T>(midX, max.y, max.z));
+            BoundingBox<T> box7 = BoundingBox<T>(Point<T>(midX, midY, midZ), max);
+
+            if(!box0.isValid(MIN_SIZE) || !box1.isValid(MIN_SIZE)
+            || !box2.isValid(MIN_SIZE) || !box3.isValid(MIN_SIZE)
+            ||!box4.isValid(MIN_SIZE) || !box5.isValid(MIN_SIZE)
+            ||!box6.isValid(MIN_SIZE) || !box7.isValid(MIN_SIZE)){
+                return;
+            }
+
+            node->children[0] = std::make_shared<Node>(box0); // 0: мин
+            node->children[1] = std::make_shared<Node>(box1); // 1: x+
+            node->children[2] = std::make_shared<Node>(box2); // 2: y+
+            node->children[3] = std::make_shared<Node>(box3); // 3: xy+
+            node->children[4] = std::make_shared<Node>(box4); // 4: z+
+            node->children[5] = std::make_shared<Node>(box5); // 5: x+z+
+            node->children[6] = std::make_shared<Node>(box6); // 6: y+z+
+            node->children[7] = std::make_shared<Node>(box7); // 7: xyz+
             node->children[0]->parent = node;
-
-
-            first = Point<T>(midX, min.y, min.z);
-            second = Point<T>(max.x, midY, midZ);
-            box = BoundingBox<T>(first, second);
-            node->children[1] = new Node(box); // 1: x+
             node->children[1]->parent = node;
-
-
-            first = Point<T>(min.x, midY, min.z);
-            second = Point<T>(midX, max.y, midZ);
-            box = BoundingBox<T>(first, second);
-            node->children[2] = new Node(box); // 2: y+
             node->children[2]->parent = node;
-
-
-            first = Point<T>(midX, midY, min.z);
-            second = Point<T>(max.x, max.y, midZ);
-            box = BoundingBox<T>(first, second);
-            node->children[3] = new Node(box); // 3: xy+
             node->children[3]->parent = node;
-
-
-            first = Point<T>(min.x, min.y, midZ);
-            second = Point<T>(midX, midY, max.z);
-            box = BoundingBox<T>(first, second);
-            node->children[4] = new Node(box); // 4: z+
             node->children[4]->parent = node;
-
-
-            first = Point<T>(midX, min.y, midZ);
-            second = Point<T>(max.x, midY, max.z);
-            box = BoundingBox<T>(first, second);
-            node->children[5] = new Node(box); // 5: x+z+
             node->children[5]->parent = node;
-
-
-            first = Point<T>(min.x, midY, midZ);
-            second =  Point<T>(midX, max.y, max.z);
-            box = BoundingBox<T>(first, second);
-            node->children[6] = new Node(box); // 6: y+z+
             node->children[6]->parent = node;
-
-
-            first = Point<T>(midX, midY, midZ);
-            second = max;
-            box = BoundingBox<T>(first, second);
-            node->children[7] = new Node(box); // 7: xyz+
             node->children[7]->parent = node;
+            
+            for (auto it = node->con.begin(); it != node->con.end(); ) {
+                bool moved = false;
 
+                for (int i = 0; i < 8; ++i) {
+                    if (node->children[i]->box.contains(it->first.LLDown) && 
+                        node->children[i]->box.contains(it->first.LLUp) &&
+                        node->children[i]->box.contains(it->first.LRDown) &&
+                        node->children[i]->box.contains(it->first.LRUp) &&
+                        node->children[i]->box.contains(it->first.RLDown) &&
+                        node->children[i]->box.contains(it->first.RLUp) &&
+                        node->children[i]->box.contains(it->first.RRDown) &&
+                        node->children[i]->box.contains(it->first.RRUp)) {
+                        node->children[i]->con.push_back(*it);
+                        moved = true;
+                        break;
+                    }
+                }
 
-            for (auto& child : node->children) {
-            createTree(child, depth - 1);
+                if (moved) {
+                    it = node->con.erase(it);
+                } else {
+                    ++it;
+                }
             }
         }
 
 
-        bool remove(std::string id){
-            bool collision = false;
-            removeR(id, root, collision);
-            if(collision == false){
-                return false;
-            }
-            collision = false;
-            return true;
-        }
 
-
-        Node* search(std::string id){
-            Node* copyCache = nullptr;
-            searchR(id, root, &copyCache);
-            return copyCache;
-        }
-
-
-        std::pair<CPosType, N> findI(std::string id){
-            std::pair<CPosType, N> it = std::make_pair(CPosType(), nullptr);
-            findI(id, root, &it);
-            return it;
-        }
-
-
-        std::vector<std::pair<CPosType, N>> searchDepth(){
-            std::vector<std::pair<CPosType, N>> copyCache(0);
-            searchDepth(root, copyCache);
-            return copyCache;
-        }
-
-
-        Node* SearchInsert(N container, CPosType pos){
-            bool collision = false;
-            Node* copyCache = nullptr;
-            std::vector<std::pair<CPosType, N>> copy(0);
-            SearchInsert(container, pos, root, &copyCache, copy, collision);
-            return copyCache;
-        }
-
-
-        void print() const {
-            printNode(root, 0);
-        }
-
-
-            static T getMinX(CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::min({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
-            }
-
-
-            static T getMaxX(CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::max({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
-            }
-
-
-            static T getMinY(CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::min({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
-            }
-
-
-            static T getMaxY(CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::max({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
-            }
-
-
-            static T getMinZ(CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::min({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
-            }
-
-
-            static T getMaxZ(CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::max({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
-            }
-
-
-            static T getMinX(const CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::min({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
-            }
-
-            static T getMaxX(const CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::max({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
-            }
-
-
-            static T getMinY(const CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::min({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
-            }
-
-
-            static T getMaxY(const CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::max({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
-            }
-
-
-
-            static T getMinZ(const CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::min({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
-            }
-
-
-            static T getMaxZ(const CPosType& position){
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                return std::max({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
-            }
-
-
-            static bool pointincontainer(Point<T>& p, CPosType& position){
-                static_assert(PointConcept<Point<T>>, "T должен удовлетворять PointConcept");
-                static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
-                T minX = getMinX(position);
-                T maxX = getMaxX(position);
-                T minY = getMinY(position);
-                T maxY = getMaxY(position);
-                T minZ = getMinZ(position);
-                T maxZ = getMaxZ(position);
-                return (p.x >= minX && p.x <= maxX && p.y >= minY && p.y <= maxY && p.z >= minZ && p.z <= maxZ);
-            }
-
-
-        private:
-
-
-        void  searchUnderOct(Node* node, std::vector<std::pair<CPosType, N>>& vec){
+        void  searchUnderOct(std::shared_ptr<Node> node, std::vector<std::pair<CPosType, N>>& vec) const{
             if(node == nullptr){
                 return;
             }
@@ -403,24 +447,7 @@ class Octree{
         }
 
 
-        void findI(std::string id, Node* node, std::pair<CPosType, N>* it){
-            if(node->con.empty() == false){
-                for(auto& i : node->con){
-                    if(i.first.LLDown.x != -1 && i.second != nullptr && number(i.first.LLDown) == id){
-                        *it = i;
-                        return;
-                    }
-                }
-            }
-            if(node->isLeaf() == false){
-                for(int i = 0; i < 8; ++i){
-                    findI(id, node->children[i], it);
-                }
-            }
-        }
-
-
-        void searchDepth(Node* node, std::vector<std::pair<CPosType, N>>& copyCache){
+        void searchDepth(std::shared_ptr<Node> node, std::vector<std::pair<CPosType, N>>& copyCache) const{
             if(node == nullptr){
                 return;
             }
@@ -433,7 +460,7 @@ class Octree{
         }
 
 
-        bool SearchInsert(N container, CPosType pos, Node* node, Node** copyCache, std::vector<std::pair<CPosType, N>>& copy, bool& collision){
+        bool SearchInsert(N container, CPosType pos, std::shared_ptr<Node> node, std::shared_ptr<Node>& copyCache, std::vector<std::pair<CPosType, N>>& copy, bool& collision) const{
             if(node == nullptr){
                 return false;
             }
@@ -446,66 +473,136 @@ class Octree{
             if(!node->con.empty()){
                 (copy).insert((copy).end(), node->con.begin(), node->con.end());
             }
-            if (node->isLeaf() == false && collision == false && *copyCache == nullptr) {
+            if (node->isLeaf() == false && collision == false && copyCache == nullptr) {
                 for (size_t i = 0; i < 8; ++i) {
                      SearchInsert(container, pos, node->children[i], copyCache, copy, collision);
                 }
             }
-            if(collision == false && *copyCache == nullptr){
+            if(collision == false && copyCache == nullptr){
                 
                 searchUnderOct(node, copy);
                 
                 if(!checkCollision(container, pos, copy)){
-                    *copyCache = node;
+                    copyCache = node;
                     return true;
                 }else{
                     collision = true;
                     return false;
                 }
-            }else if(collision == false && *copyCache != nullptr){
+            }else if(collision == false && copyCache != nullptr){
                 return true;
             }
             return false;
         }
 
 
-            void searchR(std::string id, Node* node, Node** copyCache){
-                if(node->con.empty() == false){
-                for(auto& i : node->con){
-                    if(i.first.LLDown.x != -1 && i.second != nullptr && number(i.first.LLDown) == id){
-                        *copyCache = node;
-                        return;
-                    }
+            void searchR(std::string id, std::shared_ptr<Node> node, std::shared_ptr<Node>& copyCache, Point<T> point)const{
+                if(node == nullptr){
+                    return;
                 }
-            }
-            if(node->isLeaf() == false){
-                for(int i = 0; i < 8; ++i){
-                    searchR(id, node->children[i], copyCache);
-                }
-            }
-        }
-
-
-            void removeR(std::string id, Node* node, bool& collision){
-                if(collision == true || node == nullptr){
+                if(!node->box.contains(point)){
                     return;
                 }
                 if(node->con.empty() == false){
                     for(auto& i : node->con){
-                        if(i.first.LLDown.x != -1 && i.second != nullptr && number(i.first.LLDown) == id){
-                            delete i.second;
-                            node->con.erase(std::remove(node->con.begin(), node->con.end(), i), node->con.end());
-                            collision = true;
+                        if(i.first.LLDown.x != -1  && number(i.first.LLDown) == id){
+                            copyCache = node;
                             return;
                         }
                     }
                 }
                 if(node->isLeaf() == false){
                     for(int i = 0; i < 8; ++i){
-                        removeR(id, node->children[i], collision);
+                        searchR(id, node->children[i], copyCache, point);
+                    }
+                }
+            }
+
+
+            void removeR(std::string id, std::shared_ptr<Node> node, bool& collision, std::shared_ptr<Node>& copyCache, Point<T> point){
+                if(node == nullptr){
+                    return;
+                }
+                if(collision == true || node == nullptr){
+                    return;
+                }
+                if(!node->box.contains(point)){
+                    return;
+                }
+                if(node->con.empty() == false){
+                    for(auto& i : node->con){
+                        if(i.first.LLDown.x != -1  && number(i.first.LLDown) == id){
+                            if(i.second != nullptr){
+                                i.second.reset();
+                                node->con.erase(std::remove(node->con.begin(), node->con.end(), i), node->con.end());
+                            }
+                            collision = true;
+                            copyCache = node;
+                            return;
+                        }
+                    }
+                }
+                if(node->isLeaf() == false){
+                    for(int i = 0; i < 8; ++i){
+                        removeR(id, node->children[i], collision, copyCache, point);
                     }
                 }
 
+            }
+
+
+            bool checkEmptyNode(std::shared_ptr<Node> node) const{
+            if (node == nullptr) return true;
+            for (int i = 0; i < 8; ++i) {
+                if (node->children[i] != nullptr && !node->children[i]->con.empty()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+           void mearge(std::shared_ptr<Node> node) {
+                if (node == nullptr || node->isLeaf()) return;
+                for (int i = 0; i < 8; ++i) {
+                    if (node->children[i] != nullptr && !node->children[i]->con.empty()) {
+                        node->con.insert(node->con.end(), node->children[i]->con.begin(), node->children[i]->con.end());
+                        node->children[i]->con.clear();
+                    }
+                }
+                for (int i = 0; i < 8; ++i) {
+                    mearge(node->children[i]);
+                }
+            }
+
+            void decreaseHightTree(std::shared_ptr<Node> node) {
+                if (node == nullptr || node->isLeaf()) {
+                    return;
+                }
+                for (int i = 0; i < 8; ++i) {
+                    decreaseHightTree(node->children[i]);
+                }
+                if (checkEmptyNode(node)) {
+                    for (int i = 0; i < 8; ++i) {
+                        if (node->children[i] != nullptr && node->children[i]->isLeaf()) { 
+                            node->children[i].reset();
+                            node->children[i] = nullptr;
+                        }
+                    }
+                }
+            }
+
+
+            void Update(std::shared_ptr<Node> node) {
+                 auto parentNode = node->parent.lock(); 
+                if(node == root && node->isLeaf() == false && node->con.empty()){
+                    mearge(node);
+                    decreaseHightTree(node);
+                    return;
+                }
+                if(checkEmptyNode(parentNode)){
+                    mearge(parentNode);
+                    decreaseHightTree(parentNode);
+                }
             }
 
 
@@ -543,22 +640,24 @@ class Octree{
             }
 
 
-            void printNode(Node* node, int depth) const {
-                if (!node) return;
-
-                std::cout << std::string(depth, '-') << "Node at depth " << depth 
-                        << ": " << node->box.min.x << ", " << node->box.min.y << ", " << node->box.min.z 
-                        << " to " << node->box.max.x << ", " << node->box.max.y << ", " << node->box.max.z << "\n";
-                for (auto& child : node->children) {
-                    printNode(child, depth + 1);
-                }
+            static std::string number(const Point<T>& p) {
+                return std::to_string(p.x) + "_" + std::to_string(p.y) + "_" + std::to_string(p.z);
             }
 
-            std::string number(const Point<T>& p) const{
-            return std::to_string(p.x) + "_" + std::to_string(p.y) + "_" + std::to_string(p.z);
-        }
 
-
+            static Point<T> parsePoint(const S& str){
+                static_assert(PointConcept<Point<T>>, "Point должен удовлетворять PointConcept");
+                static_assert(StringId<S>, "Строка должна удовлетворять StringId");
+                static_assert(ValidKeyFormat<S>, "Строка должна удовлетворять ValidKeyFormat");
+                Point<T> point;
+                std::regex pattern(R"((\d+|\d+\.\d+)_(\d+|\d+\.\d+)_(\d+|\d+\.\d+))");
+                std::smatch match;
+                std::regex_match(str, match, pattern);
+                point.x = static_cast<T>(std::stod(match[1].str()));
+                point.y = static_cast<T>(std::stod(match[2].str()));
+                point.z = static_cast<T>(std::stod(match[3].str()));
+                return point;
+            }
                 
 };
 

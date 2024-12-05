@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/c/л3/Lab3OOP
+CMAKE_SOURCE_DIR = /mnt/c/л3/Lab3OOP-delitel
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/c/л3/Lab3OOP/build
+CMAKE_BINARY_DIR = /mnt/c/л3/Lab3OOP-delitel/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/myprog.dir/depend.make
@@ -70,46 +70,46 @@ include CMakeFiles/myprog.dir/progress.make
 include CMakeFiles/myprog.dir/flags.make
 
 CMakeFiles/myprog.dir/test.cpp.o: CMakeFiles/myprog.dir/flags.make
-CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP/test.cpp
+CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP-delitel/test.cpp
 CMakeFiles/myprog.dir/test.cpp.o: CMakeFiles/myprog.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/л3/Lab3OOP/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/myprog.dir/test.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/myprog.dir/test.cpp.o -MF CMakeFiles/myprog.dir/test.cpp.o.d -o CMakeFiles/myprog.dir/test.cpp.o -c /mnt/c/л3/Lab3OOP/test.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/л3/Lab3OOP-delitel/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/myprog.dir/test.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/myprog.dir/test.cpp.o -MF CMakeFiles/myprog.dir/test.cpp.o.d -o CMakeFiles/myprog.dir/test.cpp.o -c /mnt/c/л3/Lab3OOP-delitel/test.cpp
 
 CMakeFiles/myprog.dir/test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/myprog.dir/test.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/л3/Lab3OOP/test.cpp > CMakeFiles/myprog.dir/test.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/л3/Lab3OOP-delitel/test.cpp > CMakeFiles/myprog.dir/test.cpp.i
 
 CMakeFiles/myprog.dir/test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/myprog.dir/test.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/л3/Lab3OOP/test.cpp -o CMakeFiles/myprog.dir/test.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/л3/Lab3OOP-delitel/test.cpp -o CMakeFiles/myprog.dir/test.cpp.s
 
 CMakeFiles/myprog.dir/Storage/Storage.cpp.o: CMakeFiles/myprog.dir/flags.make
-CMakeFiles/myprog.dir/Storage/Storage.cpp.o: /mnt/c/л3/Lab3OOP/Storage/Storage.cpp
+CMakeFiles/myprog.dir/Storage/Storage.cpp.o: /mnt/c/л3/Lab3OOP-delitel/Storage/Storage.cpp
 CMakeFiles/myprog.dir/Storage/Storage.cpp.o: CMakeFiles/myprog.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/л3/Lab3OOP/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/myprog.dir/Storage/Storage.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/myprog.dir/Storage/Storage.cpp.o -MF CMakeFiles/myprog.dir/Storage/Storage.cpp.o.d -o CMakeFiles/myprog.dir/Storage/Storage.cpp.o -c /mnt/c/л3/Lab3OOP/Storage/Storage.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/л3/Lab3OOP-delitel/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/myprog.dir/Storage/Storage.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/myprog.dir/Storage/Storage.cpp.o -MF CMakeFiles/myprog.dir/Storage/Storage.cpp.o.d -o CMakeFiles/myprog.dir/Storage/Storage.cpp.o -c /mnt/c/л3/Lab3OOP-delitel/Storage/Storage.cpp
 
 CMakeFiles/myprog.dir/Storage/Storage.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/myprog.dir/Storage/Storage.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/л3/Lab3OOP/Storage/Storage.cpp > CMakeFiles/myprog.dir/Storage/Storage.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/л3/Lab3OOP-delitel/Storage/Storage.cpp > CMakeFiles/myprog.dir/Storage/Storage.cpp.i
 
 CMakeFiles/myprog.dir/Storage/Storage.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/myprog.dir/Storage/Storage.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/л3/Lab3OOP/Storage/Storage.cpp -o CMakeFiles/myprog.dir/Storage/Storage.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/л3/Lab3OOP-delitel/Storage/Storage.cpp -o CMakeFiles/myprog.dir/Storage/Storage.cpp.s
 
 CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: CMakeFiles/myprog.dir/flags.make
-CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: /mnt/c/л3/Lab3OOP/Terminal/Terminal.cpp
+CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: /mnt/c/л3/Lab3OOP-delitel/Terminal/Terminal.cpp
 CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: CMakeFiles/myprog.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/л3/Lab3OOP/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o -MF CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o.d -o CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o -c /mnt/c/л3/Lab3OOP/Terminal/Terminal.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/л3/Lab3OOP-delitel/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o -MF CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o.d -o CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o -c /mnt/c/л3/Lab3OOP-delitel/Terminal/Terminal.cpp
 
 CMakeFiles/myprog.dir/Terminal/Terminal.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/myprog.dir/Terminal/Terminal.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/л3/Lab3OOP/Terminal/Terminal.cpp > CMakeFiles/myprog.dir/Terminal/Terminal.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /mnt/c/л3/Lab3OOP-delitel/Terminal/Terminal.cpp > CMakeFiles/myprog.dir/Terminal/Terminal.cpp.i
 
 CMakeFiles/myprog.dir/Terminal/Terminal.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/myprog.dir/Terminal/Terminal.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/л3/Lab3OOP/Terminal/Terminal.cpp -o CMakeFiles/myprog.dir/Terminal/Terminal.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /mnt/c/л3/Lab3OOP-delitel/Terminal/Terminal.cpp -o CMakeFiles/myprog.dir/Terminal/Terminal.cpp.s
 
 # Object files for target myprog
 myprog_OBJECTS = \
@@ -125,7 +125,7 @@ myprog: CMakeFiles/myprog.dir/Storage/Storage.cpp.o
 myprog: CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o
 myprog: CMakeFiles/myprog.dir/build.make
 myprog: CMakeFiles/myprog.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/mnt/c/л3/Lab3OOP/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable myprog"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/mnt/c/л3/Lab3OOP-delitel/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable myprog"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/myprog.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -137,6 +137,6 @@ CMakeFiles/myprog.dir/clean:
 .PHONY : CMakeFiles/myprog.dir/clean
 
 CMakeFiles/myprog.dir/depend:
-	cd /mnt/c/л3/Lab3OOP/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/c/л3/Lab3OOP /mnt/c/л3/Lab3OOP /mnt/c/л3/Lab3OOP/build /mnt/c/л3/Lab3OOP/build /mnt/c/л3/Lab3OOP/build/CMakeFiles/myprog.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /mnt/c/л3/Lab3OOP-delitel/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/c/л3/Lab3OOP-delitel /mnt/c/л3/Lab3OOP-delitel /mnt/c/л3/Lab3OOP-delitel/build /mnt/c/л3/Lab3OOP-delitel/build /mnt/c/л3/Lab3OOP-delitel/build/CMakeFiles/myprog.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/myprog.dir/depend
 

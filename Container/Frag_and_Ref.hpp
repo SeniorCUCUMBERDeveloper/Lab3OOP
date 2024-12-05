@@ -44,6 +44,7 @@ class FragileRefragedContainer : public IFragileContainer , public IRefragedCont
         }
 
 
+
         void setId(int X, int Y, int Z) override{
             number = std::to_string(X) + "_" + std::to_string(Y) + "_" + std::to_string(Z);
         }
@@ -63,25 +64,26 @@ class FragileRefragedContainer : public IFragileContainer , public IRefragedCont
     }
         double getMaxPressure() const override{ return maxPressure; }
         double getMaxTemperature() const override{ return maxTemperature; }
-        IContainer* Clone(size_t i = 0, size_t method = 0) override{ 
+        std::shared_ptr<IContainer> Clone(size_t i = 0, size_t method = 0) override{ 
             switch (method)
             {
             case 0:
-                return new FragileRefragedContainer(number, client, length, width, height, cost, mass,  maxPressure, maxTemperature);
+                return std::make_shared<FragileRefragedContainer>(number, client, length, width, height, cost, mass,  maxPressure, maxTemperature);
             case 1:
-                return new FragileRefragedContainer(number, client, width, length, height, cost, mass,  maxPressure, maxTemperature);
+                return std::make_shared<FragileRefragedContainer>(number, client, width, length, height, cost, mass,  maxPressure, maxTemperature);
             case 2:
-                return new FragileRefragedContainer(number, client, length, height, width, cost, mass,  maxPressure, maxTemperature);
+                return std::make_shared<FragileRefragedContainer>(number, client, length, height, width, cost, mass,  maxPressure, maxTemperature);
             case 3:
-                return new FragileRefragedContainer(number, client, height, length, width, cost, mass,  maxPressure, maxTemperature);
+                return std::make_shared<FragileRefragedContainer>(number, client, height, length, width, cost, mass,  maxPressure, maxTemperature);
             case 4:
-                return new FragileRefragedContainer(number, client, width, height, length, cost, mass,  maxPressure, maxTemperature);
+                return std::make_shared<FragileRefragedContainer>(number, client, width, height, length, cost, mass,  maxPressure, maxTemperature);
             case 5:
-                return new FragileRefragedContainer(number, client, height, width, length, cost, mass,  maxPressure, maxTemperature);
+                return std::make_shared<FragileRefragedContainer>(number, client, height, width, length, cost, mass,  maxPressure, maxTemperature);
             default:
-                return new FragileRefragedContainer(number, client, length, width, height, cost, mass,  maxPressure, maxTemperature);
+                return std::make_shared<FragileRefragedContainer>(number, client, length, width, height, cost, mass,  maxPressure, maxTemperature);
             }
         }
+        ~FragileRefragedContainer() override{}
 };
 
 

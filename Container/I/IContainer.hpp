@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <memory>
 
 
 
@@ -18,7 +19,8 @@ public:
     virtual int getWidth() const = 0;
     virtual int getHeight() const = 0;
     virtual double getMass() const = 0;
-    virtual IContainer* Clone(size_t i = 0, size_t method = 0) = 0;
+    virtual std::shared_ptr<IContainer> Clone(size_t i = 0, size_t method = 0) = 0;
+    virtual ~IContainer() = default;
 };
 
 #endif
