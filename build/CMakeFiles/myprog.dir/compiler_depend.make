@@ -152,6 +152,7 @@ CMakeFiles/myprog.dir/Storage/Storage.cpp.o: /mnt/c/л3/Lab3OOP-delitel/Storage/
   /usr/include/c++/14/cmath \
   /usr/include/c++/14/compare \
   /usr/include/c++/14/concepts \
+  /usr/include/c++/14/condition_variable \
   /usr/include/c++/14/cstddef \
   /usr/include/c++/14/cstdint \
   /usr/include/c++/14/cstdio \
@@ -505,6 +506,7 @@ CMakeFiles/myprog.dir/Terminal/Terminal.cpp.o: /mnt/c/л3/Lab3OOP-delitel/Termin
   /usr/include/c++/14/clocale \
   /usr/include/c++/14/compare \
   /usr/include/c++/14/concepts \
+  /usr/include/c++/14/condition_variable \
   /usr/include/c++/14/cstddef \
   /usr/include/c++/14/cstdint \
   /usr/include/c++/14/cstdio \
@@ -1188,8 +1190,6 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP-delitel/test.cpp \
 
 /usr/include/c++/14/cxxabi.h:
 
-/usr/include/c++/14/condition_variable:
-
 /usr/include/x86_64-linux-gnu/bits/siginfo-arch.h:
 
 /usr/include/c++/14/cassert:
@@ -1501,6 +1501,8 @@ CMakeFiles/myprog.dir/test.cpp.o: /mnt/c/л3/Lab3OOP-delitel/test.cpp \
 /usr/include/x86_64-linux-gnu/bits/struct_stat.h:
 
 /usr/include/c++/14/bits/stl_uninitialized.h:
+
+/usr/include/c++/14/condition_variable:
 
 /usr/include/x86_64-linux-gnu/bits/endianness.h:
 

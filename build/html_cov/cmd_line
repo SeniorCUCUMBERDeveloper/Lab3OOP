@@ -1,1 +1,0 @@
-genhtml gcov_filtered.info --output-directory html_cov

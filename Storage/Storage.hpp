@@ -11,6 +11,7 @@
 #include <iostream>
 #include "../Octree/Octree.hpp"
 #include "../Checker/Checker.hpp"
+#include <condition_variable>
 
 
 class Storage{
@@ -18,7 +19,7 @@ class Storage{
         int number;
         int length, width, height;
         double temperature;
-        Octree<int, std::shared_ptr<IContainer>, ContainerPosition<int>, std::string> containers;
+        Octree<int, std::shared_ptr<IContainer>> containers;
         Checker<int> checker;
 
         public:
@@ -64,17 +65,18 @@ class Storage{
           std::mutex mtx;
           mutable std::shared_mutex smtx;
           std::atomic<bool> containerAdded{false}; 
+          std::condition_variable cv; 
           int calculateDepth();
           static bool comparePosition(std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>& pos1, std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>& pos2);
           static bool comparePositionReverse(std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>& pos1, std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>& pos2);
           bool isNoTop(const ContainerPosition<int>& position);
           std::vector<std::pair<ContainerPosition<int>,std::shared_ptr<IContainer>>> searchUnderContainer(ContainerPosition<int>& position);
           static double calculatemass(std::vector<std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>>> con, size_t it);
-          bool addContainerR(std::shared_ptr<IContainer> container,  int yStart, int yEnd);
+          bool addContainerR(std::shared_ptr<IContainer> container,  int yStart, int yEnd, Point<int>& point);
           ContainerPosition<int> calculateContainerPosition(int x, int y, int z, int l, int w, int h);
           bool moveContainer(std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>> it);
           std::pair<ContainerPosition<int>, std::shared_ptr<IContainer>> isTop(const ContainerPosition<int>& position);
-           void multitread(std::shared_ptr<IContainer> container, int X, int Y, int Z);
+           Point<int> multitread(std::shared_ptr<IContainer> container, int X, int Y, int Z);
            std::vector<std::pair<ContainerPosition<int>,std::shared_ptr<IContainer>>> searchUpperContainer(ContainerPosition<int>& position);
            void howContai(std::shared_ptr<IContainer> container, std::vector<size_t>& result, size_t method);
            static bool checkSupport(ContainerPosition<int>& position, std::vector<std::pair<ContainerPosition<int>,std::shared_ptr<IContainer>>> con);

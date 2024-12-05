@@ -158,7 +158,7 @@ TEST(StorageTest, Remove){
     storage.addContainer(container, 1, 1 , 14);//8
     std::cout << storage.getInfo() << std::endl;
     std::cout<< std::endl;
-    EXPECT_THROW(storage.removeContainer("90_1056_14"), std::runtime_error);
+    EXPECT_THROW(storage.removeContainer("90_1056_14"), std::invalid_argument);
     storage.removeContainer("1_1_14");
     std::vector<std::string> result = storage.getListContainers();
     EXPECT_EQ(result.size(), 7);
@@ -365,7 +365,7 @@ TEST(OctreeTest, TestIterator){
         std::cout << *i <<std::endl;
     }
     EXPECT_EQ(vec.size(), 18);
-    EXPECT_THROW(st.find("0_120_2"), std::runtime_error);
+    EXPECT_THROW(st.find("0_120_2"), std::invalid_argument);
     EXPECT_NO_THROW(st.find("3_1_1"));
     auto it = st.find("13_1_1");
     EXPECT_EQ(it.second->getId(), "13_1_1");

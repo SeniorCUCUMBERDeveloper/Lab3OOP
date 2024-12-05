@@ -14,45 +14,36 @@
 #define MAX_ITEMS 4
 
 
-template<typename T>
-concept NumericConcept = std::is_arithmetic_v<T> || std::convertible_to<T, double>;
-
-
-template<typename T>
-concept StringId = std::same_as<T, std::string>;
-
-
-template <typename T>
-concept ValidKeyFormat = requires(T str) {
-    { std::regex_match(str, std::regex(R"((\d+|\d+\.\d+)_(\d+|\d+\.\d+)_(\d+|\d+\.\d+))")) };
-};
-
 
 template<typename T>
 concept PointConcept = requires(T a) {
-    { a.x } -> NumericConcept;
-    { a.y } -> NumericConcept;
-    { a.z } -> NumericConcept;
-    
+    { a.x };
+    { a.y };
+    { a.z };
     { a == std::declval<T>() } -> std::same_as<bool>;
     { a < std::declval<T>() } -> std::same_as<bool>;
 };
 
 
-template<typename T>
-concept ContainerPositionConcept = requires(T c) {
-    { c.LLDown } -> PointConcept;
-    { c.LLUp } -> PointConcept;
-    { c.LRDown } -> PointConcept;
-    { c.LRUp } -> PointConcept;
-    { c.RRDown } -> PointConcept;
-    { c.RRUp } -> PointConcept;
-    { c.RLDown } -> PointConcept;
-    { c.RLUp } -> PointConcept;
-
-    { c == std::declval<T>() } -> std::same_as<bool>;
-    { c < std::declval<T>() } -> std::same_as<bool>;
+template<typename PointType, typename SizeType>
+concept CompatibleCoordinates = requires(PointType p, SizeType s) {
+    { p.x + s->getLength() } -> std::convertible_to<decltype(p.x)>;
+    { p.x == s->getLength() } -> std::same_as<bool>;
 };
+
+
+template<typename T>
+concept HasDimensions = requires(T a) {
+    { a->getLength() } -> std::convertible_to<double>;
+    { a->getWidth() } -> std::convertible_to<double>;
+    { a->getHeight() } -> std::convertible_to<double>;
+};
+
+
+template<typename PointType, typename SizeType>
+concept CanAdd = PointConcept<PointType> && 
+                 HasDimensions<SizeType> && 
+                 CompatibleCoordinates<PointType, SizeType>;
 
 
 template<typename T>
@@ -80,12 +71,12 @@ struct BoundingBox{
 
 
 
-template <typename T, typename N, typename CPosType, typename S>
-requires ContainerPositionConcept<CPosType> && BoundingBoxConcept<T> && StringId<S>
+template <typename T, typename N>
+requires BoundingBoxConcept<T> && CanAdd<Point<T>, N>
 class Octree{
     public:
         struct Node{
-            std::vector<std::pair<CPosType, N>> con;
+            std::vector<std::pair<ContainerPosition<T>, N>> con;
             std::array<std::shared_ptr<Node>, 8> children;
             BoundingBox<T> box;
             std::weak_ptr<Node> parent;
@@ -95,7 +86,7 @@ class Octree{
                return std::all_of(children.begin(), children.end(), [](const std::shared_ptr<Node>& child) { return child == nullptr; });
             }
 
-            std::vector<std::pair<CPosType, N>> getCon(){
+            std::vector<std::pair<ContainerPosition<T>, N>> getCon(){
                 return con;
             }
 
@@ -186,20 +177,7 @@ class Octree{
         }
 
 
-        bool insert(N container, CPosType& position, std::shared_ptr<Node> target){
-            if(target == nullptr){
-                return false;
-            }
-            target->con.push_back(std::make_pair(position, container));
-            if (target->con.empty() == false && target->con.size() > MAX_ITEMS && target->isLeaf()){
-                std::cout << "Split\n";
-                split(target);
-            }
-            return true;
-        }
-
-
-        bool checkCollisions(N container, CPosType pos) const {
+        bool checkCollisions(N container, ContainerPosition<T> pos) const {
         BidirectionalIterator it = createIterator();
         if(!root->box.contains(pos.LLDown) || !root->box.contains(pos.LLUp) ||
         !root->box.contains(pos.LRUp) ||  !root->box.contains(pos.LRDown) ||
@@ -208,7 +186,6 @@ class Octree{
             return true;
         }
         while (it.hasNext()) {
-            // std::cout << "iterating" << std::endl;
             auto currentNode = *it;
             if (checkCollision(container, pos, currentNode->con)) {
                 return true;
@@ -225,7 +202,7 @@ class Octree{
         }
 
 
-        bool remove(std::string id) requires ValidKeyFormat<S>{
+        bool remove(std::string id){
             bool collision = false;
             std::shared_ptr<Node> copy = nullptr;
             Point<T> point = parsePoint(id);
@@ -239,111 +216,116 @@ class Octree{
         }
 
 
-        std::shared_ptr<Node> search(std::string id) const requires ValidKeyFormat<S>{
+        std::pair<ContainerPosition<T>, N> search(std::string id) const{
             Point<T> point = parsePoint(id);
-            std::shared_ptr<Node> copyCache = nullptr;
-            searchR(id, root, copyCache, point);
+            std::pair<ContainerPosition<T>, N> copyCache;
+            bool found = false;
+            searchR(id, root, copyCache, point, found);
+            if(found == false){
+                throw std::invalid_argument("Item not found");
+            }
             return copyCache;
         }
 
 
-
-        std::vector<std::pair<CPosType, N>> searchDepth() const{
-            std::vector<std::pair<CPosType, N>> copyCache(0);
+        std::vector<std::pair<ContainerPosition<T>, N>> searchDepth() const{
+            std::vector<std::pair<ContainerPosition<T>, N>> copyCache(0);
             searchDepth(root, copyCache);
             return copyCache;
         }
 
 
-        std::shared_ptr<Node> SearchInsert(N container, CPosType pos) const{
+        bool SearchInsert(N container, ContainerPosition<T> pos) const{
             bool collision = false;
             std::shared_ptr<Node> copyCache = nullptr;
-            std::vector<std::pair<CPosType, N>> copy(0);
+            std::vector<std::pair<ContainerPosition<T>, N>> copy(0);
             SearchInsert(container, pos, root, copyCache, copy, collision);
-            return copyCache;
+            if(copyCache == nullptr){
+                return false;
+            }
+            return true;
         }
 
 
-        static T getMinX(CPosType& position){
-            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+        static T getMinX(ContainerPosition<T>& position){
+            static_assert(PointConcept<Point<T>>, "ContainerPosition<T> должен удовлетворять ContainerPositionConcept");
             return std::min({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
         }
 
 
-        static T getMaxX(CPosType& position){
-            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+        static T getMaxX(ContainerPosition<T>& position){
+            static_assert(PointConcept<Point<T>>, "ContainerPosition<T> должен удовлетворять ContainerPositionConcept");
             return std::max({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
         }
 
 
-        static T getMinY(CPosType& position){
-            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+        static T getMinY(ContainerPosition<T>& position){
+            static_assert(PointConcept<Point<T>>, "ContainerPosition<T> должен удовлетворять ContainerPositionConcept");
             return std::min({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
         }
 
 
-        static T getMaxY(CPosType& position){
-            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+        static T getMaxY(ContainerPosition<T>& position){
+            static_assert(PointConcept<Point<T>>, "ContainerPosition<T> должен удовлетворять ContainerPositionConcept");
             return std::max({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
         }
 
 
-        static T getMinZ(CPosType& position){
-            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+        static T getMinZ(ContainerPosition<T>& position){
+            static_assert(PointConcept<Point<T>>, "ContainerPosition<T> должен удовлетворять ContainerPositionConcept");
             return std::min({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
         }
 
 
-        static T getMaxZ(CPosType& position){
-            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+        static T getMaxZ(ContainerPosition<T>& position){
+            static_assert(PointConcept<Point<T>>, "ContainerPosition<T> должен удовлетворять ContainerPositionConcept");
             return std::max({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
         }
 
 
-        static T getMinX(const CPosType& position){
-            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+        static T getMinX(const ContainerPosition<T>& position){
+            static_assert(PointConcept<Point<T>>, "ContainerPosition<T> должен удовлетворять ContainerPositionConcept");
             return std::min({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
         }
 
-        static T getMaxX(const CPosType& position){
-            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+        static T getMaxX(const ContainerPosition<T>& position){
+            static_assert(PointConcept<Point<T>>, "ContainerPosition<T> должен удовлетворять ContainerPositionConcept");
             return std::max({position.LLDown.x, position.LLUp.x, position.LRDown.x, position.LRUp.x, position.RRDown.x, position.RRUp.x, position.RLDown.x, position.RLUp.x});
         }
 
 
-        static T getMinY(const CPosType& position){
-            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+        static T getMinY(const ContainerPosition<T>& position){
+            static_assert(PointConcept<Point<T>>, "ContainerPosition<T> должен удовлетворять ContainerPositionConcept");
             return std::min({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
         }
 
 
-        static T getMaxY(const CPosType& position){
-            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+        static T getMaxY(const ContainerPosition<T>& position){
+            static_assert(PointConcept<Point<T>>, "ContainerPosition<T> должен удовлетворять ContainerPositionConcept");
             return std::max({position.LLDown.y, position.LLUp.y, position.LRDown.y, position.LRUp.y, position.RRDown.y, position.RRUp.y, position.RLDown.y, position.RLUp.y});
         }
 
 
 
-        static T getMinZ(const CPosType& position){
-            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+        static T getMinZ(const ContainerPosition<T>& position){
+            static_assert(PointConcept<Point<T>>, "ContainerPosition<T> должен удовлетворять ContainerPositionConcept");
             return std::min({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
         }
 
 
-        static T getMaxZ(const CPosType& position){
-            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
+        static T getMaxZ(const ContainerPosition<T>& position){
+            static_assert(PointConcept<Point<T>>, "ContainerPosition<T> должен удовлетворять ContainerPositionConcept");
             return std::max({position.LLDown.z, position.LLUp.z, position.LRDown.z, position.LRUp.z, position.RRDown.z, position.RRUp.z, position.RLDown.z, position.RLUp.z});
         }
 
 
-        bool push(N container, CPosType& position){
-            std::shared_ptr<Node> target = SearchInsert(container, position);
+        bool push(N container, ContainerPosition<T>& position){
+            std::shared_ptr<Node> target = SearchPush(container, position);
             return insert(container, position, target);
         }
 
-        static bool pointincontainer(Point<T>& p, CPosType& position){
+        static bool pointincontainer(Point<T>& p, ContainerPosition<T>& position){
             static_assert(PointConcept<Point<T>>, "T должен удовлетворять PointConcept");
-            static_assert(ContainerPositionConcept<CPosType>, "CPosType должен удовлетворять ContainerPositionConcept");
             T minX = getMinX(position);
             T maxX = getMaxX(position);
             T minY = getMinY(position);
@@ -356,7 +338,17 @@ class Octree{
 
         private:
 
-
+        bool insert(N container, ContainerPosition<T>& position, std::shared_ptr<Node> target){
+            if(target == nullptr){
+                return false;
+            }
+            target->con.push_back(std::make_pair(position, container));
+            if (target->con.empty() == false && target->con.size() > MAX_ITEMS && target->isLeaf()){
+                std::cout << "Split\n";
+                split(target);
+            }
+            return true;
+        }
 
         void split(std::shared_ptr<Node> node) {
             if (!node){
@@ -434,7 +426,7 @@ class Octree{
 
 
 
-        void  searchUnderOct(std::shared_ptr<Node> node, std::vector<std::pair<CPosType, N>>& vec) const{
+        void  searchUnderOct(std::shared_ptr<Node> node, std::vector<std::pair<ContainerPosition<T>, N>>& vec) const{
             if(node == nullptr){
                 return;
             }
@@ -447,11 +439,11 @@ class Octree{
         }
 
 
-        void searchDepth(std::shared_ptr<Node> node, std::vector<std::pair<CPosType, N>>& copyCache) const{
+        void searchDepth(std::shared_ptr<Node> node, std::vector<std::pair<ContainerPosition<T>, N>>& copyCache) const{
             if(node == nullptr){
                 return;
             }
-            if(!node->con.empty()){//
+            if(!node->con.empty()){
                 (copyCache).insert((copyCache).end(), node->con.begin(), node->con.end());
             }
             for(int i = 0; i < 8; ++i){
@@ -460,7 +452,7 @@ class Octree{
         }
 
 
-        bool SearchInsert(N container, CPosType pos, std::shared_ptr<Node> node, std::shared_ptr<Node>& copyCache, std::vector<std::pair<CPosType, N>>& copy, bool& collision) const{
+        bool SearchInsert(N container, ContainerPosition<T> pos, std::shared_ptr<Node> node, std::shared_ptr<Node>& copyCache, std::vector<std::pair<ContainerPosition<T>, N>>& copy, bool& collision) const{
             if(node == nullptr){
                 return false;
             }
@@ -496,7 +488,17 @@ class Octree{
         }
 
 
-            void searchR(std::string id, std::shared_ptr<Node> node, std::shared_ptr<Node>& copyCache, Point<T> point)const{
+
+        std::shared_ptr<Node> SearchPush(N container, ContainerPosition<T> pos) const{
+            bool collision = false;
+            std::shared_ptr<Node> copyCache = nullptr;
+            std::vector<std::pair<ContainerPosition<T>, N>> copy(0);
+            SearchInsert(container, pos, root, copyCache, copy, collision);
+            return copyCache;
+        }
+
+
+            void searchR(std::string id, std::shared_ptr<Node> node, std::pair<ContainerPosition<T>, N>& copyCache, Point<T> point, bool& flag)const{
                 if(node == nullptr){
                     return;
                 }
@@ -506,14 +508,15 @@ class Octree{
                 if(node->con.empty() == false){
                     for(auto& i : node->con){
                         if(i.first.LLDown.x != -1  && number(i.first.LLDown) == id){
-                            copyCache = node;
+                            flag = true;
+                            copyCache = std::make_pair(i.first, i.second);
                             return;
                         }
                     }
                 }
                 if(node->isLeaf() == false){
                     for(int i = 0; i < 8; ++i){
-                        searchR(id, node->children[i], copyCache, point);
+                        searchR(id, node->children[i], copyCache, point, flag);
                     }
                 }
             }
@@ -533,7 +536,7 @@ class Octree{
                     for(auto& i : node->con){
                         if(i.first.LLDown.x != -1  && number(i.first.LLDown) == id){
                             if(i.second != nullptr){
-                                i.second.reset();
+                                //i.second.reset();
                                 node->con.erase(std::remove(node->con.begin(), node->con.end(), i), node->con.end());
                             }
                             collision = true;
@@ -606,7 +609,7 @@ class Octree{
             }
 
 
-            bool ContainEntity(CPosType pos1, CPosType pos2) const {
+            bool ContainEntity(ContainerPosition<T> pos1, ContainerPosition<T> pos2) const {
                 
                 int pos1MinX = getMinX(pos1);
                 int pos1MaxX = getMaxX(pos1);
@@ -630,7 +633,7 @@ class Octree{
             }
 
 
-            bool checkCollision(N container, CPosType pos, std::vector<std::pair<CPosType, N>> copy) const {
+            bool checkCollision(N container, ContainerPosition<T> pos, std::vector<std::pair<ContainerPosition<T>, N>> copy) const {
                 for(auto it : copy){
                     if(ContainEntity(it.first, pos)){
                         return true;
@@ -645,10 +648,8 @@ class Octree{
             }
 
 
-            static Point<T> parsePoint(const S& str){
+            static Point<T> parsePoint(std::string str){
                 static_assert(PointConcept<Point<T>>, "Point должен удовлетворять PointConcept");
-                static_assert(StringId<S>, "Строка должна удовлетворять StringId");
-                static_assert(ValidKeyFormat<S>, "Строка должна удовлетворять ValidKeyFormat");
                 Point<T> point;
                 std::regex pattern(R"((\d+|\d+\.\d+)_(\d+|\d+\.\d+)_(\d+|\d+\.\d+))");
                 std::smatch match;
