@@ -351,7 +351,6 @@ Point<int> Storage::multitread(std::shared_ptr<IContainer> container, int X, int
     }
     checker.applyChecks(*this, container, pos);
     {
-        std::unique_lock<std::mutex> ul(mtx);
         if(!containerAdded.load()){
             containerAdded.store(true);
             return Point<int>{X, Y, Z};

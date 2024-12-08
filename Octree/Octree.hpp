@@ -336,6 +336,57 @@ class Octree{
         }
 
 
+        static ContainerPosition<T> calculateContainerPosition(int x, int y, int z, N container){
+            static_assert(CanAdd<Point<T>, N>, "Концепции неудовлетворены");
+            ContainerPosition<T> pos;
+            auto l = container->getLength();
+            auto w = container->getWidth();
+            auto h = container->getHeight();
+
+
+            //LLDown
+            pos.LLDown.x = x;
+            pos.LLDown.y = y;
+            pos.LLDown.z = z;
+
+            //LLUp
+            pos.LLUp.x = x;
+            pos.LLUp.y = y;
+            pos.LLUp.z = z + h;
+
+            //LRDown
+            pos.LRDown.x = x + l;
+            pos.LRDown.y = y;
+            pos.LRDown.z = z;
+
+            //LRUp
+            pos.LRUp.x = x + l;
+            pos.LRUp.y = y;
+            pos.LRUp.z = z + h;
+
+            //RRDown
+            pos.RRDown.x = x + l;
+            pos.RRDown.y = y + w;
+            pos.RRDown.z = z;
+
+            //RRUp
+            pos.RRUp.x = x + l;
+            pos.RRUp.y = y + w;
+            pos.RRUp.z = z + h;
+
+            //RLDown
+            pos.RLDown.x = x;
+            pos.RLDown.y = y + w;
+            pos.RLDown.z = z;
+
+            //RLUp
+            pos.RLUp.x = x;
+            pos.RLUp.y = y + w;
+            pos.RLUp.z = z + h;
+            return pos;
+        }
+
+
         private:
 
         bool insert(N container, ContainerPosition<T>& position, std::shared_ptr<Node> target){
